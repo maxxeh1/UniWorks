@@ -40,6 +40,10 @@ sighting* make_sighting(char *obsid, char mammal_type, double bearing,
     node->mammal_type = mammal_type;
     node->bearing = bearing;
     node->range = range;
+    node->loc.latitude = 0;
+    node->loc.longitude = 0;
+    node->actual_loc.latitude = 0;
+    node->actual_loc.longitude = 0;
     node->duplicate_flag = 0;
     node->next = NULL;
     return node;

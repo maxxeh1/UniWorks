@@ -136,17 +136,14 @@ void check_duplicates(pod **pod_list)
         {
             for(j = 0; j < pod_current->sighting_index; j++)
             {
-                if(pod_current->sightings[i].loc.latitude != 
-                            pod_current->sightings[j].loc.latitude && 
-                            pod_current->sightings[i].loc.longitude != 
-                            pod_current->sightings[j].loc.longitude)
+                if(j != i)
                 {
                     if(pod_current->sightings[i].actual_loc.latitude == 
                             pod_current->sightings[j].actual_loc.latitude && 
                             pod_current->sightings[i].actual_loc.longitude == 
                             pod_current->sightings[j].actual_loc.longitude)
                     {
-                        if(pod_current->sightings[i].duplicate_flag != 1)
+                        if(pod_current->sightings[i].duplicate_flag == 0)
                         {
                             pod_current->sightings[j].duplicate_flag = 1;
                         }
@@ -162,7 +159,9 @@ void check_duplicates(pod **pod_list)
 void print_pods(pod **pod_list)
 {
     pod *pod_current = *pod_list;
+    int i;
     int count = 0;
+    int pod_count = 0;
     char m_type[11];
     
     
@@ -170,36 +169,55 @@ void print_pods(pod **pod_list)
     printf("=====================================================\n");
     while(pod_current != NULL)
     {
-        count++;
-        printf("Pod %d\n", count);
-        printf("-----------------------------------------------------\n");
-        int i;
-        
-            for(i = 0; i < pod_current->sighting_index; i++)
+        pod_count = 0;
+        for(i = 0; i < pod_current->sighting_index; i++)
+        {
+            if(52.00 <= pod_current->sightings[i].loc.latitude && pod_current->
+            sightings[i].loc.latitude <= 52.833 && -4.000 >= pod_current->
+            sightings[i].loc.longitude && pod_current->sightings[i].loc.
+            longitude >= -5.500)
             {
-                if(52.00 <= pod_current->sightings[i].loc.latitude && pod_current->
-                sightings[i].loc.latitude <= 52.833 && -4.000 >= pod_current->
-                sightings[i].loc.longitude && pod_current->sightings[i].loc.
-                longitude >= -5.500)
+                if(pod_current->sightings[i].duplicate_flag == 0)
                 {
-                    if(pod_current->sightings[i].duplicate_flag)
-                    {
-                        if(pod_current->sightings[i].mammal_type == 'D')
-                        {
-                            strcpy(m_type, "Dolphin");
-                        }
-                        else
-                        {
-                            strcpy(m_type, "Porpoise");
-                        }
-
-                        printf("%-11lf %-14lf %-14lf %-14lf %-15s %s\n", pod_current->sightings[i].loc.latitude,
-                                pod_current->sightings[i].loc.longitude, pod_current->sightings[i].actual_loc.latitude, pod_current->sightings[i].actual_loc.longitude,
-                                m_type, pod_current->sightings[i].obsid);
-                    }
+                    pod_count++;
+                }
             }
         }
-        printf("-----------------------------------------------------\n");
+        if(pod_count > 1)
+        {
+            count++;
+            printf("Pod %d\n", count);
+            printf("-----------------------------------------------------\n");
+
+
+                for(i = 0; i < pod_current->sighting_index; i++)
+                {
+                    if(52.00 <= pod_current->sightings[i].loc.latitude && pod_current->
+                    sightings[i].loc.latitude <= 52.833 && -4.000 >= pod_current->
+                    sightings[i].loc.longitude && pod_current->sightings[i].loc.
+                    longitude >= -5.500)
+                    {
+                        if(pod_current->sightings[i].duplicate_flag == 0)
+                        {
+                            if(pod_current->sightings[i].mammal_type == 'D')
+                            {
+                                strcpy(m_type, "Dolphin");
+                            }
+                            else
+                            {
+                                strcpy(m_type, "Porpoise");
+                            }
+
+                            printf("%-11lf %-14lf %-15s %s\n",  
+                                    pod_current->sightings[i].actual_loc.latitude, 
+                                    pod_current->sightings[i].actual_loc.longitude,
+                                    m_type, pod_current->sightings[i].obsid);
+                        }
+                }
+            }
+            printf("-----------------------------------------------------\n");
+            
+        }
         pod_current = pod_current->next;
     }
 }

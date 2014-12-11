@@ -40,7 +40,7 @@ extern "C" {
     
     typedef struct sighting{
         char obsid[21];
-        char mammal_type[1];
+        char mammal_type;
         double bearing;
         double range;
         struct sighting *next;
@@ -50,7 +50,8 @@ extern "C" {
     
     typedef struct pod{
         struct pod *next;
-        struct sighting *start;
+        struct sighting *sightings;
+        int sighting_index;
     } pod;
     
     

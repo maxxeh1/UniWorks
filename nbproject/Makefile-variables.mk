@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=dolphinassignment
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/dolphinassignment
+CND_ARTIFACT_NAME_Debug=uniworks
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/uniworks
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=dolphinassignment.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/dolphinassignment.tar
+CND_PACKAGE_NAME_Debug=uniworks.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/uniworks.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=dolphinassignment
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/dolphinassignment
+CND_ARTIFACT_NAME_Release=uniworks
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/uniworks
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=dolphinassignment.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/dolphinassignment.tar
+CND_PACKAGE_NAME_Release=uniworks.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/uniworks.tar
 #
 # include compiler specific variables
 #

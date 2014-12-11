@@ -15,7 +15,7 @@
 /*
  * 
  */
-sighting* make_sighting(char *obsid, char *mammal_type, double bearing, double range);
+sighting* make_sighting(char *obsid, char mammal_type, double bearing, double range);
 void insert_sighting(sighting *sight_node, sighting **sight_list);
 observer* make_observer(char *id, double lat, double longitude);
 void insert_observer(observer *obs_node, observer **obs_list);
@@ -35,6 +35,7 @@ void print_pods(pod **pod_list);
 double avg(double one, double two);
 
 struct pod *pod_start = NULL;
+long sighting_count = 0;
 
 int main(int argc, char** argv) 
 {
@@ -43,14 +44,14 @@ int main(int argc, char** argv)
     double temp_long;
     struct observer *observer_start = NULL;
     char temp_obsid[11];
-    char temp_mammal_type[1];
+    char temp_mammal_type;
     double temp_bearing;
     double temp_range;
     struct sighting *sighting_start = NULL;
     char fileName[51];
     printf("Please enter the name of the observer file: ");
     //scanf("%s", fileName);
-    FILE* f1 = fopen("observers_2.txt", "r");
+    FILE* f1 = fopen("observers_3.txt", "r");
     if(f1 == NULL)
     {
         perror("Error opening file");
@@ -67,13 +68,14 @@ int main(int argc, char** argv)
    
     printf("\nPlease enter the name of the mammal sighting file: ");
     //scanf("%s", fileName);
-    FILE* f2 = fopen("sightings_2.txt", "r");
-    while(fscanf(f2, "%4s %s %lf %lf", temp_obsid, temp_mammal_type, 
+    FILE* f2 = fopen("sightings_3.txt", "r");
+    while(fscanf(f2, "%4s %c %lf %lf", temp_obsid, &temp_mammal_type, 
             &temp_bearing, &temp_range) == 4)
     {
         struct sighting *new_sighting = make_sighting(temp_obsid, 
                 temp_mammal_type, temp_bearing, temp_range);
         insert_sighting(new_sighting, &sighting_start);
+        sighting_count++;
     }
     fclose(f2);
     print_observer(&observer_start);
@@ -99,12 +101,13 @@ observer* make_observer(char *id, double lat, double longitude)
     return node;
 }
 
-sighting* make_sighting(char *obsid, char *mammal_type, double bearing, 
+sighting* make_sighting(char *obsid, char mammal_type, double bearing, 
         double range)
 {
     sighting *node = (sighting*) calloc(1, sizeof(sighting));
     strcpy(node->obsid, obsid);
-    strcpy(node->mammal_type, mammal_type);
+    node->mammal_type = mammal_type;
+    //strcpy(node->mammal_type, mammal_type);
     node->bearing = bearing;
     node->range = range;
     node->next = NULL;
@@ -172,7 +175,7 @@ void print_sighting(sighting **sight_list)
     sighting *sight_current = *sight_list;
     while(sight_current != NULL)
     {
-        printf("ID = %s Type = %s Bearing = %lf Range = %lf \n", 
+        printf("ID = %s Type = %c Bearing = %lf Range = %lf \n", 
                 sight_current->obsid, sight_current->mammal_type, 
                 sight_current->bearing, sight_current->range);
         sight_current = sight_current->next;
@@ -227,7 +230,7 @@ void print_locations(sighting **sight_list)
     printf("=====================================================\n");
     while(sight_current != NULL)
     {
-        if(strcmp(sight_current->mammal_type, "D"))
+        if(sight_current->mammal_type == 'D')//strcmp(&sight_current->mammal_type, "D"))
         {
             strcpy(m_type, "Porpoise");
         }
@@ -294,7 +297,7 @@ void print_locations_mission2(sighting **sight_list)
     printf("====================================================================================\n");
     while(sight_current != NULL)
     {
-        if(strcmp(sight_current->mammal_type, "D"))
+        if(sight_current->mammal_type == 'D')//strcmp(sight_current->mammal_type, "D"))
         {
             strcpy(m_type, "Porpoise");
         }
@@ -316,12 +319,15 @@ void check_pod(sighting **sight_list)
 {
     sighting *sight_current = *sight_list;
     struct sighting *sight_start = NULL;
+    int flag = 0;
+    int remove_flag = 0;
     while(sight_current != NULL)
     {
         char temp_obsid[11];// = sight_current->obsid;
         strcpy(temp_obsid, sight_current->obsid);
-        char temp_mammal[1];// = sight_current->mammal_type;
-        strcpy(temp_mammal, sight_current->mammal_type);
+        char temp_mammal;// = sight_current->mammal_type;
+        temp_mammal = sight_current->mammal_type;
+        //strcpy(temp_mammal, sight_current->mammal_type);
         double temp_bearing = sight_current->bearing;
         double temp_range = sight_current->range;
         struct sighting *sight_copy = make_sighting(temp_obsid, temp_mammal, 
@@ -336,11 +342,10 @@ void check_pod(sighting **sight_list)
     sighting *sight2_current = sight_start;
     while(sight_current != NULL)
     {
-        struct pod *new_pod = make_pod();
-        insert_pod(new_pod, &pod_start);
-        struct pod *pod_two = make_pod();
-	insert_pod(pod_two, &pod_start);
         
+//      struct pod *pod_two = make_pod();
+//	insert_pod(pod_two, &pod_start);
+        struct pod *new_pod = make_pod();
         while(sight2_current != NULL)
         {
             //struct sighting *pod_start = NULL;
@@ -353,29 +358,37 @@ void check_pod(sighting **sight_list)
             //printf("%lf\n", great_circle(location_current, location2_current));
             if(great_circle(location_current, location2_current) < 0.1)
             {
-                //struct sighting *temp_sighting;// = sight2_current;
-                char temp_obsid[11];// = sight_current->obsid;
-                strcpy(temp_obsid, sight2_current->obsid);
-                char temp_mammal[1];// = sight_current->mammal_type;
-                strcpy(temp_mammal, sight2_current->mammal_type);
-                double temp_bearing = sight2_current->bearing;
-                double temp_range = sight2_current->range;
-                struct sighting *temp_sighting = make_sighting(temp_obsid, temp_mammal, 
-                temp_bearing, temp_range);
-                insert_sighting(temp_sighting, &new_pod->start);
-                remove_sighting(sight2_current, &sight_start);
+//                struct sighting *temp_sighting = sight2_current;
+//                make_sighting(temp_sighting->obsid, temp_sighting->mammal_type,
+//                        temp_sighting->bearing, temp_sighting->range);
+                if(flag == 0)
+                {
+                    insert_pod(new_pod, &pod_start);
+                    flag = 1;
+                }
+                new_pod->sightings[new_pod->sighting_index++] = *sight2_current;
+//                insert_sighting(temp_sighting, &new_pod->start);
+                remove_flag = 1;
             }
             sight2_current = sight2_current->next;
+            if(remove_flag == 0)
+            {
+                            remove_sighting(sight2_current, &sight_start);
+            }
+
+            remove_flag = 0;
         }
+        flag = 0;
         sight_current = sight_current->next;
     }
 }
 
 pod* make_pod()
 {
-    pod *node = (pod*) calloc(1, sizeof(pod));
-    node->start = NULL;
+    pod *node = (pod*) calloc(1, sizeof(struct pod));
+    node->sightings = calloc(sighting_count, sizeof(struct sighting));
     node->next = NULL;
+    node->sighting_index = 0;
     return node;
 }
 
@@ -424,13 +437,18 @@ void print_pods(pod **pod_list)
     pod *pod_current = *pod_list;
     while(pod_current != NULL)
     {
-        while(pod_current->start != NULL)
+        printf("Pod\n");
+        int i;
+        for(i = 0; i < pod_current->sighting_index; i++)
         {
-            printf("Pod");
-            printf("%-11lf %-14lf %s\n", pod_current->start->loc.latitude, 
-                pod_current->start->loc.longitude, pod_current->start->obsid);
-            pod_current->start = pod_current->start->next;
+           
+            printf("%s %c %f %f\n",
+                    pod_current->sightings[i].obsid,
+                    pod_current->sightings[i].mammal_type,
+                    pod_current->sightings[i].loc.latitude,
+                    pod_current->sightings[i].loc.longitude);
         }
+        pod_current = pod_current->next;
     }
 }
 

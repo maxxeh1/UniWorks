@@ -12,9 +12,11 @@
                    projectFiles="true">
       <itemPath>observers_1.txt</itemPath>
       <itemPath>observers_2.txt</itemPath>
+      <itemPath>observers_3.txt</itemPath>
       <itemPath>observers_4.txt</itemPath>
       <itemPath>sightings_1.txt</itemPath>
       <itemPath>sightings_2.txt</itemPath>
+      <itemPath>sightings_3.txt</itemPath>
       <itemPath>sightings_4.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
@@ -58,11 +60,15 @@
       </item>
       <item path="observers_2.txt" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="observers_3.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="observers_4.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sightings_1.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sightings_2.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sightings_3.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sightings_4.txt" ex="false" tool="3" flavor2="0">
       </item>
@@ -97,11 +103,15 @@
       </item>
       <item path="observers_2.txt" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="observers_3.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="observers_4.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sightings_1.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sightings_2.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sightings_3.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sightings_4.txt" ex="false" tool="3" flavor2="0">
       </item>

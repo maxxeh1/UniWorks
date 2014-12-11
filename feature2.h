@@ -71,19 +71,22 @@ void print_locations_mission2(sighting **sight_list)
     printf("====================================================================================\n");
     while(sight_current != NULL)
     {
-        if(sight_current->mammal_type == 'D')
+        if(52.00 <= sight_current->loc.latitude && sight_current->loc.latitude <= 52.833 && -4.000 >= sight_current->loc.longitude && sight_current->loc.longitude >= -5.500)
         {
-            strcpy(m_type, "Dolphin");
+            if(sight_current->mammal_type == 'D')
+            {
+                strcpy(m_type, "Dolphin");
+            }
+            else
+            {
+                strcpy(m_type, "Porpoise");
+            }
+            printf("%-11lf %-14lf %-13lf %-16lf %-15s %s\n", 
+                    sight_current->loc.latitude, sight_current->loc.longitude, 
+                    sight_current->actual_loc.latitude, 
+                    sight_current->actual_loc.longitude, m_type, 
+                    sight_current->obsid);
         }
-        else
-        {
-            strcpy(m_type, "Porpoise");
-        }
-        printf("%-11lf %-14lf %-13lf %-16lf %-15s %s\n", 
-                sight_current->loc.latitude, sight_current->loc.longitude, 
-                sight_current->actual_loc.latitude, 
-                sight_current->actual_loc.longitude, m_type, 
-                sight_current->obsid);
         sight_current = sight_current->next;
     }
     printf("\n");

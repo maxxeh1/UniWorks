@@ -40,6 +40,7 @@ sighting* make_sighting(char *obsid, char mammal_type, double bearing,
     node->mammal_type = mammal_type;
     node->bearing = bearing;
     node->range = range;
+    node->duplicate_flag = 0;
     node->next = NULL;
     return node;
 }
@@ -157,16 +158,20 @@ void print_locations(sighting **sight_list)
     printf("=====================================================\n");
     while(sight_current != NULL)
     {
-        if(sight_current->mammal_type == 'D')
-        {
-            strcpy(m_type, "Porpoise");
+        if(52.00 <= sight_current->loc.latitude && sight_current->loc.latitude <= 52.833 && -4.000 >= sight_current->loc.longitude && sight_current->loc.longitude >= -5.500)
+            {
+            if(sight_current->mammal_type == 'D')
+            {
+                strcpy(m_type, "Porpoise");
+            }
+            else
+            {
+                strcpy(m_type, "Dolphin");
+            }
+            printf("%-11lf %-14lf %-15s %s\n", sight_current->loc.latitude, 
+                    sight_current->loc.longitude, m_type, sight_current->obsid);
+            
         }
-        else
-        {
-            strcpy(m_type, "Dolphin");
-        }
-        printf("%-11lf %-14lf %-15s %s\n", sight_current->loc.latitude, 
-                sight_current->loc.longitude, m_type, sight_current->obsid);
         sight_current = sight_current->next;
     }
     printf("\n");

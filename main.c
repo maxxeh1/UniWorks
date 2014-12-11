@@ -18,27 +18,11 @@
 /*
  * 
  */
-//    sighting* make_sighting(char *obsid, char mammal_type, double bearing, double range);
-//    void insert_sighting(sighting *sight_node, sighting **sight_list);
-//    observer* make_observer(char *id, double lat, double longitude);
-//    void insert_observer(observer *obs_node, observer **obs_list);
-//    void print_sighting(sighting **sight_list);
-//    void print_observer(observer **obs_list);
-//    struct mammal_location calculate_mammal_position(double obs_lat, double obs_longitude, 
-//            double bearing, double range);
-//    void apply_mammal_locations(observer **obs_list, sighting **sight_list);
-//    void print_locations(sighting **sight_list);
-//    void set_true_location(sighting **sight_list);
-//    void print_locations_mission2(sighting **sight_list);
-//    void check_pod(sighting **sight_list);
-//    pod* make_pod();
-//    void insert_pod(pod *pod_node, pod **pod_list);
-//    void remove_sighting(sighting *sight_node, sighting **sight_list);
-//    void print_pods(pod **pod_list);
-//    double avg(double one, double two);
+
 
 int main(int argc, char** argv) 
 {
+    //Main Local Variable Declarations
     char temp_id[11];
     double temp_lat;
     double temp_long;
@@ -50,9 +34,11 @@ int main(int argc, char** argv)
     struct sighting *sighting_start = NULL;
     char fileName[51];
     
+    //File Input. Example file: observers_3.txt  sightings_3.txt
     printf("Please enter the name of the observer file: ");
     //scanf("%s", fileName);
-    FILE* f1 = fopen("observers_3.txt", "r");
+    FILE* f1 = fopen("observers_5.txt", "r");
+    //Error print if file problem
     if(f1 == NULL)
     {
         perror("Error opening file");
@@ -69,7 +55,7 @@ int main(int argc, char** argv)
    
     printf("\nPlease enter the name of the mammal sighting file: ");
     //scanf("%s", fileName);
-    FILE* f2 = fopen("sightings_3.txt", "r");
+    FILE* f2 = fopen("sightings_5.txt", "r");
     while(fscanf(f2, "%4s %c %lf %lf", temp_obsid, &temp_mammal_type, 
             &temp_bearing, &temp_range) == 4)
     {
@@ -91,6 +77,7 @@ int main(int argc, char** argv)
     print_locations_mission2(&sighting_start);
     
     check_pod(&sighting_start);
+    check_duplicates(&pod_start);
     print_pods(&pod_start);
 }
 

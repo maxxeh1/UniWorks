@@ -89,6 +89,8 @@ void check_pod(sighting **sight_list)
                 temp_bearing, temp_range);
         sight_copy->loc.latitude = sight_current->loc.latitude;
         sight_copy->loc.longitude = sight_current->loc.longitude;
+        sight_copy->actual_loc.latitude = sight_current->actual_loc.latitude;
+        sight_copy->actual_loc.longitude = sight_current->actual_loc.longitude;
         insert_sighting(sight_copy, &sight_start);
         sight_current = sight_current->next;
     }
@@ -124,6 +126,39 @@ void check_pod(sighting **sight_list)
     }
 }
 
+void check_duplicates(pod **pod_list)
+{
+    pod *pod_current = *pod_list;
+    int i, j;
+    while(pod_current != NULL)
+    {
+        for(i = 0; i < pod_current->sighting_index; i++)
+        {
+            for(j = 0; j < pod_current->sighting_index; j++)
+            {
+                if(pod_current->sightings[i].loc.latitude != 
+                            pod_current->sightings[j].loc.latitude && 
+                            pod_current->sightings[i].loc.longitude != 
+                            pod_current->sightings[j].loc.longitude)
+                {
+                    if(pod_current->sightings[i].actual_loc.latitude == 
+                            pod_current->sightings[j].actual_loc.latitude && 
+                            pod_current->sightings[i].actual_loc.longitude == 
+                            pod_current->sightings[j].actual_loc.longitude)
+                    {
+                        if(pod_current->sightings[i].duplicate_flag != 1)
+                        {
+                            pod_current->sightings[j].duplicate_flag = 1;
+                        }
+                    }
+                }
+            }
+        }
+        pod_current = pod_current->next;
+    }
+    
+}
+
 void print_pods(pod **pod_list)
 {
     pod *pod_current = *pod_list;
@@ -140,21 +175,29 @@ void print_pods(pod **pod_list)
         printf("-----------------------------------------------------\n");
         int i;
         
-        for(i = 0; i < pod_current->sighting_index; i++)
-        {
-            if(pod_current->sightings[i].mammal_type == 'D')
+            for(i = 0; i < pod_current->sighting_index; i++)
             {
-                strcpy(m_type, "Dolphin");
+                if(52.00 <= pod_current->sightings[i].loc.latitude && pod_current->
+                sightings[i].loc.latitude <= 52.833 && -4.000 >= pod_current->
+                sightings[i].loc.longitude && pod_current->sightings[i].loc.
+                longitude >= -5.500)
+                {
+                    if(pod_current->sightings[i].duplicate_flag)
+                    {
+                        if(pod_current->sightings[i].mammal_type == 'D')
+                        {
+                            strcpy(m_type, "Dolphin");
+                        }
+                        else
+                        {
+                            strcpy(m_type, "Porpoise");
+                        }
+
+                        printf("%-11lf %-14lf %-14lf %-14lf %-15s %s\n", pod_current->sightings[i].loc.latitude,
+                                pod_current->sightings[i].loc.longitude, pod_current->sightings[i].actual_loc.latitude, pod_current->sightings[i].actual_loc.longitude,
+                                m_type, pod_current->sightings[i].obsid);
+                    }
             }
-            else
-            {
-                strcpy(m_type, "Porpoise");
-            }
-            
-            
-            printf("%-11lf %-14lf %-15s %s\n", pod_current->sightings[i].loc.latitude,
-                    pod_current->sightings[i].loc.longitude,
-                    m_type, pod_current->sightings[i].obsid);
         }
         printf("-----------------------------------------------------\n");
         pod_current = pod_current->next;
@@ -166,4 +209,6 @@ void print_pods(pod **pod_list)
 #endif
 
 #endif	/* FEATURE3_H */
+
+
 

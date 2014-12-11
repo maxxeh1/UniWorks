@@ -51,6 +51,7 @@ typedef struct sighting{
     struct sighting *next;
     struct mammal_location loc;
     struct mammal_location actual_loc;
+    int duplicate_flag;
 } sighting;
 
 typedef struct pod{

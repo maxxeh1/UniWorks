@@ -4,6 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>feature1.h</itemPath>
+      <itemPath>feature2.h</itemPath>
+      <itemPath>feature3.h</itemPath>
       <itemPath>navigation.h</itemPath>
       <itemPath>structure_vars.h</itemPath>
     </logicalFolder>
@@ -52,6 +55,12 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="feature1.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feature2.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feature3.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="navigation.h" ex="false" tool="3" flavor2="0">
@@ -95,6 +104,12 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="feature1.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feature2.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feature3.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="navigation.h" ex="false" tool="3" flavor2="0">

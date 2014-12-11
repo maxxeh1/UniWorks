@@ -12,47 +12,52 @@
 extern "C" {
 #endif
 
-    struct dateTime{
-        int hour;
-        int minute;
-        int second;
-        int date;
-        int month;
-        int year;
-    } dateTime;
 
-    typedef struct observer{
-        char id[21];
-        double lat;
-        double longitude;
-        struct observer *next;
-    } observer;
+
+struct pod *pod_start = NULL;
+long sighting_count = 0;
     
-    typedef struct mammal_location{
-        double latitude;
-        double longitude;
-    } mammal_location;
-    
-    typedef struct actual_location{
-        double latitude;
-        double longitude;
-    } actual_location;
-    
-    typedef struct sighting{
-        char obsid[21];
-        char mammal_type;
-        double bearing;
-        double range;
-        struct sighting *next;
-        struct mammal_location loc;
-        struct mammal_location actual_loc;
-    } sighting;
-    
-    typedef struct pod{
-        struct pod *next;
-        struct sighting *sightings;
-        int sighting_index;
-    } pod;
+struct dateTime{
+    int hour;
+    int minute;
+    int second;
+    int date;
+    int month;
+    int year;
+} dateTime;
+
+typedef struct observer{
+    char id[21];
+    double lat;
+    double longitude;
+    struct observer *next;
+} observer;
+
+typedef struct mammal_location{
+    double latitude;
+    double longitude;
+} mammal_location;
+
+typedef struct actual_location{
+    double latitude;
+    double longitude;
+} actual_location;
+
+typedef struct sighting{
+    char obsid[21];
+    char mammal_type;
+    double bearing;
+    double range;
+    struct sighting *next;
+    struct mammal_location loc;
+    struct mammal_location actual_loc;
+} sighting;
+
+typedef struct pod{
+    struct pod *next;
+    struct sighting *sightings;
+    int sighting_index;
+} pod;
     
     
     

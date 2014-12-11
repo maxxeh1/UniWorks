@@ -49,6 +49,7 @@ int main(int argc, char** argv)
     double temp_range;
     struct sighting *sighting_start = NULL;
     char fileName[51];
+    
     printf("Please enter the name of the observer file: ");
     //scanf("%s", fileName);
     FILE* f1 = fopen("observers_3.txt", "r");
@@ -107,7 +108,6 @@ sighting* make_sighting(char *obsid, char mammal_type, double bearing,
     sighting *node = (sighting*) calloc(1, sizeof(sighting));
     strcpy(node->obsid, obsid);
     node->mammal_type = mammal_type;
-    //strcpy(node->mammal_type, mammal_type);
     node->bearing = bearing;
     node->range = range;
     node->next = NULL;
@@ -201,15 +201,12 @@ void apply_mammal_locations(observer **obs_list, sighting **sight_list)
 {
     sighting *sight_current = *sight_list;
     observer *obs_current = *obs_list;
+    
     while(sight_current != NULL)
     {
         while(obs_current != NULL)
         {
-            if(strcmp(sight_current->obsid, obs_current->id))
-            {
-                
-            }
-            else
+            if(!strcmp(sight_current->obsid, obs_current->id))
             {
                 sight_current->loc = calculate_mammal_position(obs_current->lat, 
                         obs_current->longitude, sight_current->bearing, 
@@ -230,7 +227,7 @@ void print_locations(sighting **sight_list)
     printf("=====================================================\n");
     while(sight_current != NULL)
     {
-        if(sight_current->mammal_type == 'D')//strcmp(&sight_current->mammal_type, "D"))
+        if(sight_current->mammal_type == 'D')
         {
             strcpy(m_type, "Porpoise");
         }
@@ -253,6 +250,7 @@ void set_true_location(sighting **sight_list)
     double average_lat;
     location accumulator;
     int count;
+    
     while(sight_current != NULL)
     {
         count = 0;
@@ -265,20 +263,11 @@ void set_true_location(sighting **sight_list)
             location_current.lng = sight_current->loc.longitude;
             location2_current.lat = sight2_current->loc.latitude;
             location2_current.lng = sight2_current->loc.longitude;
-            //printf("%lf\n", great_circle(location_current, location2_current));
             if(great_circle(location_current, location2_current) < 0.02)
             {
                 accumulator.lat += sight2_current->loc.latitude;
                 accumulator.lng += sight2_current->loc.longitude;
                 count ++;
-                /*average_lat = avg(location_current.lat, location2_current.lat);
-                average_long = avg(location_current.lng, location2_current.lng);
-                sight_current->actual_loc.latitude = 
-                        sight2_current->actual_loc.latitude = average_lat;
-                sight_current->actual_loc.longitude = 
-                        sight2_current->actual_loc.longitude = average_long;
-                //sight2_current->actual_loc.latitude = average_lat;
-                //sight2_current->actual_loc.longitude = average_long;*/
             }
             sight2_current = sight2_current->next;
         }
@@ -297,7 +286,7 @@ void print_locations_mission2(sighting **sight_list)
     printf("====================================================================================\n");
     while(sight_current != NULL)
     {
-        if(sight_current->mammal_type == 'D')//strcmp(sight_current->mammal_type, "D"))
+        if(sight_current->mammal_type == 'D')
         {
             strcpy(m_type, "Porpoise");
         }
@@ -319,15 +308,15 @@ void check_pod(sighting **sight_list)
 {
     sighting *sight_current = *sight_list;
     struct sighting *sight_start = NULL;
+    struct sighting *temp_container = NULL;
     int flag = 0;
-    int remove_flag = 0;
+    
     while(sight_current != NULL)
     {
-        char temp_obsid[11];// = sight_current->obsid;
+        char temp_obsid[11];
         strcpy(temp_obsid, sight_current->obsid);
-        char temp_mammal;// = sight_current->mammal_type;
+        char temp_mammal;
         temp_mammal = sight_current->mammal_type;
-        //strcpy(temp_mammal, sight_current->mammal_type);
         double temp_bearing = sight_current->bearing;
         double temp_range = sight_current->range;
         struct sighting *sight_copy = make_sighting(temp_obsid, temp_mammal, 
@@ -337,48 +326,34 @@ void check_pod(sighting **sight_list)
         insert_sighting(sight_copy, &sight_start);
         sight_current = sight_current->next;
     }
-    
     sight_current = *sight_list;
     sighting *sight2_current = sight_start;
     while(sight_current != NULL)
     {
-        
-//      struct pod *pod_two = make_pod();
-//	insert_pod(pod_two, &pod_start);
         struct pod *new_pod = make_pod();
         while(sight2_current != NULL)
         {
-            //struct sighting *pod_start = NULL;
+            temp_container = sight2_current;
             location location_current;
             location location2_current;
             location_current.lat = sight_current->loc.latitude;
             location_current.lng = sight_current->loc.longitude;
             location2_current.lat = sight2_current->loc.latitude;
             location2_current.lng = sight2_current->loc.longitude;
-            //printf("%lf\n", great_circle(location_current, location2_current));
             if(great_circle(location_current, location2_current) < 0.1)
             {
-//                struct sighting *temp_sighting = sight2_current;
-//                make_sighting(temp_sighting->obsid, temp_sighting->mammal_type,
-//                        temp_sighting->bearing, temp_sighting->range);
                 if(flag == 0)
                 {
                     insert_pod(new_pod, &pod_start);
                     flag = 1;
                 }
                 new_pod->sightings[new_pod->sighting_index++] = *sight2_current;
-//                insert_sighting(temp_sighting, &new_pod->start);
-                remove_flag = 1;
+                remove_sighting(sight2_current, &sight_start);
             }
-            sight2_current = sight2_current->next;
-            if(remove_flag == 0)
-            {
-                            remove_sighting(sight2_current, &sight_start);
-            }
-
-            remove_flag = 0;
+            sight2_current = temp_container->next;
         }
         flag = 0;
+        sight2_current = sight_start;
         sight_current = sight_current->next;
     }
 }

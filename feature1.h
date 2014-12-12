@@ -220,8 +220,10 @@ extern "C" {
         //Set sight_current to head of sighting list
         sighting *sight_current = *sight_list;
         char m_type[11];
+        
         printf("LATITUDE     LONGITUDE     MAMMAL TYPE     SIGHTED BY\n");
         printf("=====================================================\n");
+        
         //Loop through sighting list
         while(sight_current != NULL)
         {
@@ -239,6 +241,7 @@ extern "C" {
                 {
                     strcpy(m_type, "Porpoise");
                 }
+                
                 //Print each sighting data
                 printf("%-11lf %-14lf %-15s %s\n", sight_current->loc.latitude, 
                         sight_current->loc.longitude, m_type, sight_current->obsid);

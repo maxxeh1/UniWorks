@@ -12,53 +12,52 @@
 extern "C" {
 #endif
 
-
-
-struct pod *pod_start = NULL;
-long sighting_count = 0;
+    //Variables for global use
+    struct pod *pod_start = NULL;
+    long sighting_count = 0;
     
-struct dateTime{
-    int hour;
-    int minute;
-    int second;
-    int date;
-    int month;
-    int year;
-} dateTime;
+    //Structure to hold date and time from Observer File
+    struct dateTime{
+        int hour;
+        int minute;
+        int second;
+        int date;
+        int month;
+        int year;
+    } dateTime;
+    
+    //Structure to hold observers from Observer File
+    typedef struct observer{
+        char id[21];
+        double lat;
+        double longitude;
+        struct observer *next; //Pointer to next element in list
+    } observer;
 
-typedef struct observer{
-    char id[21];
-    double lat;
-    double longitude;
-    struct observer *next;
-} observer;
+    //Structure to hold latitude and longitude variables for sightings
+    typedef struct mammal_location{
+        double latitude;
+        double longitude;
+    } mammal_location, actual_location;
 
-typedef struct mammal_location{
-    double latitude;
-    double longitude;
-} mammal_location;
+    //Structure to hold sightings from Sightings File
+    typedef struct sighting{
+        char obsid[21];
+        char mammal_type;
+        double bearing;
+        double range;
+        struct sighting *next; //Pointer to next element in list
+        struct mammal_location loc; //Holds calculated lat and long data
+        struct mammal_location actual_loc; //Holds averaged lat and long data
+        int duplicate_flag; //Flag to show the structure is a duplicate element
+    } sighting;
 
-typedef struct actual_location{
-    double latitude;
-    double longitude;
-} actual_location;
-
-typedef struct sighting{
-    char obsid[21];
-    char mammal_type;
-    double bearing;
-    double range;
-    struct sighting *next;
-    struct mammal_location loc;
-    struct mammal_location actual_loc;
-    int duplicate_flag;
-} sighting;
-
-typedef struct pod{
-    struct pod *next;
-    struct sighting *sightings;
-    int sighting_index;
-} pod;
+    //Structure to hold pods
+    typedef struct pod{
+        struct pod *next; //Pointer to next element in list
+        struct sighting *sightings; //Pointer to sightings array
+        int sighting_index; //Number of sightings in sightings array
+    } pod;
     
     
     

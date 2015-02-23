@@ -1,1 +1,1 @@
-This project a Competition Management System which allows a list of players to "fight" each other and move up and down a queue, with different queue implementations.
+This project a Competition Management System which allows a list of players to "fight" each other and move up and down a queue, with different queue implementations. This got me a 1st.

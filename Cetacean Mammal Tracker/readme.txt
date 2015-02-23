@@ -1,0 +1,2 @@
+This is a Cetacean Mammal Sightings Analyser for my first C assignment. This project got me a 1st.
+To run this, use the sightings and observer files provided below, or create your own which follow the same format.

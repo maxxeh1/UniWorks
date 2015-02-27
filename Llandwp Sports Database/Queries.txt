@@ -1,0 +1,160 @@
+create table IF NOT EXISTS sports (
+	sport_id SERIAL,
+	sport_name VARCHAR(20),
+	PRIMARY KEY(sport_id)
+	);
+
+create table IF NOT EXISTS players (
+	player_id SERIAL,
+	player_name VARCHAR(20),
+	player_phone VARCHAR(15),
+	PRIMARY KEY(player_id)
+	);
+
+create table IF NOT EXISTS players_sports (
+    player_id INT REFERENCES players(player_id),
+    sport_id int REFERENCES sports(sport_id),
+    PRIMARY KEY (player_id, sport_id)
+    );
+
+create table IF NOT EXISTS teams (
+	team_name VARCHAR(20),
+	sport_id INT,
+	captain_id INT,
+	FOREIGN KEY (sport_id, captain_id) 
+		REFERENCES players_sports(sport_id, player_id),
+	PRIMARY KEY (team_name, sport_id)
+	);
+
+create table IF NOT EXISTS has_players (
+	team_name VARCHAR(20),
+	sport_id int,
+	player_id INT REFERENCES players(player_id),
+	FOREIGN KEY (team_name, sport_id) 
+		REFERENCES teams(team_name, sport_id),
+	FOREIGN KEY (player_id, sport_id)
+    		REFERENCES players_sports(player_id, sport_id),
+	PRIMARY KEY(team_name, sport_id, player_id)
+	);
+
+CREATE TYPE DAY AS ENUM (
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+);
+
+create table IF NOT EXISTS time_slot (
+	training_id SERIAL,
+	training_day DAY,
+	training_time TIME,
+	team_name VARCHAR(20),
+	sport_id int,
+	FOREIGN KEY (team_name, sport_id) 
+		REFERENCES teams (team_name, sport_id),
+	PRIMARY KEY (training_id)
+	);
+
+
+	
+	
+
+
+INSERT INTO players (player_name, player_phone) VALUES ('Max', '07949028660');
+INSERT INTO players (player_name, player_phone) VALUES ('Hannah', '07945624312');
+INSERT INTO players (player_name, player_phone) VALUES ('Chandlar', '07947687776');
+INSERT INTO players (player_name, player_phone) VALUES ('Edward', '07945432123');
+INSERT INTO players (player_name, player_phone) VALUES ('Liam', '07945678765');
+INSERT INTO players (player_name, player_phone) VALUES ('Erin', '07949996758');
+INSERT INTO players (player_name, player_phone) VALUES ('Ffion', '07946576566');
+
+INSERT INTO sports (sport_name) VALUES ('Soccer');
+INSERT INTO sports (sport_name) VALUES ('Table Tennis');
+INSERT INTO sports (sport_name) VALUES ('Chess');
+INSERT INTO sports (sport_name) VALUES ('Squash');
+INSERT INTO sports (sport_name) VALUES ('Rugby');
+
+
+INSERT INTO players_sports(player_id, sport_id) VALUES (1, 1);
+INSERT INTO players_sports(player_id, sport_id) VALUES (1, 2);
+INSERT INTO players_sports(player_id, sport_id) VALUES (2, 1);
+INSERT INTO players_sports(player_id, sport_id) VALUES (2, 4);
+INSERT INTO players_sports(player_id, sport_id) VALUES (3, 1);
+INSERT INTO players_sports(player_id, sport_id) VALUES (3, 3);
+INSERT INTO players_sports(player_id, sport_id) VALUES (4, 1);
+INSERT INTO players_sports(player_id, sport_id) VALUES (4, 2);
+INSERT INTO players_sports(player_id, sport_id) VALUES (5, 1);
+INSERT INTO players_sports(player_id, sport_id) VALUES (5, 3);
+INSERT INTO players_sports(player_id, sport_id) VALUES (6, 1);
+INSERT INTO players_sports(player_id, sport_id) VALUES (7, 2);
+INSERT INTO players_sports(player_id, sport_id) VALUES (7, 3);
+
+INSERT INTO teams (team_name, sport_id, captain_id) VALUES ('Thunderbirds', 1, 2);
+INSERT INTO teams (team_name, sport_id, captain_id) VALUES ('Flying Machine', 1, 3);
+INSERT INTO teams (team_name, sport_id, captain_id) VALUES ('The Tables', 2, 7);
+INSERT INTO teams (team_name, sport_id, captain_id) VALUES ('The Chessers', 3, 5);
+
+INSERT INTO has_players (team_name, sport_id, player_id) VALUES ('Thunderbirds', 1, 1);
+INSERT INTO has_players (team_name, sport_id, player_id) VALUES ('Thunderbirds', 1, 5);
+INSERT INTO has_players (team_name, sport_id, player_id) VALUES ('Thunderbirds', 1, 6);
+INSERT INTO has_players (team_name, sport_id, player_id) VALUES ('Flying Machine', 1, 4);
+INSERT INTO has_players (team_name, sport_id, player_id) VALUES ('The Tables', 2, 4);
+INSERT INTO has_players (team_name, sport_id, player_id) VALUES ('The Tables', 2, 1);
+
+
+INSERT INTO time_slot (training_day, training_time, team_name, sport_id)
+	VALUES ('Tuesday', '09:30', 'Thunderbirds', 1);
+INSERT INTO time_slot (training_day, training_time, team_name, sport_id)
+	VALUES ('Thursday', '14:30', 'Thunderbirds', 1);
+INSERT INTO time_slot (training_day, training_time, team_name, sport_id)
+	VALUES ('Monday', '10:00', 'Flying Machine', 1);
+INSERT INTO time_slot (training_day, training_time, team_name, sport_id)
+	VALUES ('Sunday', '04:00', 'The Tables', 2);
+INSERT INTO time_slot (training_day, training_time, team_name, sport_id)
+	VALUES ('Monday', '12:00', 'The Tables', 2);
+INSERT INTO time_slot (training_day, training_time, team_name, sport_id)
+	VALUES ('Monday', '14:00', 'The Tables', 2);
+
+SELECT players.player_name, players.player_phone FROM has_players 
+	JOIN players ON has_players.player_id = players.player_id 
+	WHERE has_players.team_name = 'Thunderbirds' AND has_players.sport_id = 1;
+
+
+SELECT players.player_name, players.player_phone FROM has_players 
+	JOIN players on has_players.player_id = players.player_id
+	WHERE has_players.team_name = 'Flying Machine' AND has_players.sport_id = 1;
+
+SELECT players.player_name, players.player_phone FROM has_players 
+	JOIN players ON has_players.player_id = players.player_id
+	WHERE has_players.team_name = 'The Tables' AND has_players.sport_id = 2;
+
+SELECT sports.sport_name, players.player_name FROM players_sports
+	JOIN players ON players_sports.player_id = players.player_id
+	JOIN sports ON  sports.sport_id = players_sports.sport_id
+	WHERE sports.sport_name  = 'Soccer';
+
+SELECT sports.sport_name, players.player_name FROM players_sports
+	JOIN players ON players_sports.player_id = players.player_id
+	JOIN sports ON  sports.sport_id = players_sports.sport_id
+	WHERE sports.sport_name  = 'Table Tennis';
+
+SELECT sports.sport_name, players.player_name FROM players_sports
+	JOIN players ON players_sports.player_id = players.player_id
+	JOIN sports ON  sports.sport_id = players_sports.sport_id
+	WHERE sports.sport_name  = 'Chess';
+
+SELECT sports.sport_name, players.player_name FROM players_sports
+	JOIN players ON players_sports.player_id = players.player_id
+	JOIN sports ON  sports.sport_id = players_sports.sport_id
+	WHERE sports.sport_name  = 'Squash';
+
+SELECT sports.sport_name FROM sports
+	LEFT JOIN teams ON teams.sport_id = sports.sport_id
+	WHERE teams.sport_id IS NULL;
+
+SELECT sports.sport_name FROM sports 
+	LEFT JOIN players_sports ON players_sports.sport_id = sports.sport_id
+	WHERE players_sports.sport_id IS NULL;

@@ -2,12 +2,6 @@
 using namespace std;
 //class Grid;
 
-//Main function
-int main()
-{
-
-}
-
 //Create a class called Grid
 class Grid
 {

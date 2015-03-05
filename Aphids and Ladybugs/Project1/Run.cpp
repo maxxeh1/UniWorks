@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "Aphid.cpp"
 using namespace std;
 
 //Global variables
@@ -11,6 +12,8 @@ int num_aphids;
 int num_ladys;
 int aphid_pos[2];
 int lady_pos[2];
+int temp_pos1;
+int temp_pos2;
 
 //The main function for the program. This will load config files and run the simulator.
 int main()
@@ -37,12 +40,25 @@ int main()
 	//Read first line as grid sizes
 	in_file >> grid_size[0]; //Grid height
 	in_file >> grid_size[1]; //Grid length
+	//Read next line as number of aphids
 	in_file >> num_aphids;
-	while (1)
+	//Loop and grab each aphid position
+	for (int i = 0; i < num_aphids; i++)
 	{
-		in_file >> aphid_pos[0];
+		in_file >> temp_pos1;
+		in_file >> temp_pos2;
+		
 	}
-	cout << grid_size[0] << " " << grid_size[1];
+	//Read next line as number of ladybugs
+	in_file >> num_ladys;
+	//Loop and grab each ladybug position
+	for (int i = 0; i < num_ladys; i++)
+	{
+		in_file >> lady_pos[0];
+		in_file >> lady_pos[1];
+		cout << lady_pos[0] << lady_pos[1];
+	}
+	cout << grid_size[0] << " " << grid_size[1] << " " << num_aphids << " ";
 	cin.get();
 	//Close the file
 	in_file.close();

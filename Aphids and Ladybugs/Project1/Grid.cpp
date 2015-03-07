@@ -1,37 +1,45 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 //class Grid;
 
 //Create a class called Grid
 class Grid
 {
+	//Variables
+	int height;
+	int width;
+	char *** grid;
+
 	public:
-	void createGrid()
-	{
-		char grid[3][3] = { { 'a', 'b', 'c' }, { 'a', 'b', 'c' }, { 'a', 'b', 'c' } };
-		int number = 52;
-		int gridSize = sizeof(grid) / sizeof(int);
-		char character = '*';
-		int position[2] = { 0, 2 };
-
-		for (int i = 0; i < 3; i++)
+		Grid(int temp_height, int temp_width)
 		{
-			for (int j = 0; j < 3; j++)
-			{
-				if (i == position[0] && j == position[1])
-				{
-					cout << character;
-				}
-				else
-				{
-					cout << grid[i][j];
-				}
-				cout << " ";
-
-			}
-			cout << "\n";
-			cout << "______\n";
+			this->height = temp_height;
+			this->width = temp_width;
 		}
-		cin.get();
-	}
+
+		void createGrid()
+		{
+			char **temp_grid = new char *[this->height];
+			for (int i = 0; i < height; i++)
+			{
+				temp_grid[i] = new char[this->width];
+			}
+			this->grid = &temp_grid;
+		}	
+
+		int getHeight()
+		{
+			return this->height;
+		}
+
+		int getWidth()
+		{
+			return this->width;
+		}
+
+		char*** getGrid()
+		{
+			return this->grid;
+		}
 };

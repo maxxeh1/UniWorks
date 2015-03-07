@@ -41,9 +41,12 @@ int main()
 	//Read first line as grid sizes
 	in_file >> grid_size[0]; //Grid height
 	in_file >> grid_size[1]; //Grid length
-	Grid currentGrid;
-	currentGrid.createGrid(grid_size[0], grid_size[1]);
-	for (int i = 0; i < )
+
+	//Create instance of Grid
+	Grid currentGrid(grid_size[0], grid_size[1]);
+	currentGrid.createGrid();
+	//Draw grid
+	currentGrid.drawGrid();
 	//Read next line as number of aphids
 	in_file >> num_aphids;
 	//Loop and grab each aphid position

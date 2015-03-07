@@ -28,6 +28,24 @@ class Grid
 			this->grid = &temp_grid;
 		}	
 
+		void drawGrid()
+		{
+			for (int i = 0; i < this->height; i++)
+			{
+
+				for (int j = 0; j < this->width; j++)
+				{
+					cout << "|aa";
+				}
+				cout << "|\n";
+				for (int f = 0; f < this->width; f++)
+				{
+					cout << "___";
+				}
+				cout << "\n";
+			}
+		}
+
 		int getHeight()
 		{
 			return this->height;

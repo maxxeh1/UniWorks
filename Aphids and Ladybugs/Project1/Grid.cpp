@@ -41,9 +41,7 @@ class Grid
 		}	
 
 		/**
-		
-		
-		
+			Draws the array as a #x# grid
 		*/
 		void drawGrid()
 		{
@@ -63,18 +61,21 @@ class Grid
 			}
 		}
 
+		/**
+			Retrieves the height of the grid
+			@return height variable
+		*/
 		int getHeight()
 		{
 			return this->height;
 		}
 
+		/**
+			Retrieves the width of the grid
+			@return width variable
+		*/
 		int getWidth()
 		{
 			return this->width;
-		}
-
-		char*** getGrid()
-		{
-			return this->grid;
 		}
 };

@@ -11,13 +11,25 @@ class Grid
 	int width;
 	char *** grid;
 
+	//Public methods
 	public:
+		//Default Constructor
+		Grid()
+		{
+			this->height = 10;
+			this->width = 10;
+		}
+		//Constructor
 		Grid(int temp_height, int temp_width)
 		{
 			this->height = temp_height;
 			this->width = temp_width;
 		}
 
+		/**
+			Creates a 2D array based on object variables
+			for later drawing as a grid
+		*/
 		void createGrid()
 		{
 			char **temp_grid = new char *[this->height];
@@ -28,6 +40,11 @@ class Grid
 			this->grid = &temp_grid;
 		}	
 
+		/**
+		
+		
+		
+		*/
 		void drawGrid()
 		{
 			for (int i = 0; i < this->height; i++)

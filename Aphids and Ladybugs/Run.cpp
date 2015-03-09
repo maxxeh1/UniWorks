@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include "Aphid.cpp"
+#include "Ladybug.cpp"
 #include "Grid.cpp"
 using namespace std;
 
@@ -17,8 +18,8 @@ int aphid_pos[2];
 int lady_pos[2];
 int temp_pos1;
 int temp_pos2;
-map <string, Aphid> aphidMap;
 vector<Aphid> aphidVector(10);
+vector<Ladybug> ladyVector(10);
 
 //The main function for the program. This will load config files and run the simulator.
 int main()
@@ -64,7 +65,7 @@ int main()
 		//Aphid temp_aphid(temp_pos1, temp_pos2);
 		//aphidMap[temp_name] = temp_aphid;
 		aphidVector[i].setHeight(temp_pos1);
-		aphidVector[i].setHeight(temp_pos2);
+		aphidVector[i].setWidth(temp_pos2);
 		aphidVector[i].test();
 	}
 	for (int i = 0; i < num_aphids; i++)
@@ -77,9 +78,15 @@ int main()
 	//Loop and grab each ladybug position
 	for (int i = 0; i < num_ladys; i++)
 	{
-		in_file >> lady_pos[0];
-		in_file >> lady_pos[1];
-		cout << lady_pos[0] << lady_pos[1];
+		in_file >> temp_pos1;
+		in_file >> temp_pos2;
+		string temp_name;
+		cout << "Please enter a name for this ladybug: ";
+		//cin >> temp_name;
+		//Aphid temp_aphid(temp_pos1, temp_pos2);
+		//aphidMap[temp_name] = temp_aphid;
+		ladyVector[i].setHeight(temp_pos1);
+		ladyVector[i].setWidth(temp_pos2);
 	}
 	cout << grid_size[0] << " " << grid_size[1] << " " << num_aphids << " " << " " << num_ladys;
 	cin.get();

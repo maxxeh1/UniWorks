@@ -3,9 +3,10 @@
 #include <fstream>
 #include <map>
 #include <vector>
-#include "Aphid.cpp"
-#include "Ladybug.cpp"
-#include "Grid.cpp"
+#include "Animal.h"
+//#include "Aphid.cpp"
+//#include "Ladybug.cpp"
+#include "Grid.h"
 using namespace std;
 
 //Global variables

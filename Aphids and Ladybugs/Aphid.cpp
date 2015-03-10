@@ -1,30 +1,28 @@
-#include "Animal.cpp"
 #include <string>
 #include <iostream>
+#include "Animal.h"
 using namespace std;
 
-class Aphid : public Animal
-{
-	//Global variables
+
+//Global variables
 
 
-	//Constructor
-	public:
-		Aphid()
-		{
-			position[0] = 0;
-			position[1] = 1;
-		}
+//Constructor
 
-		Aphid(int position1, int position2)
-		{
-			position[0] = position1;
-			position[1] = position2;
-		}
+	Aphid::Aphid()
+	{
+		position[0] = 0;
+		position[1] = 1;
+	}
 
-		void test()
-		{
-			cout << "Testing Testing";
-		}
+	Aphid::Aphid(int position1, int position2)
+	{
+		position[0] = position1;
+		position[1] = position2;
+	}
 
-};
+	void Aphid::test()
+	{
+		cout << "Testing Testing";
+	}
+

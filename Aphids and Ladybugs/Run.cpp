@@ -69,8 +69,10 @@ int main()
 		aphidVector[i].setWidth(temp_pos2);
 		aphidVector[i].test();
 	}
-	for (int i = 0; i < num_aphids; i++)
+	for (vector<Aphid>::iterator it = aphidVector.begin(); it != aphidVector.end(); ++it)
 	{
+		cout << *it;
+	
 		cout << aphidVector[i].getHeight();
 		cout << aphidVector[i].getWidth();
 		cin.get();

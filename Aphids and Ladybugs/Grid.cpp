@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Grid.h"
+#include "Animal.h"
 using namespace std;
 //class Grid;
 
@@ -39,14 +40,36 @@ using namespace std;
 		/**
 			Draws the array as a #x# grid
 		*/
-		void Grid::drawGrid()
+		void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector, int num_aphids, int num_ladys)
 		{
+			int cellAphids = 0;
+			int cellLadys = 0; 
+			bool filled = false;
 			for (int i = 0; i < this->height; i++)
 			{
 
 				for (int j = 0; j < this->width; j++)
 				{
-					cout << "|aa";
+					for (int arr = 0; arr < num_aphids; arr++)
+					{
+						if (aphidVector[i].getHeight == i && aphidVector[i].getWidth == j)
+						{
+							cout << "|A" + ++cellAphids;
+							filled = true;
+						}
+					}
+					for (int arr1 = 0; arr1 < num_ladys; arr1++)
+					{
+						if (ladyVector[i].getHeight == i && ladyVector[i].getWidth == j)
+						{
+							cout << "|L" + ++cellLadys;
+							filled = true;
+						}
+					}
+					if (!filled)
+					{
+						cout << "|  ";
+					}
 				}
 				cout << "|\n";
 				for (int f = 0; f < this->width; f++)

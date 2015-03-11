@@ -52,7 +52,7 @@ int main()
 	Grid currentGrid(grid_size[0], grid_size[1]);
 	currentGrid.createGrid();
 	//Draw grid
-	currentGrid.drawGrid();
+	
 	//Read next line as number of aphids
 	in_file >> num_aphids;
 	//Loop and grab each aphid position
@@ -61,7 +61,7 @@ int main()
 		in_file >> temp_pos1;
 		in_file >> temp_pos2;
 		string temp_name;
-		cout << "Please enter a name for this aphid: ";
+		//cout << "Please enter a name for this aphid: ";
 		//cin >> temp_name;
 		//Aphid temp_aphid(temp_pos1, temp_pos2);
 		//aphidMap[temp_name] = temp_aphid;
@@ -73,6 +73,7 @@ int main()
 	{
 		cout << aphidVector[i].getHeight();
 		cout << aphidVector[i].getWidth();
+		cin.get();
 	}
 	//Read next line as number of ladybugs
 	in_file >> num_ladys;
@@ -82,14 +83,21 @@ int main()
 		in_file >> temp_pos1;
 		in_file >> temp_pos2;
 		string temp_name;
-		cout << "Please enter a name for this ladybug: ";
+		//cout << "Please enter a name for this ladybug: ";
 		//cin >> temp_name;
 		//Aphid temp_aphid(temp_pos1, temp_pos2);
 		//aphidMap[temp_name] = temp_aphid;
 		ladyVector[i].setHeight(temp_pos1);
 		ladyVector[i].setWidth(temp_pos2);
 	}
-	cout << grid_size[0] << " " << grid_size[1] << " " << num_aphids << " " << " " << num_ladys;
+	for (int i = 0; i < num_ladys; i++)
+	{
+		cout << ladyVector[i].getHeight();
+		cout << ladyVector[i].getWidth();
+		cin.get();
+	}
+	currentGrid.drawGrid(aphidVector, ladyVector, num_aphids, num_ladys);
+	//cout << grid_size[0] << " " << grid_size[1] << " " << num_aphids << " " << " " << num_ladys;
 	cin.get();
 	//Close the file
 	in_file.close();

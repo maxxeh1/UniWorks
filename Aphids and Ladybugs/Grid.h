@@ -1,10 +1,15 @@
 #ifndef GRID_H
 #define GRID_H
+
+#include <vector>
+#include "Animal.h"
+using namespace std;
 //class Grid;
 
 //Create a class called Grid
 class Grid
 {
+	friend class Animal;
 	//Variables
 	int height;
 	int width;
@@ -26,7 +31,7 @@ class Grid
 		/**
 			Draws the array as a #x# grid
 		*/
-		void drawGrid();
+		void drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector, int num_aphids, int num_ladys);
 
 		/**
 			Retrieves the height of the grid

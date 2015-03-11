@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <stdlib.h>
 #include "Animal.h"
 using namespace std;
 
@@ -8,6 +9,7 @@ using namespace std;
 
 
 //Constructor
+
 
 	Aphid::Aphid()
 	{
@@ -21,8 +23,39 @@ using namespace std;
 		position[1] = position2;
 	}
 
-	void Aphid::test()
-	{
-		cout << "Testing Testing";
-	}
+        void Aphid::update()
+        {
+            this->direction = rand() % 7;
+            switch(this->direction)
+            {
+                case(0): //North
+                    this->position[0]--;
+                    break;
+                case(1): //North-east
+                    this->position[0]--;
+                    this->position[1]++;
+                    break;
+                case(2): //East
+                    this->position[1]++;
+                    break;
+                case(3): //South-east
+                    this->position[0]++;
+                    this->position[1]++;
+                    break;
+                case(4): //South
+                    this->position[0]++;
+                    break;
+                case(5): //South-west
+                    this->position[0]++;
+                    this->position[1]--;
+                    break;
+                case(6): //West
+                    this->position[1]--;
+                    break;
+                case(7): //North-west
+                    this->position[0]--;
+                    this->position[1]--;
+                    break;
+            }
+        }
 

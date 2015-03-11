@@ -3,6 +3,9 @@
 #include <fstream>
 #include <map>
 #include <vector>
+#include <utility>
+#include <time.h>
+#include <stdlib.h>
 #include "Animal.h"
 #include "Grid.h"
 using namespace std;
@@ -18,6 +21,7 @@ float moveProb = 0, killProb = 0, groupKillProb = 0, reproduceProb = 0;
 //The main function for the program. This will load config files and run the simulator.
 int main()
 {
+    srand(time(0));
     //Welcome messages in console
     cout << "Welcome to the Aphids and Ladybugs simulator.";
     cout << "Please enter the name of the config files you wish to use: \n";
@@ -63,7 +67,8 @@ int main()
     for (vector<Aphid>::iterator itA = aphidVector.begin();  
                     itA != aphidVector.end(); ++itA)
     {
-        cout << (*itA).getPosition();
+        pair<int, int> temp_pos = (*itA).getPosition();
+        cout << temp_pos.first << temp_pos.second;
     }
     //Read next line as number of ladybugs
     in_file >> num_ladys;
@@ -104,8 +109,24 @@ int main()
     
     //Draw the grid
     currentGrid.drawGrid(aphidVector, ladyVector);
-
+    
     cin.get();
+    for (vector<Ladybug>::iterator itL = ladyVector.begin();  
+                    itL != ladyVector.end(); ++itL)
+    {
+        (*itL).setDirection('e');
+        (*itL).update();
+    }
+    currentGrid.drawGrid(aphidVector, ladyVector);
+    cin.get();
+    for (vector<Aphid>::iterator itA = aphidVector.begin();  
+                    itA != aphidVector.end(); ++itA)
+    {
+        (*itA).update();
+    }
+    cin.get();
+    //Draw the grid
+    currentGrid.drawGrid(aphidVector, ladyVector);
     //Close the file
     in_file.close();
 }

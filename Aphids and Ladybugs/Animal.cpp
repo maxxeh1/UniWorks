@@ -47,7 +47,12 @@ int Animal::getWidth()
     return this->position[1];
 }
 
-int Animal::getPosition()
+pair<int,int> Animal::getPosition()
 {
-    return tie(this->position[0], this->position[1]);
+    return make_pair(this->position[0], this->position[1]);
+}
+
+void Animal::update()
+{
+    
 }

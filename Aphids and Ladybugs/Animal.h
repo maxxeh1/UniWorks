@@ -1,51 +1,63 @@
 #ifndef ANIMAL_H
 #define ANIMAL_H
+#include <utility>
+using namespace std;
 
 class Animal
 {
-	protected:
-		int position[2];
+    protected:
+        int position[2];
 
-	public:
-		Animal();
+    public:
+        Animal();
 
-		void setHeight(int height);
-
-
-		void setWidth(int width);
+        void setHeight(int height);
 
 
-		int getHeight();
+        void setWidth(int width);
 
 
-		int getWidth();
-                
-                int getPosition();
+        int getHeight();
+
+
+        int getWidth();
+
+        pair<int, int> getPosition();
+
+        void update();
 
 };
 
 class Aphid : public Animal
 {
-	//Global variables
+    //Global variables
+    protected:
+        int direction;
 
+    //Constructor
+    public:
+        Aphid();
 
-	//Constructor
-	public:
-		Aphid();
+        Aphid(int position1, int position2);
 
-		Aphid(int position1, int position2);
-
-		void test();
+        void update();
 
 };
 
 class Ladybug : public Animal
 {
-	public:
-		Ladybug();
+    protected:
+        char direction;
+        int subdirection;
+        
+    public:
+            Ladybug();
 
-		Ladybug(int position1, int position2);
-
+            Ladybug(int position1, int position2);
+            
+            void setDirection(char temp_direction);
+            
+            void update();
 };
 
 

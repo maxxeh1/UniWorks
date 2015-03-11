@@ -4,13 +4,19 @@
 #include "Animal.h"
 using namespace std;
 
-
+/**
+ * Default constructor
+ */
 Grid::Grid()
 {
     this->height = 10;
     this->width = 10;
 }
-//Constructor
+/**
+ * Constructor
+ * @param int temp_height
+ * @param int temp_width
+ */
 Grid::Grid(int temp_height, int temp_width)
 {
     this->height = temp_height;
@@ -18,9 +24,9 @@ Grid::Grid(int temp_height, int temp_width)
 }
 
 /**
-    Creates a 2D array based on object variables
-    for later drawing as a grid
-*/
+ * Creates a 2D array based on object variables
+ * for later drawing as a grid
+ */
 void Grid::createGrid()
 {
     char **temp_grid = new char *[this->height];
@@ -32,8 +38,11 @@ void Grid::createGrid()
 }	
 
 /**
-    Draws the array as a #x# grid
-*/
+ * Draws the array as a #x# grid and shows locations of aphids and
+ * ladybugs
+ * @param vector<Aphid> aphidVector
+ * @param vector<Ladybug> ladyVector
+ */
 void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
 {
     //Local variables
@@ -42,11 +51,14 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
     
     //Draw the grid, looping through aphid and ladybug vectors
     cout << " ";
+    //Loop through columns and print column numbers
     for (int colCount = 0; colCount < this->width; colCount++)
     {
         cout << " " << column++ << " ";
     }
     cout << endl;
+    //Loop through rows and nested loop through columns to print locations of 
+    //aphids and ladybugs, as well as the number of them in each cell
     for (int i = 0; i < this->height; i++)
     {
         cout << row++ << "";
@@ -78,14 +90,15 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             {
                 cout << "|L" << cellLadys;
             }
-            if(aphid)
+            else if(aphid)
             {
                 cout << "|A" << cellAphids;
             }
-            if (!filled)
+            else if (!filled)
             {
                 cout << "|  ";
             }
+            //Reset condition variables
             aphid = false;
             ladyBug = false;
             filled = false;
@@ -94,6 +107,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
         }
         cout << "|\n";
         cout << "  ";
+        //Print row seperators
         for (int f = 0; f < this->width; f++)
         {
             cout << "___";
@@ -103,18 +117,18 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
 }
 
 /**
-    Retrieves the height of the grid
-    @return height variable
-*/
+ * Retrieves the height of the grid
+ * @return int height
+ */
 int Grid::getHeight()
 {
     return this->height;
 }
 
 /**
-    Retrieves the width of the grid
-    @return width variable
-*/
+ * Retrieves the width of the grid
+ * @return int width
+ */
 int Grid::getWidth()
 {
     return this->width;

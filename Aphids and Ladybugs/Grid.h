@@ -19,30 +19,37 @@ class Grid
     public:
         //Default Constructor
         Grid();
-        //Constructor
+        /**
+         * Constructor
+         * @param int temp_height
+         * @param int temp_width
+         */
         Grid(int temp_height, int temp_width);
 
         /**
-                Creates a 2D array based on object variables
-                for later drawing as a grid
-        */
+         * Creates a 2D array based on object variables
+         * for later drawing as a grid
+         */
         void createGrid();
 
         /**
-                Draws the array as a #x# grid
-        */
+         * Draws the array as a #x# grid and shows locations of aphids and
+         * ladybugs
+         * @param vector<Aphid> aphidVector
+         * @param vector<Ladybug> ladyVector
+         */
         void drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector);
 
         /**
-                Retrieves the height of the grid
-                @return height variable
-        */
+         * Retrieves the height of the grid
+         * @return int height
+         */
         int getHeight();
 
         /**
-                Retrieves the width of the grid
-                @return width variable
-        */
+         * Retrieves the width of the grid
+         * @return int width
+         */
         int getWidth();
 };
 

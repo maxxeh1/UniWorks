@@ -19,6 +19,8 @@ class Animal
 
 
 		int getWidth();
+                
+                int getPosition();
 
 };
 

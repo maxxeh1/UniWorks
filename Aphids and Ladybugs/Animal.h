@@ -24,7 +24,7 @@ class Animal
 
         pair<int, int> getPosition();
 
-        void update();
+        virtual void update();
 
 };
 

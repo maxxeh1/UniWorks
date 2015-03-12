@@ -8,11 +8,13 @@
 #include <stdlib.h>
 #include "Animal.h"
 #include "Grid.h"
+#include "Manager.h"
 using namespace std;
 
 //Global variables
 string file_name;
 ifstream in_file;
+Manager currentManager;
 int num_aphids = 0, num_ladys = 0, temp_pos1 = 0, temp_pos2 = 0, aphid_pos[2], 
         lady_pos[2],grid_size[2];
 float moveProb = 0, killProb = 0, groupKillProb = 0, reproduceProb = 0;
@@ -86,6 +88,9 @@ int main()
         ladyVector[i].setHeight(temp_pos1);
         ladyVector[i].setWidth(temp_pos2);
     }
+    
+    currentManager.setVectors(aphidVector, ladyVector);
+    
     //Close current file
     in_file.close();
     //Open aphid config file and assign variables
@@ -111,7 +116,8 @@ int main()
     currentGrid.drawGrid(aphidVector, ladyVector);
     
     cin.get();
-    for (vector<Ladybug>::iterator itL = ladyVector.begin();  
+    currentManager.updateAll();
+    /*for (vector<Ladybug>::iterator itL = ladyVector.begin();  
                     itL != ladyVector.end(); ++itL)
     {
         (*itL).setDirection('e');
@@ -126,7 +132,7 @@ int main()
     }
     cin.get();
     //Draw the grid
-    currentGrid.drawGrid(aphidVector, ladyVector);
+    currentGrid.drawGrid(aphidVector, ladyVector);*/
     //Close the file
     in_file.close();
 }

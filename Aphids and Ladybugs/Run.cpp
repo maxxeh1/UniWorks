@@ -14,10 +14,12 @@ using namespace std;
 //Global variables
 string file_name;
 ifstream in_file;
-Manager currentManager;
+
 int num_aphids = 0, num_ladys = 0, temp_pos1 = 0, temp_pos2 = 0, aphid_pos[2], 
         lady_pos[2],grid_size[2];
-float moveProb = 0, killProb = 0, groupKillProb = 0, reproduceProb = 0;
+float aphidMoveProb = 0, aphidKillProb = 0, groupKillProb = 0, 
+        aphidReproduceProb = 0, ladyMoveProb = 0, ladyDirectionProb = 0, 
+        ladyKillProb = 0, ladyReproduceProb = 0;
 
 
 //The main function for the program. This will load config files and run the simulator.
@@ -89,33 +91,39 @@ int main()
         ladyVector[i].setWidth(temp_pos2);
     }
     
-    currentManager.setVectors(aphidVector, ladyVector);
+    
+    //currentManager.setVectors(aphidVector, ladyVector);
     
     //Close current file
     in_file.close();
     //Open aphid config file and assign variables
     in_file.open("aphidConfig.txt");
-    in_file >> moveProb;
-    in_file >> killProb;
+    in_file >> aphidMoveProb;
+    in_file >> aphidKillProb;
     in_file >> groupKillProb;
-    in_file >> reproduceProb;
-    cout << moveProb << killProb << groupKillProb << reproduceProb;
+    in_file >> aphidReproduceProb;
+    //cout << moveProb << killProb << groupKillProb << reproduceProb;
     
     //Close current file
     in_file.close();
     
     //Open ladybug config file and assign variables
     in_file.open("ladybugConfig.txt"); 
-    in_file >> moveProb;
-    in_file >> killProb;
-    in_file >> groupKillProb;
-    in_file >> reproduceProb;
-    cout << moveProb << killProb << groupKillProb << reproduceProb;
+    in_file >> ladyMoveProb;
+    in_file >> ladyDirectionProb;
+    in_file >> ladyKillProb;
+    in_file >> ladyReproduceProb;
+    //cout << moveProb << killProb << groupKillProb << reproduceProb;
     
+    //Create manager with provided data
+    Manager currentManager(aphidVector, ladyVector, aphidMoveProb, ladyMoveProb,
+            ladyDirectionProb);
     //Draw the grid
     currentGrid.drawGrid(aphidVector, ladyVector);
     
     cin.get();
+    
+    
     currentManager.updateAll();
     /*for (vector<Ladybug>::iterator itL = ladyVector.begin();  
                     itL != ladyVector.end(); ++itL)

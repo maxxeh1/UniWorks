@@ -3,6 +3,15 @@
 #include <utility>
 using namespace std;
 
+enum LadyDirection
+{
+    North,
+    East,
+    South,
+    West,
+    NUM_DIRECTIONS
+};
+
 class Animal
 {
     protected:
@@ -47,7 +56,7 @@ class Aphid : public Animal
 class Ladybug : public Animal
 {
     protected:
-        char direction;
+        LadyDirection direction;
         int subdirection;
         
     public:
@@ -55,10 +64,12 @@ class Ladybug : public Animal
 
             Ladybug(int position1, int position2);
             
-            void setDirection(char temp_direction);
+            void setDirection(LadyDirection temp_direction);
             
             void update();
 };
+
+
 
 
 

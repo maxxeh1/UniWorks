@@ -43,12 +43,24 @@ void Manager::updateAll()
     for (vector<Ladybug>::iterator itL = this->currentLadys.begin();  
                 itL != this->currentLadys.end(); ++itL)
     {
+        
         if(checkProbability(this->ladyMoveProb))
         {
-        (*itL).update();
-        this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
-        cout << "Ladybug moved";
-        cin.get();
+            if(checkProbability(this->ladyDirectionProb))
+            {
+                (*itL).setDirection(static_cast<LadyDirection>(rand()% NUM_DIRECTIONS));
+                cout << "Ladybug changed direction";
+                cin.get();
+            }
+            else
+            {
+                cout << "Ladybug did not change direction";
+                cin.get();
+            }
+            (*itL).update();
+            this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
+            cout << "Ladybug moved";
+            cin.get();
         }
         else
         {

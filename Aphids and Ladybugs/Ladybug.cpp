@@ -7,17 +7,17 @@ Ladybug::Ladybug()
         {
             position[0] = 0;
             position[1] = 1;
-            direction = 'n';
+            direction = North;
         }
 
 Ladybug::Ladybug(int position1, int position2)
 {
         position[0] = position1;
         position[1] = position2;
-        direction = 'n';
+        direction = North;
 }
 
-void Ladybug::setDirection(char temp_direction)
+void Ladybug::setDirection(LadyDirection temp_direction)
 {
     this->direction = temp_direction;
 }
@@ -26,7 +26,7 @@ void Ladybug::update()
 {
     switch(this->direction)
     {
-        case('n'):
+        case(North):
             this->position[0]--;
             this->subdirection = rand() % 3;
             switch(this->subdirection)
@@ -41,7 +41,7 @@ void Ladybug::update()
                     break;
             }
             break;
-        case('e'):
+        case(East):
             this->position[1]++;
             subdirection = rand() % 3;
             switch(this->subdirection)
@@ -56,7 +56,7 @@ void Ladybug::update()
                     break;
             }
             break;
-        case('s'):
+        case(South):
             this->position[0]++;
             subdirection = rand() % 3;
             switch(this->subdirection)
@@ -71,7 +71,7 @@ void Ladybug::update()
                     break;
             }
             break;
-        case('w'):
+        case(West):
             this->position[1]--;
             subdirection = rand() % 3;
             switch(this->subdirection)

@@ -128,7 +128,8 @@ int main()
     while(true)
     {
         currentManager.updateAll();
-        this_thread::sleep_for(std::chrono::milliseconds(2000));
+        cin.get();
+        //this_thread::sleep_for(std::chrono::milliseconds(2000));
     }
     
     /*for (vector<Ladybug>::iterator itL = ladyVector.begin();  

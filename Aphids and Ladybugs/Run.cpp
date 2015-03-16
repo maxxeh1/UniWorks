@@ -4,6 +4,8 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <chrono>
+#include <thread>
 #include <time.h>
 #include <stdlib.h>
 #include "Animal.h"
@@ -123,8 +125,12 @@ int main()
     
     cin.get();
     
+    while(true)
+    {
+        currentManager.updateAll();
+        this_thread::sleep_for(std::chrono::milliseconds(2000));
+    }
     
-    currentManager.updateAll();
     /*for (vector<Ladybug>::iterator itL = ladyVector.begin();  
                     itL != ladyVector.end(); ++itL)
     {

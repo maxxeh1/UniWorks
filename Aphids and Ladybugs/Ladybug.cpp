@@ -17,76 +17,160 @@ Ladybug::Ladybug(int position1, int position2)
         direction = North;
 }
 
-void Ladybug::setDirection(LadyDirection temp_direction)
+void Ladybug::setDirection(int nSteps)
 {
-    this->direction = temp_direction;
+    this->direction = static_cast<LadyDirection>(
+                     (this->direction + nSteps) % NUM_DIRECTIONS);
 }
 
 void Ladybug::update()
 {
-    switch(this->direction)
+    bool check = true;
+    while(check)
     {
-        case(North):
-            this->position[0]--;
-            this->subdirection = rand() % 3;
-            switch(this->subdirection)
-            {
-                case(0): //North
+        switch(this->direction)
+        {
+            case(North):
+                if(position[0] == 0)
+                {
+                    this->direction = South;
                     break;
-                case(1): //North-east
-                    this->position[1]++;
+                }
+                this->position[0]--;
+                if(this->position[1] == 9)
+                {
+                    this->subdirection = 2;
+                }
+                else if(this->position[1] == 0)
+                {
+                    this->subdirection = 1;
+                }
+                else
+                {
+                    this->subdirection = rand() % 3;
+                }
+                switch(this->subdirection)
+                {
+                    case(0): //North
+                        check = false;
+                        break;
+                    case(1): //North-east
+                        this->position[1]++;
+                        check = false;
+                        break;
+                    case(2): //North-west
+                        this->position[1]--;
+                        check = false;
+                        break;
+                }
+                break;
+            case(East):
+                if(position[1] == 9)
+                {
+                    this->direction = West;
                     break;
-                case(2): //North-west
-                    this->position[1]--;
+                }
+                this->position[1]++;
+                
+                if(this->position[0] == 9)
+                {
+                    this->subdirection = 1;
+                }
+                else if(this->position[0] == 0)
+                {
+                    this->subdirection = 2;
+                }
+                else
+                {
+                    this->subdirection = rand() % 3;
+                }
+                subdirection = rand() % 3;
+                switch(this->subdirection)
+                {
+                    case(0): //East
+                        check = false;
+                        break;
+                    case(1): //East-north
+                        this->position[0]--;
+                        check = false;
+                        break;
+                    case(2): //East-south
+                        this->position[0]++;
+                        check = false;
+                        break;
+                }
+                break;
+            case(South):
+                if(position[0] == 9)
+                {
+                    this->direction = North;
                     break;
-            }
-            break;
-        case(East):
-            this->position[1]++;
-            subdirection = rand() % 3;
-            switch(this->subdirection)
-            {
-                case(0): //East
+                }
+                this->position[0]++;
+                
+                if(this->position[1] == 9)
+                {
+                    this->subdirection = 2;
+                }
+                else if(this->position[1] == 0)
+                {
+                    this->subdirection = 1;
+                }
+                else
+                {
+                    this->subdirection = rand() % 3;
+                }
+                switch(this->subdirection)
+                {
+                    case(0): //South
+                        check = false;
+                        break;
+                    case(1): //South-east
+                        this->position[1]++;
+                        check = false;
+                        break;
+                    case(2): //South-west
+                        this->position[1]--;
+                        check = false;
+                        break;
+                }
+                break;
+            case(West):
+                if(this->position[1] == 0)
+                {
+                    this->direction == East;
                     break;
-                case(1): //East-north
-                    this->position[0]--;
-                    break;
-                case(2): //East-south
-                    this->position[0]++;
-                    break;
-            }
-            break;
-        case(South):
-            this->position[0]++;
-            subdirection = rand() % 3;
-            switch(this->subdirection)
-            {
-                case(0): //South
-                    break;
-                case(1): //South-east
-                    this->position[1]++;
-                    break;
-                case(2): //South-west
-                    this->position[1]--;
-                    break;
-            }
-            break;
-        case(West):
-            this->position[1]--;
-            subdirection = rand() % 3;
-            switch(this->subdirection)
-            {
-                case(0): //West
-                    break;
-                case(1): //West-north
-                    this->position[0]--;
-                    break;
-                case(2): //West-south
-                    this->position[0]++;
-                    break;
-            }
-            break;
+                }
+                this->position[1]--;
+                
+                if(this->position[0] == 9)
+                {
+                    this->subdirection = 1;
+                }
+                else if(this->position[0] == 0)
+                {
+                    this->subdirection = 2;
+                }
+                else
+                {
+                    this->subdirection = rand() % 3;
+                }
+                switch(this->subdirection)
+                {
+                    case(0): //West
+                        check = false;
+                        break;
+                    case(1): //West-north
+                        this->position[0]--;
+                        check = false;
+                        break;
+                    case(2): //West-south
+                        this->position[0]++;
+                        check = false;
+                        break;
+                }
+                break;
+        }
     }
 }
-
 

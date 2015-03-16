@@ -19,7 +19,16 @@ void Manager::setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys)
 {
     currentAphids = newAphids;
     currentLadys = newLadys;
-
+    /*for (vector<Aphid>::iterator itA = this->currentAphids.begin();
+            itA != this->currentAphids.end(); ++itA)
+    {
+        allAnimals.push_back(itA);
+    }
+    for (vector<Ladybug>::iterator itL = this->currentLadys.begin();
+            itL != this->currentLadys.end(); ++itL)
+    {
+        allAnimals.push_back(itL);
+    }*/
 }
 
 void Manager::updateAll()
@@ -32,12 +41,12 @@ void Manager::updateAll()
             (*itA).update();
             this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
             cout << "Aphid moved";
-            cin.get();
+            //cin.get();
         }
         else
         {
             cout << "Aphid did not move";
-            cin.get();
+            //cin.get();
         }
     }
     for (vector<Ladybug>::iterator itL = this->currentLadys.begin();  
@@ -48,24 +57,24 @@ void Manager::updateAll()
         {
             if(checkProbability(this->ladyDirectionProb))
             {
-                (*itL).setDirection(static_cast<LadyDirection>(rand()% NUM_DIRECTIONS));
+                (*itL).setDirection(1 + rand()%(NUM_DIRECTIONS - 1));
                 cout << "Ladybug changed direction";
-                cin.get();
+                //cin.get();
             }
             else
             {
                 cout << "Ladybug did not change direction";
-                cin.get();
+                //cin.get();
             }
             (*itL).update();
             this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
             cout << "Ladybug moved";
-            cin.get();
+            //cin.get();
         }
         else
         {
             cout << "Ladybug did not move";
-            cin.get();
+            //cin.get();
         }
     }
 }

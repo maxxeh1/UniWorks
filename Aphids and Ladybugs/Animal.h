@@ -64,7 +64,7 @@ class Ladybug : public Animal
 
             Ladybug(int position1, int position2);
             
-            void setDirection(LadyDirection temp_direction);
+            void setDirection(int nSteps);
             
             void update();
 };

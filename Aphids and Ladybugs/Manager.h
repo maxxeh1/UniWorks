@@ -16,6 +16,7 @@ class Manager
         Grid currentGrid;
         vector<Aphid> currentAphids;
         vector<Ladybug> currentLadys;
+        vector<Animal> allAnimals;
     
     public:
         Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys, 

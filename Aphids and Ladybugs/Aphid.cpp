@@ -24,7 +24,8 @@ using namespace std;
 	{
 		position[0] = position1;
 		position[1] = position2;
-                this->life = 70 + (rand() % (int)(100 - 70 + 1));
+                //this->life = 70 + (rand() % (int)(100 - 70 + 1));
+                this->life = 10;
 	}
 
         void Aphid::update(int gridHeight, int gridWidth)

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include "Grid.h"
 #include "Animal.h"
 using namespace std;
@@ -54,14 +55,14 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
     //Loop through columns and print column numbers
     for (int colCount = 0; colCount < this->width; colCount++)
     {
-        cout << " " << column++ << " ";
+        cout << setw(5) << column++;
     }
     cout << endl;
     //Loop through rows and nested loop through columns to print locations of 
     //aphids and ladybugs, as well as the number of them in each cell
     for (int i = 0; i < this->height; i++)
     {
-        cout << row++ << "";
+        cout << setw(3) << row++;
         for (int j = 0; j < this->width; j++)
         {
             for (vector<Aphid>::iterator itA = aphidVector.begin();  
@@ -110,7 +111,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             cellLadys = 0;
         }
         cout << "|\n";
-        cout << "  ";
+        cout << "    ";
         //Print row seperators
         for (int f = 0; f < this->width; f++)
             

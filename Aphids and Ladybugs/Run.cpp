@@ -74,7 +74,7 @@ int main()
                     itA != aphidVector.end(); ++itA)
     {
         pair<int, int> temp_pos = (*itA).getPosition();
-        cout << temp_pos.first << temp_pos.second;
+        //cout << temp_pos.first << temp_pos.second;
     }
     //Read next line as number of ladybugs
     in_file >> num_ladys;

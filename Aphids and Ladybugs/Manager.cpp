@@ -46,12 +46,12 @@ void Manager::updateAll()
         {
             (*itA).update();
             this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
-            cout << "Aphid moved";
+            cout << "Aphid moved" << endl;
             //cin.get();
         }
         else
         {
-            cout << "Aphid did not move";
+            cout << "Aphid did not move" << endl;
             //cin.get();
         }
     }
@@ -64,22 +64,22 @@ void Manager::updateAll()
             if(checkProbability(this->ladyDirectionProb))
             {
                 (*itL).setDirection(1 + rand()%(NUM_DIRECTIONS - 1));
-                cout << "Ladybug changed direction";
+                cout << "Ladybug changed direction" << endl;
                 //cin.get();
             }
             else
             {
-                cout << "Ladybug did not change direction";
+                cout << "Ladybug did not change direction" << endl;
                 //cin.get();
             }
             (*itL).update();
             this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
-            cout << "Ladybug moved";
+            cout << "Ladybug moved" << endl;
             //cin.get();
         }
         else
         {
-            cout << "Ladybug did not move";
+            cout << "Ladybug did not move" << endl;
             //cin.get();
         }
     }

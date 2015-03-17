@@ -44,8 +44,8 @@ void Manager::updateAll()
     {
         if(checkProbability(this->aphidMoveProb))
         {
-            (*itA).update();
-            this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
+            (*itA).update(currentGrid.getHeight(), currentGrid.getWidth());
+            //this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
             cout << "Aphid moved" << endl;
             //cin.get();
         }
@@ -73,7 +73,7 @@ void Manager::updateAll()
                 //cin.get();
             }
             (*itL).update();
-            this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
+            //this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
             cout << "Ladybug moved" << endl;
             //cin.get();
         }
@@ -83,6 +83,8 @@ void Manager::updateAll()
             //cin.get();
         }
     }
+    cout << endl << "Turn: " << turn++ << endl;
+    this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
 }
 
 void Manager::fight(Animal movedAnimal, Animal currentAnimal)

@@ -12,6 +12,7 @@ class Manager
     friend class Animal;
     
     protected:
+        int turn = 0;
         float aphidMoveProb, ladyMoveProb, ladyDirectionProb;
         Grid currentGrid;
         vector<Aphid> currentAphids;

@@ -1,5 +1,7 @@
 #include <string>
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "Animal.h"
 using namespace std;
@@ -23,39 +25,58 @@ using namespace std;
 		position[1] = position2;
 	}
 
-        void Aphid::update()
+        void Aphid::update(int gridHeight, int gridWidth)
         {
-            this->direction = rand() % 7;
-            switch(this->direction)
+            bool check = true;
+            int store[2];
+            memcpy(store, this->position, sizeof(store));
+            
+            
+            while(check)
             {
-                case(0): //North
-                    this->position[0]--;
-                    break;
-                case(1): //North-east
-                    this->position[0]--;
-                    this->position[1]++;
-                    break;
-                case(2): //East
-                    this->position[1]++;
-                    break;
-                case(3): //South-east
-                    this->position[0]++;
-                    this->position[1]++;
-                    break;
-                case(4): //South
-                    this->position[0]++;
-                    break;
-                case(5): //South-west
-                    this->position[0]++;
-                    this->position[1]--;
-                    break;
-                case(6): //West
-                    this->position[1]--;
-                    break;
-                case(7): //North-west
-                    this->position[0]--;
-                    this->position[1]--;
-                    break;
+                this->direction = rand() % 7;
+                switch(this->direction)
+                {
+                    case(0): //North
+                        this->position[0]--;
+                        break;
+                    case(1): //North-east
+                        this->position[0]--;
+                        this->position[1]++;
+                        break;
+                    case(2): //East
+                        this->position[1]++;
+                        break;
+                    case(3): //South-east
+                        this->position[0]++;
+                        this->position[1]++;
+                        break;
+                    case(4): //South
+                        this->position[0]++;
+                        break;
+                    case(5): //South-west
+                        this->position[0]++;
+                        this->position[1]--;
+                        break;
+                    case(6): //West
+                        this->position[1]--;
+                        break;
+                    case(7): //North-west
+                        this->position[0]--;
+                        this->position[1]--;
+                        break;
+                }
+                if(this->position[0] >= gridHeight 
+                        || this->position[0] <= 0
+                        || this->position[1] >= gridWidth
+                        || this->position[1] <= 0)
+                {
+                    memcpy(this->position, store, sizeof(this->position));
+                }
+                else
+                {
+                    check = false;
+                }
             }
         }
 

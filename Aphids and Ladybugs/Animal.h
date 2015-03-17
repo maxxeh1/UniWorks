@@ -49,7 +49,7 @@ class Aphid : public Animal
 
         Aphid(int position1, int position2);
 
-        void update();
+        void update(int grid_height, int grid_width);
 
 };
 

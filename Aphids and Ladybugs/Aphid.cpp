@@ -19,7 +19,9 @@ using namespace std;
 		position[1] = 1;
                 this->life = 70 + (rand() % (int)(100 - 70 + 1));
 	}
-
+        
+        Aphid::~Aphid(){}
+        
 	Aphid::Aphid(int position1, int position2)
 	{
 		position[0] = position1;

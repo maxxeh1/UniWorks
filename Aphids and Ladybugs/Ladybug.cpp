@@ -4,12 +4,14 @@ using namespace std;
 
 
 Ladybug::Ladybug()
-        {
-            position[0] = 0;
-            position[1] = 1;
-            this->life = 80 + (rand() % (int)(110 - 80 + 1));
-            direction = North;
-        }
+{
+    position[0] = 0;
+    position[1] = 1;
+    this->life = 80 + (rand() % (int)(110 - 80 + 1));
+    direction = North;
+}
+
+Ladybug::~Ladybug(){}
 
 Ladybug::Ladybug(int position1, int position2)
 {

@@ -20,7 +20,9 @@ class Animal
 
     public:
         Animal();
-
+           
+        //~Animal();
+        
         void setHeight(int height);
 
 
@@ -51,6 +53,8 @@ class Aphid : public Animal
     //Constructor
     public:
         Aphid();
+        
+        ~Aphid();
 
         Aphid(int position1, int position2);
 
@@ -66,6 +70,8 @@ class Ladybug : public Animal
         
     public:
             Ladybug();
+            
+            ~Ladybug();
 
             Ladybug(int position1, int position2);
             

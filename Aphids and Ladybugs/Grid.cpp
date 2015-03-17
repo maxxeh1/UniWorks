@@ -86,17 +86,21 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             }
             //If a ladybug or aphid is found, fill the "cell", if not fill with
             //space
-            if(ladyBug)
+            if(ladyBug && aphid)
             {
-                cout << "|L" << cellLadys;
+                cout << "|L" << cellLadys << "A" << cellAphids;
             }
             else if(aphid)
             {
-                cout << "|A" << cellAphids;
+                cout << "|A" << cellAphids << "  ";
+            }
+            else if(ladyBug)
+            {
+                cout << "|L" << cellLadys << "  ";
             }
             else if (!filled)
             {
-                cout << "|  ";
+                cout << "|    ";
             }
             //Reset condition variables
             aphid = false;
@@ -109,8 +113,9 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
         cout << "  ";
         //Print row seperators
         for (int f = 0; f < this->width; f++)
+            
         {
-            cout << "___";
+            cout << "_____";
         }
         cout << "\n";
     }

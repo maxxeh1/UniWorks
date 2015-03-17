@@ -191,9 +191,9 @@ void Ladybug::update()
             case(West):
                 //If ladybug is at west-most row, change direction and 
                 //restart
-                if(this->position[1] == 0)
+                if(position[1] == 0)
                 {
-                    this->direction == East;
+                    this->direction = East;
                     break;
                 }
                 //Move ladybug to the west

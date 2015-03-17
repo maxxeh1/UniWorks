@@ -7,6 +7,7 @@ Ladybug::Ladybug()
         {
             position[0] = 0;
             position[1] = 1;
+            this->life = 80 + (rand() % (int)(110 - 80 + 1));
             direction = North;
         }
 
@@ -15,6 +16,7 @@ Ladybug::Ladybug(int position1, int position2)
         position[0] = position1;
         position[1] = position2;
         direction = North;
+        this->life = 80 + (rand() % (int)(110 - 80 + 1));
 }
 
 void Ladybug::setDirection(int nSteps)
@@ -239,5 +241,6 @@ void Ladybug::update()
                 break;
         }
     }
+    life = life - (rand() % 10 + 1);
 }
 

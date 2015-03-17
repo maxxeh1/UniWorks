@@ -17,12 +17,14 @@ using namespace std;
 	{
 		position[0] = 0;
 		position[1] = 1;
+                this->life = 70 + (rand() % (int)(100 - 70 + 1));
 	}
 
 	Aphid::Aphid(int position1, int position2)
 	{
 		position[0] = position1;
 		position[1] = position2;
+                this->life = 70 + (rand() % (int)(100 - 70 + 1));
 	}
 
         void Aphid::update(int gridHeight, int gridWidth)
@@ -75,6 +77,7 @@ using namespace std;
                 }
                 else
                 {
+                    life = life - (rand() % 10 + 1);
                     check = false;
                 }
             }

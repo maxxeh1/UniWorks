@@ -44,8 +44,17 @@ void Manager::updateAll()
     {
         if(checkProbability(this->aphidMoveProb))
         {
-            (*itA).update(currentGrid.getHeight(), currentGrid.getWidth());
-            //this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
+            if((*itA).getLife() <= 0)
+            {
+                currentAphids.erase(itA);
+                cout << "Aphid died" << endl;
+                //Call destructor
+            }
+            else
+            {
+                (*itA).update(currentGrid.getHeight(), currentGrid.getWidth());
+            }
+                //this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
             cout << "Aphid moved" << endl;
             //cin.get();
         }
@@ -72,7 +81,16 @@ void Manager::updateAll()
                 cout << "Ladybug did not change direction" << endl;
                 //cin.get();
             }
-            (*itL).update();
+            if((*itL).getLife() <= 0)
+            {
+                currentLadys.erase(itL);
+                cout << "Ladybug died" << endl;
+                //Call destructor
+            }
+            else
+            {
+                (*itL).update();
+            }
             //this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
             cout << "Ladybug moved" << endl;
             //cin.get();

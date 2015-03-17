@@ -16,6 +16,7 @@ class Animal
 {
     protected:
         int position[2];
+        signed int life;
 
     public:
         Animal();
@@ -32,6 +33,10 @@ class Animal
         int getWidth();
 
         pair<int, int> getPosition();
+        
+        void setLife(int tempLife);
+        
+        int getLife();
 
         virtual void update();
 

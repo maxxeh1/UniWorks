@@ -52,6 +52,16 @@ pair<int,int> Animal::getPosition()
     return make_pair(this->position[0], this->position[1]);
 }
 
+void Animal::setLife(int tempLife)
+{
+    this->life = tempLife;
+}
+
+int Animal::getLife()
+{
+    return this->life;
+}
+
 void Animal::update()
 {
     

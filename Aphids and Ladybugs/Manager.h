@@ -16,7 +16,9 @@ class Manager
         float aphidMoveProb, ladyMoveProb, ladyDirectionProb;
         Grid currentGrid;
         vector<Aphid> currentAphids;
+        vector<Aphid*> deadAphids;
         vector<Ladybug> currentLadys;
+        vector<Ladybug*> deadLadys;
         vector<Animal> allAnimals;
     
     public:

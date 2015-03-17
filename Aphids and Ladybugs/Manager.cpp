@@ -39,6 +39,8 @@ void Manager::setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys)
 
 void Manager::updateAll()
 {
+    if(currentAphids.size() > 0)
+    {
     for (vector<Aphid>::iterator itA = this->currentAphids.begin();  
                 itA != this->currentAphids.end(); ++itA)
     {
@@ -46,7 +48,8 @@ void Manager::updateAll()
         {
             if((*itA).getLife() <= 0)
             {
-                currentAphids.erase(itA);
+                deadAphids.push_back(&(*itA));
+                //itA = currentAphids.erase(itA);
                 cout << "Aphid died" << endl;
                 //Call destructor
             }
@@ -63,6 +66,7 @@ void Manager::updateAll()
             cout << "Aphid did not move" << endl;
             //cin.get();
         }
+    }
     }
     for (vector<Ladybug>::iterator itL = this->currentLadys.begin();  
                 itL != this->currentLadys.end(); ++itL)
@@ -81,16 +85,16 @@ void Manager::updateAll()
                 cout << "Ladybug did not change direction" << endl;
                 //cin.get();
             }
-            if((*itL).getLife() <= 0)
+            /*if((*itL).getLife() <= 0)
             {
-                currentLadys.erase(itL);
+                //itL = currentLadys.erase(itL);
                 cout << "Ladybug died" << endl;
                 //Call destructor
             }
             else
-            {
+            {*/
                 (*itL).update();
-            }
+            //}
             //this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
             cout << "Ladybug moved" << endl;
             //cin.get();
@@ -101,6 +105,23 @@ void Manager::updateAll()
             //cin.get();
         }
     }
+    for (vector<Aphid*>::iterator itA = this->deadAphids.begin();  
+            itA != this->deadAphids.end(); ++itA)
+    {
+        if(currentAphids.size() > 0)
+        {
+        for (vector<Aphid>::iterator itAlive = this->currentAphids.begin();
+                itAlive != this->currentAphids.end(); ++itAlive)
+        {
+            if(&(*itAlive) == *itA)
+            {
+                itAlive = currentAphids.erase(itAlive);
+                //currentAphids.shrink_to_fit();
+            }
+        }
+        }
+    }
+    cout << currentAphids.size();
     cout << endl << "Turn: " << turn++ << endl;
     this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
 }

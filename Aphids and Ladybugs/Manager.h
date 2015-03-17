@@ -22,6 +22,8 @@ class Manager
         Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys, 
         float tempAphidMove, float tempLadyMove, float tempLadyDir);
         
+        void setupGrid(int gridHeight, int gridWidth);
+        
         void setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys);
         
         void updateAll();

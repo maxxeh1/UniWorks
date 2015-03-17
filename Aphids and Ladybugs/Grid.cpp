@@ -138,3 +138,13 @@ int Grid::getWidth()
 {
     return this->width;
 }
+
+void Grid::setHeight(int temp_height)
+{
+    this->height = temp_height;
+}
+
+void Grid:: setWidth(int temp_width)
+{
+    this->width = temp_width;
+}

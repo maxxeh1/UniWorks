@@ -51,6 +51,10 @@ class Grid
          * @return int width
          */
         int getWidth();
+        
+        void setHeight(int temp_height);
+        
+        void setWidth(int temp_width);
 };
 
 #endif

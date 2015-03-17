@@ -15,6 +15,12 @@ Manager::Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys,
     ladyDirectionProb = tempLadyDir;
 }
 
+void Manager::setupGrid(int gridHeight, int gridWidth)
+{
+    currentGrid.setHeight(gridHeight);
+    currentGrid.setWidth(gridWidth);
+}
+
 void Manager::setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys)
 {
     currentAphids = newAphids;

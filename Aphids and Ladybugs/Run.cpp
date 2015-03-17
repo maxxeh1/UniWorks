@@ -122,6 +122,7 @@ int main()
             ladyDirectionProb);
     //Draw the grid
     currentGrid.drawGrid(aphidVector, ladyVector);
+    currentManager.setupGrid(grid_size[0], grid_size[1]);
     
     cin.get();
     

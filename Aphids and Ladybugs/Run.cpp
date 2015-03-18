@@ -50,10 +50,6 @@ int main()
     in_file >> grid_size[0]; //Grid height
     in_file >> grid_size[1]; //Grid length
 
-    //Create instance of Grid
-    Grid currentGrid(grid_size[0], grid_size[1]);
-    currentGrid.createGrid();
-
     //Read next line as number of aphids
     in_file >> num_aphids;
     vector<Aphid> aphidVector(num_aphids);
@@ -129,11 +125,9 @@ int main()
     //cout << moveProb << killProb << groupKillProb << reproduceProb;
     
     //Create manager with provided data
-    Manager currentManager(aphidVector, ladyVector, aphidMoveProb, ladyMoveProb,
-            ladyDirectionProb);
-    currentManager.setVectors(aphidVector, ladyVector);
+    Manager currentManager(aphidVector, ladyVector);
+    currentManager.setVectors();
     //Draw the grid
-    currentGrid.drawGrid(aphidVector, ladyVector);
     currentManager.setupGrid(grid_size[0], grid_size[1]);
     
     cin.get();

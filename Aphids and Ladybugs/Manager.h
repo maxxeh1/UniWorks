@@ -21,15 +21,14 @@ class Manager
         vector<Ladybug> currentLadys;
         vector<Ladybug*> deadLadys;
         vector<Animal*> allAnimals;
-        vector<Animal*> deadAnimalls;
+        vector<Animal*> deadAnimals;
     
     public:
-        Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys, 
-        float tempAphidMove, float tempLadyMove, float tempLadyDir);
+        Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys);
         
         void setupGrid(int gridHeight, int gridWidth);
         
-        void setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys);
+        void setVectors();
         
         void updateAll();
         

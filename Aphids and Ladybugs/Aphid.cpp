@@ -71,7 +71,7 @@ bool Aphid::update(int gridHeight, int gridWidth)
                     this->position[1]--;
                     break;
             }
-            if(this->position[0] >= gridHeight 
+            if(this->position[0] >= gridHeight
                     || this->position[0] <= 0
                     || this->position[1] >= gridWidth
                     || this->position[1] <= 0)

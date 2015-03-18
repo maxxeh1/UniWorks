@@ -5,26 +5,21 @@
 #include "Grid.h"
 using namespace std;
 
-Manager::Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys, 
-        float tempAphidMove, float tempLadyMove, float tempLadyDir)
+Manager::Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys)
 {
     currentAphids = newAphids;
     currentLadys = newLadys;
-    aphidMoveProb = tempAphidMove;
-    ladyMoveProb = tempLadyMove;
-    ladyDirectionProb = tempLadyDir;
 }
 
 void Manager::setupGrid(int gridHeight, int gridWidth)
 {
     currentGrid.setHeight(gridHeight);
     currentGrid.setWidth(gridWidth);
+    currentGrid.drawGrid(currentAphids, currentLadys);
 }
 
-void Manager::setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys)
+void Manager::setVectors()
 {
-    currentAphids = newAphids;
-    currentLadys = newLadys;
     //Loop through vector of aphids
     for (vector<Aphid>::iterator itA = this->currentAphids.begin();
             itA != this->currentAphids.end(); ++itA)
@@ -59,19 +54,39 @@ void Manager::updateAll()
         if((*itAll)->getLife() <= 0)
         {
             //If aphid or ladybug is dead, mark for death
-            deadAnimalls.push_back(*itAll);
-            cout << "Animal has died" << endl;
+            deadAnimals.push_back(*itAll);
+            cout << "Animal" <<  "has died" << endl;
         }
         else
         {
             //Update aphid or ladybug position on grid
-            (*itAll)->update(currentGrid.getHeight(), currentGrid.getWidth());
+            if((*itAll)->update(currentGrid.getHeight(), currentGrid.getWidth()))
+            {
+                for(vector<Animal*>::iterator itCheck = itAll;
+                        itCheck != itAll; ++ itCheck)
+                {
+                    if(*itAll != *itCheck)
+                    {
+                        if((*itAll)->getHeight() == (*itCheck)->getHeight() 
+                                && (*itAll)->getWidth() 
+                                == (*itCheck)->getWidth())
+                        {
+                            cout << "Two in same position." << endl;
+                            cin.get();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                cout << "Did not move";
+            }
         }
     }
 
     //Loop through vector of marked for death aphids
-    for (vector<Animal*>::iterator itAni = this->deadAnimalls.begin();  
-            itAni != this->deadAnimalls.end(); ++itAni)
+    for (vector<Animal*>::iterator itAni = this->deadAnimals.begin();  
+            itAni != this->deadAnimals.end(); ++itAni)
     {
         //Loop through vector of alive aphids
         for (vector<Aphid>::iterator itAlive = this->currentAphids.begin();
@@ -99,7 +114,7 @@ void Manager::updateAll()
         }
     }
     //Clear the deadAphids vector for the next turn
-    this->deadAnimalls.clear();
+    this->deadAnimals.clear();
 
     //Print out remaining ladybugs and aphids
     cout << "Aphids: " << currentAphids.size() << endl << "Ladybugs: " 

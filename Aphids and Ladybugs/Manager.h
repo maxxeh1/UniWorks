@@ -20,6 +20,7 @@ class Manager
         vector<Ladybug> currentLadys;
         vector<Ladybug*> deadLadys;
         vector<Animal> allAnimals;
+        vector<Animal*> deadAnimalls;
     
     public:
         Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys, 
@@ -32,6 +33,9 @@ class Manager
         void updateAll();
         
         void fight(Animal movedAnimal, Animal currentAnimal);
+        
+        void killAnimal(vector<Animal> currentAnimals, 
+            vector <Animal*> deadAnimals);
         
         bool checkProbability(float probToCheck);
 };

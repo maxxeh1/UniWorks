@@ -1,3 +1,4 @@
+#include <iostream>
 #include <stdlib.h>
 #include "Animal.h"
 using namespace std;
@@ -19,6 +20,7 @@ Ladybug::Ladybug(int position1, int position2)
         position[1] = position2;
         direction = North;
         this->life = 80 + (rand() % (int)(110 - 80 + 1));
+        this->moveProb;
 }
 
 void Ladybug::setDirection(int nSteps)
@@ -27,222 +29,252 @@ void Ladybug::setDirection(int nSteps)
                      (this->direction + nSteps) % NUM_DIRECTIONS);
 }
 
+void Ladybug::setDirChangeProb(float prob)
+{
+    this->dirChangeProb = prob;
+}
+
+float Ladybug::getDirChangeProb()
+{
+    return this->dirChangeProb;
+}
+
 /**
  * This function updates each individual ladybug according to their direction
  */
-void Ladybug::update()
+bool Ladybug::update(int grid_height, int grid_width)
 {
     bool check = true;
     //Loop until check is false
-    while(check)
+    if(checkProbability(this->moveProb))
     {
-        //Check what direction is set
-        switch(this->direction)
+        if(checkProbability(this->dirChangeProb))
         {
-            //If direction is north
-            case(North):
-                //If ladybug is in the top-most row, change direction to 
-                //south and repeat
-                if(position[0] == 0)
-                {
-                    this->direction = South;
-                    break;
-                }
-                //Go north by one
-                this->position[0]--;
-                
-                //If ladybug is in the east-most column, change subdirection to
-                //west
-                if(this->position[1] == 9)
-                {
-                    this->subdirection = 2;
-                }
-                //If ladybug is in the west-most column, change subdirection to
-                //east
-                else if(this->position[1] == 0)
-                {
-                    this->subdirection = 1;
-                }
-                //Choose a random subdirection
-                else
-                {
-                    this->subdirection = rand() % 3;
-                }
-                
-                /**
-                 * Go north-west, north or north-east based on subdirection
-                 * Set check to false to break out of loop when movement is 
-                 * concluded
-                 */
-                switch(this->subdirection)
-                {
-                    case(0): //North
-                        check = false;
-                        break;
-                    case(1): //North-east
-                        this->position[1]++;
-                        check = false;
-                        break;
-                    case(2): //North-west
-                        this->position[1]--;
-                        check = false;
-                        break;
-                }
-                break;
-                
-            //If direction is east
-            case(East):
-                //If ladybug is at east-most column, change direction and 
-                //restart
-                if(position[1] == 9)
-                {
-                    this->direction = West;
-                    break;
-                }
-                //Move ladybug to the east
-                this->position[1]++;
-                
-                //If ladybug is in the south-most row, change subdirection to
-                //north
-                if(this->position[0] == 9)
-                {
-                    this->subdirection = 1;
-                }
-                //If ladybug is in the north-most row, change subdirection to 
-                //south
-                else if(this->position[0] == 0)
-                {
-                    this->subdirection = 2;
-                }
-                //Choose a random subdirection
-                else
-                {
-                    this->subdirection = rand() % 3;
-                }
-                
-                /**
-                 * Go east-north, east or east-south based on subdirection
-                 * Set check to false to break out of loop when movement is 
-                 * concluded
-                 */
-                switch(this->subdirection)
-                {
-                    case(0): //East
-                        check = false;
-                        break;
-                    case(1): //East-north
-                        this->position[0]--;
-                        check = false;
-                        break;
-                    case(2): //East-south
-                        this->position[0]++;
-                        check = false;
-                        break;
-                }
-                break;
-                
-            //If direction is south
-            case(South):
-                //If ladybug is at south-most row, change direction and 
-                //restart
-                if(position[0] == 9)
-                {
-                    this->direction = North;
-                    break;
-                }
-                //Move ladybug to the south
-                this->position[0]++;
-                
-                //If ladybug is in the east-most column, change subdirection to
-                //west
-                if(this->position[1] == 9)
-                {
-                    this->subdirection = 2;
-                }
-                //If ladybug is in the west-most column, change subdirection to
-                //east
-                else if(this->position[1] == 0)
-                {
-                    this->subdirection = 1;
-                }
-                //Choose a random subdirection
-                else
-                {
-                    this->subdirection = rand() % 3;
-                }
-                
-                /**
-                 * Go south-east, south or south-west based on subdirection
-                 * Set check to false to break out of loop when movement is 
-                 * concluded
-                 */
-                switch(this->subdirection)
-                {
-                    case(0): //South
-                        check = false;
-                        break;
-                    case(1): //South-east
-                        this->position[1]++;
-                        check = false;
-                        break;
-                    case(2): //South-west
-                        this->position[1]--;
-                        check = false;
-                        break;
-                }
-                break;
-            //If direction is west
-            case(West):
-                //If ladybug is at west-most row, change direction and 
-                //restart
-                if(position[1] == 0)
-                {
-                    this->direction = East;
-                    break;
-                }
-                //Move ladybug to the west
-                this->position[1]--;
-                
-                //If ladybug is in the south-most row, change subdirection to
-                //north
-                if(this->position[0] == 9)
-                {
-                    this->subdirection = 1;
-                }
-                //If ladybug is in the north-most row, change subdirection to
-                //south
-                else if(this->position[0] == 0)
-                {
-                    this->subdirection = 2;
-                }
-                //Choose a random subdirection
-                else
-                {
-                    this->subdirection = rand() % 3;
-                }
-                
-                /**
-                 * Go west-north, west or west-south based on subdirection
-                 * Set check to false to break out of loop when movement is 
-                 * concluded
-                 */
-                switch(this->subdirection)
-                {
-                    case(0): //West
-                        check = false;
-                        break;
-                    case(1): //West-north
-                        this->position[0]--;
-                        check = false;
-                        break;
-                    case(2): //West-south
-                        this->position[0]++;
-                        check = false;
-                        break;
-                }
-                break;
+            setDirection(1 + rand()%(NUM_DIRECTIONS - 1));
+            cout << "Ladybug changed direction to " << direction << endl;
         }
+        else
+        {
+            cout << "Ladybug did not change direction" << endl;
+        }
+        while(check)
+        {
+            //Check what direction is set
+            switch(this->direction)
+            {
+                //If direction is north
+                case(North):
+                    //If ladybug is in the top-most row, change direction to 
+                    //south and repeat
+                    if(position[0] == 0)
+                    {
+                        this->direction = South;
+                        break;
+                    }
+                    //Go north by one
+                    this->position[0]--;
+
+                    //If ladybug is in the east-most column, change subdirection to
+                    //west
+                    if(this->position[1] == grid_width)
+                    {
+                        this->subdirection = 2;
+                    }
+                    //If ladybug is in the west-most column, change subdirection to
+                    //east
+                    else if(this->position[1] == 0)
+                    {
+                        this->subdirection = 1;
+                    }
+                    //Choose a random subdirection
+                    else
+                    {
+                        this->subdirection = rand() % 3;
+                    }
+
+                    /**
+                     * Go north-west, north or north-east based on subdirection
+                     * Set check to false to break out of loop when movement is 
+                     * concluded
+                     */
+                    switch(this->subdirection)
+                    {
+                        case(0): //North
+                            check = false;
+                            break;
+                        case(1): //North-east
+                            this->position[1]++;
+                            check = false;
+                            break;
+                        case(2): //North-west
+                            this->position[1]--;
+                            check = false;
+                            break;
+                    }
+                    break;
+
+                //If direction is east
+                case(East):
+                    //If ladybug is at east-most column, change direction and 
+                    //restart
+                    if(position[1] == grid_width)
+                    {
+                        this->direction = West;
+                        break;
+                    }
+                    //Move ladybug to the east
+                    this->position[1]++;
+
+                    //If ladybug is in the south-most row, change subdirection to
+                    //north
+                    if(this->position[0] == grid_height)
+                    {
+                        this->subdirection = 1;
+                    }
+                    //If ladybug is in the north-most row, change subdirection to 
+                    //south
+                    else if(this->position[0] == 0)
+                    {
+                        this->subdirection = 2;
+                    }
+                    //Choose a random subdirection
+                    else
+                    {
+                        this->subdirection = rand() % 3;
+                    }
+
+                    /**
+                     * Go east-north, east or east-south based on subdirection
+                     * Set check to false to break out of loop when movement is 
+                     * concluded
+                     */
+                    switch(this->subdirection)
+                    {
+                        case(0): //East
+                            check = false;
+                            break;
+                        case(1): //East-north
+                            this->position[0]--;
+                            check = false;
+                            break;
+                        case(2): //East-south
+                            this->position[0]++;
+                            check = false;
+                            break;
+                    }
+                    break;
+
+                //If direction is south
+                case(South):
+                    //If ladybug is at south-most row, change direction and 
+                    //restart
+                    if(position[0] == grid_height)
+                    {
+                        this->direction = North;
+                        break;
+                    }
+                    //Move ladybug to the south
+                    this->position[0]++;
+
+                    //If ladybug is in the east-most column, change subdirection to
+                    //west
+                    if(this->position[1] == grid_width)
+                    {
+                        this->subdirection = 2;
+                    }
+                    //If ladybug is in the west-most column, change subdirection to
+                    //east
+                    else if(this->position[1] == 0)
+                    {
+                        this->subdirection = 1;
+                    }
+                    //Choose a random subdirection
+                    else
+                    {
+                        this->subdirection = rand() % 3;
+                    }
+
+                    /**
+                     * Go south-east, south or south-west based on subdirection
+                     * Set check to false to break out of loop when movement is 
+                     * concluded
+                     */
+                    switch(this->subdirection)
+                    {
+                        case(0): //South
+                            check = false;
+                            break;
+                        case(1): //South-east
+                            this->position[1]++;
+                            check = false;
+                            break;
+                        case(2): //South-west
+                            this->position[1]--;
+                            check = false;
+                            break;
+                    }
+                    break;
+                //If direction is west
+                case(West):
+                    //If ladybug is at west-most row, change direction and 
+                    //restart
+                    if(position[1] == 0)
+                    {
+                        this->direction = East;
+                        break;
+                    }
+                    //Move ladybug to the west
+                    this->position[1]--;
+
+                    //If ladybug is in the south-most row, change subdirection to
+                    //north
+                    if(this->position[0] == grid_height)
+                    {
+                        this->subdirection = 1;
+                    }
+                    //If ladybug is in the north-most row, change subdirection to
+                    //south
+                    else if(this->position[0] == 0)
+                    {
+                        this->subdirection = 2;
+                    }
+                    //Choose a random subdirection
+                    else
+                    {
+                        this->subdirection = rand() % 3;
+                    }
+
+                    /**
+                     * Go west-north, west or west-south based on subdirection
+                     * Set check to false to break out of loop when movement is 
+                     * concluded
+                     */
+                    switch(this->subdirection)
+                    {
+                        case(0): //West
+                            check = false;
+                            break;
+                        case(1): //West-north
+                            this->position[0]--;
+                            check = false;
+                            break;
+                        case(2): //West-south
+                            this->position[0]++;
+                            check = false;
+                            break;
+                    }
+                    break;
+            }
+        }
+        life = life - (rand() % 10 + 1);
+        cout << "Ladybug moved to " << position[0] << position[1] << endl;
+        cout << "Ladybugs life is " << life << endl;
+        return true;
     }
-    life = life - (rand() % 10 + 1);
+    else
+    {
+        cout << "Ladybug did not move" << endl;
+        return false;
+    }
 }
 

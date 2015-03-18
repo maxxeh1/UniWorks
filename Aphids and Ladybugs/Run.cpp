@@ -104,6 +104,11 @@ int main()
     in_file >> aphidKillProb;
     in_file >> groupKillProb;
     in_file >> aphidReproduceProb;
+    for (vector<Aphid>::iterator itA = aphidVector.begin();
+            itA != aphidVector.end(); ++itA)
+    {
+        (*itA).setMoveProb(aphidMoveProb);
+    }
     //cout << moveProb << killProb << groupKillProb << reproduceProb;
     
     //Close current file
@@ -115,6 +120,12 @@ int main()
     in_file >> ladyDirectionProb;
     in_file >> ladyKillProb;
     in_file >> ladyReproduceProb;
+    for (vector<Ladybug>::iterator itL = ladyVector.begin();  
+                itL != ladyVector.end(); ++itL)
+    {
+        (*itL).setMoveProb(ladyMoveProb);
+        (*itL).setDirChangeProb(ladyDirectionProb);
+    }
     //cout << moveProb << killProb << groupKillProb << reproduceProb;
     
     //Create manager with provided data

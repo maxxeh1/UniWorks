@@ -17,6 +17,8 @@ class Animal
     protected:
         int position[2];
         signed int life;
+        float moveProb = 0, fightProb = 0, reproduceProb = 0;
+        
 
     public:
         Animal();
@@ -25,23 +27,25 @@ class Animal
         
         void setHeight(int height);
 
-
         void setWidth(int width);
-
-
+        
+        void setMoveProb(float prob);
+        
         int getHeight();
 
-
         int getWidth();
-
+        
+        float getMoveProb();
+        
         pair<int, int> getPosition();
         
         void setLife(int tempLife);
         
         int getLife();
 
-        virtual void update();
-
+        virtual bool update(int grid_height, int grid_width);
+        
+        bool checkProbability(float probToCheck);
 };
 
 class Aphid : public Animal
@@ -58,7 +62,7 @@ class Aphid : public Animal
 
         Aphid(int position1, int position2);
 
-        void update(int grid_height, int grid_width);
+        bool update(int grid_height, int grid_width);
 
 };
 
@@ -67,6 +71,7 @@ class Ladybug : public Animal
     protected:
         LadyDirection direction;
         int subdirection;
+        float dirChangeProb = 0;
         
     public:
             Ladybug();
@@ -77,7 +82,11 @@ class Ladybug : public Animal
             
             void setDirection(int nSteps);
             
-            void update();
+            void setDirChangeProb(float prob);
+            
+            float getDirChangeProb();
+            
+            bool update(int grid_height, int grid_width);
 };
 
 

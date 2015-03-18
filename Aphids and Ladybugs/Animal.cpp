@@ -1,4 +1,5 @@
 #include <string>
+#include <stdlib.h>
 #include "Animal.h"
 using namespace std;
 
@@ -62,7 +63,30 @@ int Animal::getLife()
     return this->life;
 }
 
-void Animal::update()
+void Animal::setMoveProb(float prob)
+{
+    this->moveProb = prob;
+}
+
+float Animal::getMoveProb()
+{
+    return this->moveProb;
+}
+
+bool Animal::update(int grid_height, int grid_width)
 {
     
+}
+
+bool Animal::checkProbability(float probToCheck)
+{
+    float chance = ((double) rand() / (RAND_MAX));
+    if(chance <= probToCheck)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

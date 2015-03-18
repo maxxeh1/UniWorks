@@ -1,6 +1,7 @@
 #ifndef ANIMAL_H
 #define ANIMAL_H
 #include <utility>
+#include "AnimalInteractor.h"
 using namespace std;
 
 enum LadyDirection
@@ -39,6 +40,7 @@ class Animal
         
         pair<int, int> getPosition();
         
+        
         void setLife(int tempLife);
         
         int getLife();
@@ -46,9 +48,11 @@ class Animal
         virtual bool update(int grid_height, int grid_width);
         
         bool checkProbability(float probToCheck);
+        
+        virtual void interactWith(AnimalInteractor &animal) = 0;
 };
 
-class Aphid : public Animal
+class Aphid : public Animal, public AnimalInteractor
 {
     //Global variables
     protected:
@@ -63,6 +67,12 @@ class Aphid : public Animal
         Aphid(int position1, int position2);
 
         bool update(int grid_height, int grid_width);
+        
+        void interactWith(AnimalInteractor &animal);
+        
+        void interact(Aphid &animal);
+        
+        void interact(Ladybug &animal);
 
 };
 
@@ -85,6 +95,12 @@ class Ladybug : public Animal
             void setDirChangeProb(float prob);
             
             float getDirChangeProb();
+            
+            void interactWith(AnimalInteractor &animal);
+        
+            void interact(Aphid &animal);
+        
+            void interact(Ladybug &animal);
             
             bool update(int grid_height, int grid_width);
 };

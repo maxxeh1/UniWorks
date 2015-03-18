@@ -29,6 +29,21 @@ Aphid::Aphid(int position1, int position2)
         this->life = 10;
 }
 
+void Aphid::interactWith(AnimalInteractor &animal)
+{
+    animal.interact(*this);
+}
+
+void Aphid::interact(Aphid &animal)
+{
+    cout << "Aphids reproduce";
+}
+
+void Aphid::interact(Ladybug &animal)
+{
+    cout << "Kill ladybugs";
+}
+
 bool Aphid::update(int gridHeight, int gridWidth)
 {
     bool check = true;

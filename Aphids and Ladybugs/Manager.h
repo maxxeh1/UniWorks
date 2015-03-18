@@ -32,7 +32,7 @@ class Manager
         
         void updateAll();
         
-        void fight(Animal movedAnimal, Animal currentAnimal);
+        bool checkFight(Animal movedAnimal, Animal currentAnimal);
         
         void killAnimal(vector<Animal> currentAnimals, 
             vector <Animal*> deadAnimals);

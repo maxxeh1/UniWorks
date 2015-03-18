@@ -39,6 +39,21 @@ float Ladybug::getDirChangeProb()
     return this->dirChangeProb;
 }
 
+void Ladybug::interactWith(AnimalInteractor &animal)
+{
+    animal.interact(*this);
+}
+
+void Ladybug::interact(Aphid &animal)
+{
+    cout << "Kill aphids";
+}
+
+void Ladybug::interact(Ladybug &animal)
+{
+    cout << "Ladybugs reproduce";
+}
+
 /**
  * This function updates each individual ladybug according to their direction
  */
@@ -76,7 +91,7 @@ bool Ladybug::update(int grid_height, int grid_width)
 
                     //If ladybug is in the east-most column, change subdirection to
                     //west
-                    if(this->position[1] == grid_width)
+                    if(this->position[1] == (grid_width - 1))
                     {
                         this->subdirection = 2;
                     }
@@ -117,7 +132,7 @@ bool Ladybug::update(int grid_height, int grid_width)
                 case(East):
                     //If ladybug is at east-most column, change direction and 
                     //restart
-                    if(position[1] == grid_width)
+                    if(position[1] == (grid_width - 1))
                     {
                         this->direction = West;
                         break;
@@ -127,7 +142,7 @@ bool Ladybug::update(int grid_height, int grid_width)
 
                     //If ladybug is in the south-most row, change subdirection to
                     //north
-                    if(this->position[0] == grid_height)
+                    if(this->position[0] == (grid_height - 1))
                     {
                         this->subdirection = 1;
                     }
@@ -168,7 +183,7 @@ bool Ladybug::update(int grid_height, int grid_width)
                 case(South):
                     //If ladybug is at south-most row, change direction and 
                     //restart
-                    if(position[0] == grid_height)
+                    if(position[0] == (grid_height - 1))
                     {
                         this->direction = North;
                         break;
@@ -178,7 +193,7 @@ bool Ladybug::update(int grid_height, int grid_width)
 
                     //If ladybug is in the east-most column, change subdirection to
                     //west
-                    if(this->position[1] == grid_width)
+                    if(this->position[1] == (grid_width - 1))
                     {
                         this->subdirection = 2;
                     }
@@ -228,7 +243,7 @@ bool Ladybug::update(int grid_height, int grid_width)
 
                     //If ladybug is in the south-most row, change subdirection to
                     //north
-                    if(this->position[0] == grid_height)
+                    if(this->position[0] == (grid_height - 1))
                     {
                         this->subdirection = 1;
                     }

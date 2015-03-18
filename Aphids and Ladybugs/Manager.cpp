@@ -62,16 +62,23 @@ void Manager::updateAll()
             //Update aphid or ladybug position on grid
             if((*itAll)->update(currentGrid.getHeight(), currentGrid.getWidth()))
             {
-                for(vector<Animal*>::iterator itCheck = itAll;
-                        itCheck != itAll; ++ itCheck)
+                for(vector<Animal*>::iterator itCheck = allAnimals.begin();
+                        itCheck != allAnimals.end(); ++ itCheck)
                 {
                     if(*itAll != *itCheck)
                     {
-                        if((*itAll)->getHeight() == (*itCheck)->getHeight() 
+                        /*if((*itAll)->getHeight() == (*itCheck)->getHeight() 
                                 && (*itAll)->getWidth() 
                                 == (*itCheck)->getWidth())
                         {
                             cout << "Two in same position." << endl;
+                            cin.get();
+                        }*/
+                        if(checkFight (**itAll, **itCheck))
+                        {
+                            cout << "Two in same position" << endl;
+                            this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
+                            **itAll->interactWith(*itCheck);
                             cin.get();
                         }
                     }
@@ -125,9 +132,17 @@ void Manager::updateAll()
     this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
 }
 
-void Manager::fight(Animal movedAnimal, Animal currentAnimal)
+bool Manager::checkFight(Animal movedAnimal, Animal currentAnimal)
 {
-    
+    if(movedAnimal.getHeight() == currentAnimal.getHeight() 
+            && movedAnimal.getWidth() == currentAnimal.getWidth())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /*void Manager::killAnimal(vector<Animal> currentAnimals, 

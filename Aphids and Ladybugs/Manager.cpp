@@ -25,15 +25,19 @@ void Manager::setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys)
 {
     currentAphids = newAphids;
     currentLadys = newLadys;
+    //Loop through vector of aphids
     for (vector<Aphid>::iterator itA = this->currentAphids.begin();
             itA != this->currentAphids.end(); ++itA)
     {
-        allAnimals.push_back(*itA);
+        //Push aphids to vector of aphids and ladybugs
+        allAnimals.push_back(&(*itA));
     }
+    //Loop through vector of ladybugs
     for (vector<Ladybug>::iterator itL = this->currentLadys.begin();
             itL != this->currentLadys.end(); ++itL)
     {
-        allAnimals.push_back(*itL);
+        //Push ladybugs to vector of aphids and ladybugs
+        allAnimals.push_back(&(*itL));
     }
 }
 
@@ -47,58 +51,23 @@ void Manager::setVectors(vector<Aphid> newAphids, vector<Ladybug> newLadys)
  */
 void Manager::updateAll()
 {
-    for(vector<Animal>::iterator itAll = this->allAnimals.begin();
-            itAll != this->allAnimals.end(); ++itAll)
+    //Loop through vector of animals
+    for(vector<Animal*>::iterator itAll = allAnimals.begin();
+            itAll != allAnimals.end(); ++itAll)
     {
-        if((*itAll).getLife() <= 0)
+        //Check life of aphid or ladybug
+        if((*itAll)->getLife() <= 0)
         {
-            deadAnimalls.push_back(&(*itAll));
+            //If aphid or ladybug is dead, mark for death
+            deadAnimalls.push_back(*itAll);
             cout << "Animal has died" << endl;
         }
         else
         {
-            (*itAll).update(currentGrid.getHeight(), currentGrid.getWidth());
+            //Update aphid or ladybug position on grid
+            (*itAll)->update(currentGrid.getHeight(), currentGrid.getWidth());
         }
     }
-    //Loop through current alive aphids
-    /*for (vector<Aphid>::iterator itA = this->currentAphids.begin();  
-            itA != this->currentAphids.end(); ++itA)
-    {
-        //Check if the selected aphid's life is at 0
-        if((*itA).getLife() <= 0)
-        {
-            //Add this aphid to the dead aphids vector for processing later
-            deadAnimalls.push_back(&(*itA));
-            cout << "Aphid died" << endl;
-        }
-        else
-        {
-            //Update the aphid's location on the grid
-            (*itA).update(currentGrid.getHeight(), currentGrid.getWidth());
-        }
-        //this->currentGrid.drawGrid(this->currentAphids, 
-        //this->currentLadys);
-    }
-    //Loop through current alive ladybugs
-    for (vector<Ladybug>::iterator itL = this->currentLadys.begin();  
-                itL != this->currentLadys.end(); ++itL)
-    {
-        if((*itL).getLife() <= 0)
-        {
-            //Add this aphid to the dead aphids vector for processing later
-            deadAnimalls.push_back(&(*itL));
-            cout << "Lady died" << endl;
-        }
-        else
-        {
-            //Update the aphid's location on the grid
-            (*itL).update(currentGrid.getHeight(), currentGrid.getWidth());
-        }
-        //this->currentGrid.drawGrid(this->currentAphids, 
-        //this->currentLadys);
-        //cout << "Ladybug moved" << endl;
-        //cin.get();
-    }*/
 
     //Loop through vector of marked for death aphids
     for (vector<Animal*>::iterator itAni = this->deadAnimalls.begin();  
@@ -131,49 +100,7 @@ void Manager::updateAll()
     }
     //Clear the deadAphids vector for the next turn
     this->deadAnimalls.clear();
-    //this->deadLadys.clear();
-    /*
-    cout << deadAphids.size();
-    //Loop through vector of marked for death aphids
-    for (vector<Aphid*>::iterator itA = this->deadAphids.begin();  
-            itA != this->deadAphids.end(); ++itA)
-    {
-        //Loop through vector of alive aphids
-        for (vector<Aphid>::iterator itAlive = this->currentAphids.begin();
-                itAlive != this->currentAphids.end(); ++itAlive)
-        {
-            //If an aphid exists in deadAphids that exists in currentAphids, 
-            //remove the aphid from currentAphids
-            if(&(*itAlive) == *itA)
-            {
-                itAlive = currentAphids.erase(itAlive);
-                break;
-            }
-        }
-    }
-    //Clear the deadAphids vector for the next turn
-    this->deadAphids.clear();
-    
-    cout << deadLadys.size();
-    //Loop through vector of marked for death ladybugs
-    for (vector<Ladybug*>::iterator itL = this->deadLadys.begin();  
-            itL != this->deadLadys.end(); ++itL)
-    {
-        //Loop through vector of alive ladybugs
-        for (vector<Ladybug>::iterator itAlive = this->currentLadys.begin();
-                itAlive != this->currentLadys.end(); ++itAlive)
-        {
-            //If an ladybug exists in deadLadys that exists in currentLadys, 
-            //remove the ladybug from currentLadys
-            if(&(*itAlive) == *itL)
-            {
-                itAlive = currentLadys.erase(itAlive);
-                break;
-            }
-        }
-    }
-    //Clear the deadLadys vector for the next turn
-    this->deadLadys.clear();*/
+
     //Print out remaining ladybugs and aphids
     cout << "Aphids: " << currentAphids.size() << endl << "Ladybugs: " 
             << currentLadys.size();

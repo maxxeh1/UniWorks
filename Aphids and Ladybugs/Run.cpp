@@ -94,7 +94,7 @@ int main()
     }
     
     
-    //currentManager.setVectors(aphidVector, ladyVector);
+    
     
     //Close current file
     in_file.close();
@@ -131,6 +131,7 @@ int main()
     //Create manager with provided data
     Manager currentManager(aphidVector, ladyVector, aphidMoveProb, ladyMoveProb,
             ladyDirectionProb);
+    currentManager.setVectors(aphidVector, ladyVector);
     //Draw the grid
     currentGrid.drawGrid(aphidVector, ladyVector);
     currentManager.setupGrid(grid_size[0], grid_size[1]);

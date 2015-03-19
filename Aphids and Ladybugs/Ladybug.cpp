@@ -20,45 +20,45 @@ Ladybug::Ladybug(int position1, int position2)
     position[1] = position2;
 }
 
-Ladybug::Ladybug(int position1, int position2, float mvProb, float reProb, 
-        float killProb, float dChangeProb)
+Ladybug::Ladybug(int position1, int position2, float mv_prob, float re_prob, 
+        float kill_prob, float d_change_prob)
 {
         position[0] = position1;
         position[1] = position2;
         direction = North;
         this->life = 50 + (rand() % (int)(110 - 50 + 1));
-        this->moveProb = mvProb;
-        this->reproduceProb = reProb;
-        this->fightProb = killProb;
-        this->dirChangeProb = dChangeProb;
+        this->move_prob = mv_prob;
+        this->reproduce_prob = re_prob;
+        this->fight_prob = kill_prob;
+        this->dir_change_prob = d_change_prob;
 }
 
-void Ladybug::setDirection(int nSteps)
+void Ladybug::setDirection(int n_steps)
 {
     this->direction = static_cast<LadyDirection>(
-                     (this->direction + nSteps) % NUM_DIRECTIONS);
+                     (this->direction + n_steps) % NUM_DIRECTIONS);
 }
 
 void Ladybug::setDirChangeProb(float prob)
 {
-    this->dirChangeProb = prob;
+    this->dir_change_prob = prob;
 }
 
 float Ladybug::getDirChangeProb()
 {
-    return this->dirChangeProb;
+    return this->dir_change_prob;
 }
 
-void Ladybug::visitWith(AnimalVisitor &animal)
+void Ladybug::visit_with(AnimalVisitor &animal)
 {
     animal.visit(*this);
 }
 
 bool Ladybug::visit(Aphid &animal)
 {
-    if(checkProbability(this->fightProb))
+    if(check_probability(this->fight_prob))
     {
-        animal.setDead(true);
+        animal.set_dead(true);
         //cout << "Kill aphid";
         return true;
     }
@@ -71,9 +71,9 @@ bool Ladybug::visit(Aphid &animal)
 
 bool Ladybug::visit(Ladybug &animal)
 {
-    if(checkProbability(this->reproduceProb))
+    if(check_probability(this->reproduce_prob))
     {
-        animal.setReproduce(true);
+        animal.set_reproduce(true);
         //cout << "Ladybugs reproduce";
         return true;
     }
@@ -91,9 +91,9 @@ bool Ladybug::update(int grid_height, int grid_width)
 {
     bool check = true;
     //Loop until check is false
-    if(checkProbability(this->moveProb))
+    if(check_probability(this->move_prob))
     {
-        if(checkProbability(this->dirChangeProb))
+        if(check_probability(this->dir_change_prob))
         {
             setDirection(1 + rand()%(NUM_DIRECTIONS - 1));
             //cout << "Ladybug changed direction to " << direction << endl;

@@ -24,7 +24,4 @@ class AnimalVisitor
         virtual bool visit(Ladybug &animal) = 0;
 };
 
-
-
-
 #endif

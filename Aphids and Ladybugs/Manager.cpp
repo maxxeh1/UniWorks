@@ -7,25 +7,25 @@ using namespace std;
 
 /**
  * Manager constructor, assigns vectors to the manager
- * @param newAphids
- * @param newLadys
+ * @param new_aphids
+ * @param new_ladys
  */
-Manager::Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys)
+Manager::Manager(vector<Aphid> new_aphids, vector<Ladybug> new_ladys) 
 {
-    currentAphids = newAphids;
-    currentLadys = newLadys;
+    current_aphids = new_aphids;
+    current_ladys = new_ladys;
 }
 
 /**
  * Sets up the grid with inputted values
- * @param gridHeight
- * @param gridWidth
+ * @param grid_height
+ * @param grid_width
  */
-void Manager::setupGrid(int gridHeight, int gridWidth)
+void Manager::setup_grid(int grid_height, int grid_width) 
 {
-    currentGrid.setHeight(gridHeight);
-    currentGrid.setWidth(gridWidth);
-    currentGrid.drawGrid(currentAphids, currentLadys);
+    current_grid.set_height(grid_height);
+    current_grid.set_width(grid_width);
+    current_grid.draw_grid(current_aphids, current_ladys);
 }
 
 /**
@@ -33,26 +33,26 @@ void Manager::setupGrid(int gridHeight, int gridWidth)
  * vectors at any point in the simulation. Ensures no dangling pointers to 
  * deleted objects
  */
-void Manager::setVectors()
+void Manager::set_vectors() 
 {
-    this->allAnimals.clear();
-    this->currentAphids.shrink_to_fit();
-    this->currentLadys.shrink_to_fit();
+    this->all_animals.clear();
+    this->current_aphids.shrink_to_fit();
+    this->current_ladys.shrink_to_fit();
     //Loop through vector of aphids
-    for (vector<Aphid>::iterator itA = this->currentAphids.begin();
-            itA != this->currentAphids.end(); ++itA)
+    for (vector<Aphid>::iterator it_a = this->current_aphids.begin();
+            it_a != this->current_aphids.end(); ++it_a) 
     {
         //Push aphids to vector of aphids and ladybugs
-        allAnimals.push_back(&(*itA));
+        all_animals.push_back(&(*it_a));
     }
     //Loop through vector of ladybugs
-    for (vector<Ladybug>::iterator itL = this->currentLadys.begin();
-            itL != this->currentLadys.end(); ++itL)
+    for (vector<Ladybug>::iterator it_l = this->current_ladys.begin();
+            it_l != this->current_ladys.end(); ++it_l) 
     {
         //Push ladybugs to vector of aphids and ladybugs
-        allAnimals.push_back(&(*itL));
+        all_animals.push_back(&(*it_l));
     }
-    this->allAnimals.shrink_to_fit();
+    this->all_animals.shrink_to_fit();
 }
 
 /**
@@ -63,34 +63,31 @@ void Manager::setVectors()
  * reproduce. This functions ties in functionality from all sections of the code
  * to make the program do what it is supposed to do.
  */
-void Manager::updateAll()
+void Manager::update_all() 
 {
     //Loop through vector of animals
-    for(vector<Animal*>::iterator itAll = allAnimals.begin();
-            itAll != allAnimals.end(); ++itAll)
+    for (vector<Animal*>::iterator it_all = all_animals.begin();
+            it_all != all_animals.end(); ++it_all) 
     {
         //Check life of aphid or ladybug
-        if((*itAll)->getLife() <= 0)
+        if ((*it_all)->get_life() <= 0) 
         {
             //If aphid or ladybug is dead, mark it for death
-            (*itAll)->setDead(true);
-        }
-        //If aphid or ladybug still has life
-        else
-        {
+            (*it_all)->set_dead(true);
+        }            //If aphid or ladybug still has life
+        else {
             //Update aphid or ladybug position on grid
-            if((*itAll)->update(currentGrid.getHeight(), 
-                    currentGrid.getWidth()))
+            if ((*it_all)->update(current_grid.get_height(),
+                    current_grid.get_width())) 
             {
                 //Loop through vector of animals again
-                for(vector<Animal*>::iterator itCheck = allAnimals.begin();
-                        itCheck != allAnimals.end(); ++ itCheck)
+                for (vector<Animal*>::iterator it_check = all_animals.begin();
+                        it_check != all_animals.end(); ++it_check) 
                 {
                     //Don't compare to self
-                    if(*itAll != *itCheck)
-                    {
+                    if (*it_all != *it_check) {
                         //If two animals are in the same cell
-                        if(checkSameCell (**itAll, **itCheck))
+                        if (check_same_cell(**it_all, **it_check)) 
                         {
                             /***************DEBUGGING COUTS********************/
                             //cout << "Two in same position" << endl;
@@ -103,99 +100,96 @@ void Manager::updateAll()
                              * polymorphically. This marks an aphid or ladybug
                              * for death or reproduction
                              */
-                            (*itAll)->visitWith(**itCheck);
+                            (*it_all)->visit_with(**it_check);
                             //cin.get(); //For debugging each update
                         }
                     }
                 }
-            }
-            else //For debugging, or future extensions
+            } else //For debugging, or future extensions
             {
                 //cout << "Did not move";
             }
         }
     }
-    
+
     //Loop through currentAphids vector
-    vector<Aphid>::iterator iA = currentAphids.begin();
-    while(iA != currentAphids.end())
+    vector<Aphid>::iterator it_a = current_aphids.begin();
+    while (it_a != current_aphids.end()) 
     {
         //If an aphid is marked for death
-        if(iA->getDead())
+        if (it_a->get_dead()) 
         {
             //Delete and destruct aphid
-            iA = currentAphids.erase(iA);
-        }
-        //Or increment iterator
-        else
+            it_a = current_aphids.erase(it_a);
+        }            //Or increment iterator
+        else 
         {
-            ++iA;
+            ++it_a;
         }
     }
     //Reset iterator
-    iA = currentAphids.begin();
+    it_a = current_aphids.begin();
     //Loop through currentAphids again
-    while(iA != currentAphids.end())
+    while (it_a != current_aphids.end()) 
     {
         //If an aphid is marked for reproduction
-        if(iA->getReproduce())
+        if (it_a->get_reproduce()) 
         {
             //Create a new aphid object at the end of the vector with same 
             //variables as parent
-            currentAphids.emplace_back(iA->getHeight(), iA->getWidth(), 
-                    iA->getMoveProb(), iA->getReproduceProb(), 
-                    iA->getFightProb(), iA->getGroupKillProb());
+            current_aphids.emplace_back(it_a->get_height(), it_a->get_width(),
+                    it_a->get_move_prob(), it_a->get_reproduce_prob(),
+                    it_a->get_fight_prob(), it_a->get_group_kill_prob());
             //Reset reproduce marker 
-            iA->setReproduce(false);
+            it_a->set_reproduce(false);
             //Reset iterator
-            iA = currentAphids.begin();
+            it_a = current_aphids.begin();
         }
         //Increment iterator
-        ++iA;
+        ++it_a;
     }
-    
+
     //Loop through currentLadys vector
-    vector<Ladybug>::iterator l = currentLadys.begin();
-    while(l != currentLadys.end())
+    vector<Ladybug>::iterator it_l = current_ladys.begin();
+    while (it_l != current_ladys.end()) 
     {
         //If a ladybug is marked for death
-        if(l->getDead())
+        if (it_l->get_dead()) 
         {
             //Delete and destruct ladybug
-            l = currentLadys.erase(l);
-        }
-        //Or increment iterator
-        else
+            it_l = current_ladys.erase(it_l);
+        }            //Or increment iterator
+        else 
         {
-            ++l;
+            ++it_l;
         }
     }
     //Reset iterator
-    l = currentLadys.begin();
+    it_l = current_ladys.begin();
     //Loop through currentLadys again
-    while(l != currentLadys.end())
+    while (it_l != current_ladys.end()) 
     {
         //If a ladybug is marked for reproduction
-        if(l->getReproduce())
+        if (it_l->get_reproduce()) 
         {
             //Create a new ladybug object at the end of the vector with same 
             //variables as parent
-            currentLadys.emplace_back(l->getHeight(), l->getWidth(), l->getMoveProb(), 
-                    l->getReproduceProb(), l->getFightProb(), 
-                    l->getDirChangeProb());
+            current_ladys.emplace_back(it_l->get_height(), it_l->get_width(), 
+                    it_l->get_move_prob(), it_l->get_reproduce_prob(), 
+                    it_l->get_fight_prob(), it_l->getDirChangeProb());
             //Reset reproduce marker
-            l->setReproduce(false);
+            it_l->set_reproduce(false);
             //Reset iterator
-            l = currentLadys.begin();
+            it_l = current_ladys.begin();
         }
         //Increment iterator
-        ++l;
+        ++it_l;
     }
-    
+
     //Update allAnimals vector with updated positions and animals
-    setVectors();
-    
-    /*******ENABLE THIS IF YOU WANT STATISTICS FOR EACH OBJECT*****************/ 
+    set_vectors();
+
+    /*******ENABLE THIS IF YOU WANT STATISTICS FOR EACH OBJECT*****************/
     /*****************BAD FOR LONG SIMULATIONS*********************************/
     /*for (vector<Animal*>::iterator a = this->allAnimals.begin();
         a != this->allAnimals.end(); ++a)
@@ -206,76 +200,94 @@ void Manager::updateAll()
                     << (*a)->getHeight() << "Life: " << (*a)->getLife() << endl;
         }
     }*/
-    
+
     //Print out remaining ladybugs and aphids
-    cout << "Aphids: " << currentAphids.size() << endl << "Ladybugs: " 
-            << currentLadys.size();
+    cout << "Aphids: " << current_aphids.size() << endl << "Ladybugs: "
+            << current_ladys.size();
     //Print out turn number
     cout << endl << "Turn: " << turn++ << endl;
     //Draw grid with all updated data
-    this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
+    this->current_grid.draw_grid(this->current_aphids, this->current_ladys);
 }
 
 /**
  * Checks if an animal is in the same cell as another animal
- * @param movedAnimal
- * @param currentAnimal
- * @return boolean
+ * @param moved_animal
+ * @param current_animal
+ * @return boolean is_same
  */
-bool Manager::checkSameCell(Animal &movedAnimal, Animal &currentAnimal)
+bool Manager::check_same_cell(Animal &moved_animal, Animal &current_animal) 
 {
     //If the getHeight() and getWidth() functions return the same values, they 
     //are in the same cell
-    if(movedAnimal.getHeight() == currentAnimal.getHeight() 
-            && movedAnimal.getWidth() == currentAnimal.getWidth())
+    if (moved_animal.get_height() == current_animal.get_height()
+            && moved_animal.get_width() == current_animal.get_width()) 
     {
         return true;
-    }
-    else
+    } 
+    else 
     {
         return false;
     }
 }
 
-/*void Manager::killAnimal(vector<Animal> currentAnimals, 
-        vector <Animal*> deadAnimals)
-{
-    for (vector<Animal*>::iterator itA = this->deadAnimals.begin();  
-            itA != this->deadAnimals.end(); ++itA)
-    {
+/*void Manager::kill_animal(vector<Animal> these_animals,
+        vector <Animal*> marked_animals) 
+ * {
+    for (vector<Animal*>::iterator itA = this->marked_animals.begin();
+            itA != this->marked_animals.end(); ++itA) 
+ * {
         //Loop through vector of alive aphids
-        for (vector<Animal>::iterator itAlive = this->currentAnimals.begin();
-                itAlive != this->currentAnimals.end(); ++itAlive)
-        {
+        for (vector<Animal>::iterator itAlive = this->these_animals.begin();
+                itAlive != this->these_animals.end(); ++itAlive) 
+ *      {
             //If an aphid exists in deadAphids that exists in currentAphids, 
             //remove the aphid from currentAphids
-            if(&(*itAlive) == *itA)
-            {
-                itAlive = currentAnimals.erase(itAlive);
+            if (&(*itAlive) == *itA) 
+ *          {
+                itAlive = these_animals.erase(itAlive);
                 break;
             }
         }
     }
     //Clear the deadAphids vector for the next turn
-    this->deadAnimals.clear();
+    this->dead_animals.clear();
 }*/
 
 /**
  * This function marks a specific animal for death.
  * Not used in the program, but can be used for debugging
- * @param animalToKill
+ * @param animal_to_kill
  */
-void Manager::markDeath(Animal &animalToKill)
+void Manager::mark_death(Animal &animal_to_kill) 
 {
-    animalToKill.setDead(true);
+    animal_to_kill.set_dead(true);
 }
 
 /**
  * This function marks a specific animal for reproduction.
  * Not used in the program, but can be used for debugging
- * @param animalToReproduce
+ * @param animal_to_reproduce
  */
-void Manager::markReproduce(Animal &animalToReproduce)
+void Manager::mark_reproduce(Animal &animal_to_reproduce) 
 {
-    animalToReproduce.setReproduce(true);
+    animal_to_reproduce.set_reproduce(true);
+}
+
+/**
+ * Returns the size of the ladybug vector
+ * @return int ladybug_count
+ */
+int Manager::get_ladybug_count()
+{
+    return this->current_ladys.size();
+}
+
+/**
+ * Returns the size of the aphid vector
+ * @return int aphid_count
+ */
+int Manager::get_aphid_count()
+{
+    return this->current_aphids.size();
 }

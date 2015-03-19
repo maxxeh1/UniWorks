@@ -7,12 +7,7 @@
 #include "Manager.h"
 using namespace std;
 
-
-//Global variables
-
-
 //Constructor
-
 Aphid::Aphid()
 {
         position[0] = 0;
@@ -28,38 +23,38 @@ Aphid::Aphid(int position1, int position2)
     position[1] = position2;
 }
 
-Aphid::Aphid(int position1, int position2, float mvProb, float reProb, 
-        float killProb, float gKillProb)
+Aphid::Aphid(int position1, int position2, float mv_prob, float re_prob, 
+        float kil_prob, float g_kill_prob)
 {
     position[0] = position1;
     position[1] = position2;
     this->life = 40 + (rand() % (int)(100 - 40 + 1));
-    this->moveProb = mvProb;
-    this->reproduceProb = reProb;
-    this->fightProb = killProb;
-    this->groupKillProb = gKillProb;
+    this->move_prob = mv_prob;
+    this->reproduce_prob = re_prob;
+    this->fight_prob = kil_prob;
+    this->group_kill_prob = g_kill_prob;
 }
 
-void Aphid::setGroupKillProb(float prob)
+void Aphid::set_group_kill_prob(float prob)
 {
-    this->groupKillProb = prob;
+    this->group_kill_prob = prob;
 }
 
-float Aphid::getGroupKillProb()
+float Aphid::get_group_kill_prob()
 {
-    return this->groupKillProb;
+    return this->group_kill_prob;
 }
 
-void Aphid::visitWith(AnimalVisitor &animal)
+void Aphid::visit_with(AnimalVisitor &animal)
 {
     animal.visit(*this);
 }
 
 bool Aphid::visit(Aphid &animal)
 {
-    if(checkProbability(this->reproduceProb))
+    if(check_probability(this->reproduce_prob))
     {
-        animal.setReproduce(true);
+        animal.set_reproduce(true);
         //cout << "Aphids reproduce";
         return true;
     }
@@ -73,10 +68,10 @@ bool Aphid::visit(Aphid &animal)
 
 bool Aphid::visit(Ladybug &animal)
 {
-    if(checkProbability(this->fightProb))
+    if(check_probability(this->fight_prob))
     {
         //cout << "Kill ladybugs";
-        animal.setDead(true);
+        animal.set_dead(true);
         //currentManager.kill(animal);
         return true;
     }
@@ -87,13 +82,13 @@ bool Aphid::visit(Ladybug &animal)
     }
 }
 
-bool Aphid::update(int gridHeight, int gridWidth)
+bool Aphid::update(int grid_height, int grid_width)
 {
     bool check = true;
     int store[2];
     memcpy(store, this->position, sizeof(store));
 
-    if(checkProbability(this->moveProb))
+    if(check_probability(this->move_prob))
     {
         while(check)
         {
@@ -129,9 +124,9 @@ bool Aphid::update(int gridHeight, int gridWidth)
                     this->position[1]--;
                     break;
             }
-            if(this->position[0] >= gridHeight
+            if(this->position[0] >= grid_height
                     || this->position[0] < 0
-                    || this->position[1] >= gridWidth
+                    || this->position[1] >= grid_width
                     || this->position[1] < 0)
             {
                 memcpy(this->position, store, sizeof(this->position));

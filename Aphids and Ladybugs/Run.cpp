@@ -19,9 +19,9 @@ ifstream in_file;
 
 int num_aphids = 0, num_ladys = 0, temp_pos1 = 0, temp_pos2 = 0, aphid_pos[2], 
         lady_pos[2],grid_size[2];
-float aphidMoveProb = 0, aphidKillProb = 0, groupKillProb = 0, 
-        aphidReproduceProb = 0, ladyMoveProb = 0, ladyDirectionProb = 0, 
-        ladyKillProb = 0, ladyReproduceProb = 0;
+float aphid_move_prob = 0, aphid_kill_prob = 0, group_kill_prob = 0, 
+        aphid_reproduce_prob = 0, lady_move_prob = 0, lady_direction_prob = 0, 
+        lady_kill_prob = 0, lady_reproduce_prob = 0;
 
 
 /**
@@ -60,28 +60,28 @@ int main()
 
     //Read next line as number of aphids
     in_file >> num_aphids;
-    vector<Aphid> aphidVector(num_aphids);
+    vector<Aphid> aphid_vector(num_aphids);
     //Loop and grab each aphid position
     for (int i = 0; i < num_aphids; i++)
     {
         in_file >> temp_pos1;
         in_file >> temp_pos2;
         //Set positions of initialised aphids
-        aphidVector[i].setHeight(temp_pos1);
-        aphidVector[i].setWidth(temp_pos2);
+        aphid_vector[i].set_height(temp_pos1);
+        aphid_vector[i].set_width(temp_pos2);
     }
 
     //Read next line as number of ladybugs
     in_file >> num_ladys;
-    vector<Ladybug> ladyVector(num_ladys);
+    vector<Ladybug> lady_vector(num_ladys);
     //Loop and grab each aphid position
     for (int i = 0; i < num_ladys; i++)
     {
         in_file >> temp_pos1;
         in_file >> temp_pos2;
         //Set positions of initialised aphids
-        ladyVector[i].setHeight(temp_pos1);
-        ladyVector[i].setWidth(temp_pos2);
+        lady_vector[i].set_height(temp_pos1);
+        lady_vector[i].set_width(temp_pos2);
     }
     
     //Close current file
@@ -104,22 +104,22 @@ int main()
         cout << "File not opened" << endl;
     }
     //Assign variables with loaded values
-    in_file >> aphidMoveProb;
-    in_file >> aphidKillProb;
-    in_file >> groupKillProb;
-    in_file >> aphidReproduceProb;
+    in_file >> aphid_move_prob;
+    in_file >> aphid_kill_prob;
+    in_file >> group_kill_prob;
+    in_file >> aphid_reproduce_prob;
     
     //Close current file
     in_file.close();
     
     //Loop through aphid vector and assign object variables
-    for (vector<Aphid>::iterator itA = aphidVector.begin();
-            itA != aphidVector.end(); ++itA)
+    for (vector<Aphid>::iterator itA = aphid_vector.begin();
+            itA != aphid_vector.end(); ++itA)
     {
-        (*itA).setMoveProb(aphidMoveProb);
-        (*itA).setGroupKillProb(groupKillProb);
-        (*itA).setReproduceProb(aphidReproduceProb);
-        (*itA).setFightProb(aphidKillProb);
+        (*itA).set_move_prob(aphid_move_prob);
+        (*itA).set_group_kill_prob(group_kill_prob);
+        (*itA).set_reproduce_prob(aphid_reproduce_prob);
+        (*itA).set_fight_prob(aphid_kill_prob);
     }
     
     //Open ladybug config file and assign variables
@@ -141,30 +141,30 @@ int main()
     }
 
     //Assign variables with loaded values
-    in_file >> ladyMoveProb;
-    in_file >> ladyDirectionProb;
-    in_file >> ladyKillProb;
-    in_file >> ladyReproduceProb;
+    in_file >> lady_move_prob;
+    in_file >> lady_direction_prob;
+    in_file >> lady_kill_prob;
+    in_file >> lady_reproduce_prob;
     
     //Close the file
     in_file.close();
     
     //Loop through ladybug vector and assign object variables
-    for (vector<Ladybug>::iterator itL = ladyVector.begin();  
-                itL != ladyVector.end(); ++itL)
+    for (vector<Ladybug>::iterator itL = lady_vector.begin();  
+                itL != lady_vector.end(); ++itL)
     {
-        (*itL).setMoveProb(ladyMoveProb);
-        (*itL).setDirChangeProb(ladyDirectionProb);
-        (*itL).setReproduceProb(ladyReproduceProb);
-        (*itL).setFightProb(ladyKillProb);
+        (*itL).set_move_prob(lady_move_prob);
+        (*itL).setDirChangeProb(lady_direction_prob);
+        (*itL).set_reproduce_prob(lady_reproduce_prob);
+        (*itL).set_fight_prob(lady_kill_prob);
     }
     
     //Create manager with provided vectors
-    Manager currentManager(aphidVector, ladyVector);
+    Manager current_manager(aphid_vector, lady_vector);
     //Set manager vectors up, including a vector to hold all animals
-    currentManager.setVectors();
+    current_manager.set_vectors();
     //Draw the grid for the first time
-    currentManager.setupGrid(grid_size[0], grid_size[1]);
+    current_manager.setup_grid(grid_size[0], grid_size[1]);
     
     //Let the user see the initial grid
     cin.get();
@@ -173,10 +173,20 @@ int main()
     //Loop through the program forever
     while(true)
     {
-        currentManager.updateAll();
+        current_manager.update_all();
+        if(current_manager.get_aphid_count() == 0)
+        {
+            cout << "Aphids have been wiped out. Ladybugs rule the world.";
+            break;
+        }
+        else if(current_manager.get_ladybug_count() == 0)
+        {
+            cout << "Ladybugs have been wiped out. Aphids rule the world.";
+            break;
+        }
         //Pause update for 1000 milliseconds
         this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
-
+    return 0;
 }

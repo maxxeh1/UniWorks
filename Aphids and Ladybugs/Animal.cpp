@@ -16,16 +16,16 @@ Animal::Animal()
  * Sets dead boolean
  * @param isDead
  */
-void Animal::setDead(bool isDead)
+void Animal::set_dead(bool is_dead)
 {
-    this->dead = isDead;
+    this->dead = is_dead;
 }
 
 /**
  * Returns dead boolean
  * @return boolean dead
  */
-bool Animal::getDead()
+bool Animal::get_dead()
 {
     return this->dead;
 }
@@ -34,16 +34,16 @@ bool Animal::getDead()
  * Sets reproduce boolean
  * @param hasBaby
  */
-void Animal::setReproduce(bool hasBaby)
+void Animal::set_reproduce(bool will_reproduce)
 {
-    this->reproducing = hasBaby;
+    this->reproducing = will_reproduce;
 }
 
 /**
  * Returns reproduce boolean
  * @return boolean reproduce
  */
-bool Animal::getReproduce()
+bool Animal::get_reproduce()
 {
     return this->reproducing;
 }
@@ -52,7 +52,7 @@ bool Animal::getReproduce()
  * Sets height of animal
  * @param int height
  */
-void Animal::setHeight(int height)
+void Animal::set_height(int height)
 {
     this->position[0] = height;
 }
@@ -61,7 +61,7 @@ void Animal::setHeight(int height)
  * Sets width of animal
  * @param int width
  */
-void Animal::setWidth(int width)
+void Animal::set_width(int width)
 {
         this->position[1] = width;
 }
@@ -70,7 +70,7 @@ void Animal::setWidth(int width)
  * Gets height of animal
  * @return int position
  */
-int Animal::getHeight()
+int Animal::get_height()
 {
         return this->position[0];
 }
@@ -79,7 +79,7 @@ int Animal::getHeight()
  * Gets width of animal
  * @return int position
  */
-int Animal::getWidth()
+int Animal::get_width()
 {
     return this->position[1];
 }
@@ -89,7 +89,7 @@ int Animal::getWidth()
  * Used for debugging at the moment
  * @return pair position
  */
-pair<int,int> Animal::getPosition()
+pair<int,int> Animal::get_position()
 {
     return make_pair(this->position[0], this->position[1]);
 }
@@ -98,16 +98,16 @@ pair<int,int> Animal::getPosition()
  * Set life of animal
  * @param tempLife
  */
-void Animal::setLife(int tempLife)
+void Animal::set_life(int life_span)
 {
-    this->life = tempLife;
+    this->life = life_span;
 }
 
 /**
  * Returns life of animal
  * @return int life
  */
-int Animal::getLife()
+int Animal::get_life()
 {
     return this->life;
 }
@@ -116,54 +116,54 @@ int Animal::getLife()
  * Sets move probability of animal
  * @param float prob
  */
-void Animal::setMoveProb(float prob)
+void Animal::set_move_prob(float prob)
 {
-    this->moveProb = prob;
+    this->move_prob = prob;
 }
 
 /**
  * Returns move probability of animal
  * @return float moveProb
  */
-float Animal::getMoveProb()
+float Animal::get_move_prob()
 {
-    return this->moveProb;
+    return this->move_prob;
 }
 
 /**
  * Sets fight probability of animal
  * @param float prob
  */
-void Animal::setFightProb(float prob)
+void Animal::set_fight_prob(float prob)
 {
-    this->fightProb = prob;
+    this->fight_prob = prob;
 }
 
 /**
  * Returns fight probability of animal
  * @return float fightProb
  */
-float Animal::getFightProb()
+float Animal::get_fight_prob()
 {
-    return this->fightProb;
+    return this->fight_prob;
 }
 
 /**
  * Sets reproduce probability of animal
  * @param float prob
  */
-void Animal::setReproduceProb(float prob)
+void Animal::set_reproduce_prob(float prob)
 {
-    this->reproduceProb = prob;
+    this->reproduce_prob = prob;
 }
 
 /**
  * Returns reproduce probability of animal
  * @return float reproduceProb
  */
-float Animal::getReproduceProb()
+float Animal::get_reproduce_prob()
 {
-    return this->reproduceProb;
+    return this->reproduce_prob;
 }
 
 /**
@@ -185,13 +185,13 @@ bool Animal::update(int grid_height, int grid_width)
  * @param float probToCheck
  * @return bool willDo
  */
-bool Animal::checkProbability(float probToCheck)
+bool Animal::check_probability(float prob_to_check)
 {
     //Generate a random float
     float chance = ((double) rand() / (RAND_MAX));
     
     //If it's less than the parameter probability, return true
-    if(chance <= probToCheck)
+    if(chance <= prob_to_check)
     {
         return true;
     }

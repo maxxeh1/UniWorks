@@ -15,36 +15,36 @@ class Manager
     //Initialise protected variables
     protected:
         int turn = 0;
-        Grid currentGrid;
-        vector<Aphid> currentAphids;
-        vector<Aphid*> deadAphids;
-        vector<Ladybug> currentLadys;
-        vector<Ladybug*> deadLadys;
-        vector<Animal*> allAnimals;
-        vector<Animal*> deadAnimals;
+        Grid current_grid;
+        vector<Aphid> current_aphids;
+        vector<Aphid*> dead_aphids;
+        vector<Ladybug> current_ladys;
+        vector<Ladybug*> dead_ladys;
+        vector<Animal*> all_animals;
+        vector<Animal*> dead_animals;
     
     //Define functions to be implemented
     public:
         /**
          * Manager constructor, assigns vectors to the manager
-         * @param newAphids
-         * @param newLadys
+         * @param new_aphids
+         * @param new_ladys
          */
-        Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys);
+        Manager(vector<Aphid> new_aphids, vector<Ladybug> new_ladys);
         
         /**
          * Sets up the grid with inputted values
-         * @param gridHeight
-         * @param gridWidth
+         * @param grid_height
+         * @param grid_width
          */
-        void setupGrid(int gridHeight, int gridWidth);
+        void setup_grid(int grid_height, int grid_width);
         
         /**
          * Resets the vector which holds all the animals, and fills it with updated 
          * vectors at any point in the simulation. Ensures no dangling pointers to 
          * deleted objects
          */
-        void setVectors();
+        void set_vectors();
         
         /**
          * This function is the core of the program. It loops through vectors 
@@ -55,32 +55,45 @@ class Manager
          * Functionality from all sections of the code to make the program do 
          * what it is supposed to do.
          */
-        void updateAll();
+        void update_all();
         
         /**
          * Checks if an animal is in the same cell as another animal
-         * @param movedAnimal
-         * @param currentAnimal
+         * @param moved_animal
+         * @param current_animal
          * @return boolean
          */
-        bool checkSameCell(Animal &movedAnimal, Animal &currentAnimal);
+        bool check_same_cell(Animal &moved_animal, Animal &current_animal);
         
-        void killAnimal(vector<Animal> currentAnimals, 
-            vector <Animal*> deadAnimals);
+        void kill_animal(vector<Animal> these_animals, 
+            vector <Animal*> marked_animals);
         
         /**
          * This function marks a specific animal for death.
          * Not used in the program, but can be used for debugging
-         * @param animalToKill
+         * @param animal_to_kill
          */
-        void markDeath(Animal &animalToKill);
+        void mark_death(Animal &animal_to_kill);
         
         /**
          * This function marks a specific animal for reproduction.
          * Not used in the program, but can be used for debugging
-         * @param animalToReproduce
+         * @param animal_to_reproduce
          */
-        void markReproduce(Animal &animalToReproduce);
+        void mark_reproduce(Animal &animal_to_reproduce);
+        
+        /**
+         * Returns the size of the ladybug vector
+         * @return int ladybug_count
+         */
+        int get_ladybug_count();
+        
+        /**
+         * Returns the size of the aphid vector
+         * @return int aphid_count
+         */
+        int get_aphid_count();
+
 };
 
 #endif

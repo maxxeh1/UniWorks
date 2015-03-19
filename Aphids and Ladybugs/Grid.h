@@ -31,39 +31,39 @@ class Grid
          * Creates a 2D array based on object variables
          * for later drawing as a grid
          */
-        void createGrid();
+        void create_grid();
 
         /**
          * Draws the array as a #x# grid and shows locations of aphids and
          * ladybugs
-         * @param vector<Aphid> aphidVector
-         * @param vector<Ladybug> ladyVector
+         * @param vector<Aphid> aphid_vector
+         * @param vector<Ladybug> lady_vector
          */
-        void drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector);
+        void draw_grid(vector<Aphid>& aphid_vector, vector<Ladybug>& lady_vector);
 
         /**
          * Retrieves the height of the grid
          * @return int height
          */
-        int getHeight();
+        int get_height();
 
         /**
          * Retrieves the width of the grid
          * @return int width
          */
-        int getWidth();
+        int get_width();
         
         /**
          * Sets height of grid
          * @param temp_height
          */
-        void setHeight(int temp_height);
+        void set_height(int temp_height);
         
         /**
          * Sets width of grid
          * @param temp_width
          */
-        void setWidth(int temp_width);
+        void set_width(int temp_width);
 };
 
 #endif

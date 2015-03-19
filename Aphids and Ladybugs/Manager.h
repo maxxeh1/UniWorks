@@ -2,7 +2,6 @@
 #define MANAGER_H
 
 #include <vector>
-#include <memory>
 #include "Animal.h"
 #include "Grid.h"
 using namespace std;

@@ -1,7 +1,7 @@
 #ifndef ANIMAL_H
 #define ANIMAL_H
 #include <utility>
-#include "AnimalInteractor.h"
+#include "AnimalVisitor.h"
 using namespace std;
 
 //Define an enumerator for choosing directions to go in
@@ -164,66 +164,169 @@ class Animal: public AnimalVisitor
 
 class Aphid : public Animal//, public AnimalInteractor
 {
-    //Global variables
+    //Protected variables
     protected:
         int direction;
         float group_kill_prob;
 
-    //Constructor
     public:
+        //Default constructor
         Aphid();
         
+        //Destructor
         ~Aphid();
         
+        /**
+         * Constructor to just set positions of an aphid
+         * @param int position1
+         * @param int position2
+         */
         Aphid(int position1, int position2);
 
+        /**
+         * Second constructor that takes probabilities as well as positions
+         * @param int position1
+         * @param int position2
+         * @param float mv_prob
+         * @param float re_prob
+         * @param float kill_prob
+         * @param float g_kill_prob
+         */
         Aphid(int position1, int position2, float mvProb, float reProb, 
         float killProb, float gKillProb);
         
+        /**
+         * Sets aphid's group kill probability
+         * @param float prob
+         */
         void set_group_kill_prob(float prob);
        
+        /**
+         * Returns aphid's group kill probability
+         * @return float group_kill_prob
+         */
         float get_group_kill_prob();
 
+        /**
+         * Checks if aphid will move, then decides a direction. Then increments 
+         * the position of the aphid in chosen direction. Also checks if aphid will go
+         * out of bounds, and change the direction. At the end, decrements the aphid's
+         * life
+         * @param grid_height
+         * @param grid_width
+         * @return boolean moved
+         */
         bool update(int grid_height, int grid_width);
         
+        /**
+         * Visitor pattern function. Decides which visit() function to call 
+         * @param AnimalVisitor animal
+         */
         void visit_with(AnimalVisitor &animal);
         
+        /**
+         * Visitor pattern function. Chosen polymorphically. Checks if an aphid 
+         * will be marked for reproduction
+         * @param AnimalVisitor animal
+         * @return boolean will_reproduce
+         */
         bool visit(Aphid &animal);
         
+        /**
+         * Visitor pattern function. Chosen polymorphically. Checks if an aphid 
+         * will fight a ladybug
+         * @param AnimalVisitor animal
+         * @return boolean will_fight
+         */
         bool visit(Ladybug &animal);
 
 };
 
 class Ladybug : public Animal//, public AnimalInteractor
 {
+    //Protected variables
     protected:
         LadyDirection direction;
         int subdirection;
         float dir_change_prob = 0;
         
     public:
-            Ladybug();
-            
-            ~Ladybug();
-            
-            Ladybug(int position1, int position2);
+        //Default constructor
+        Ladybug();
 
-            Ladybug(int position1, int position2, float mvProb, float reProb, 
-        float killProb, float dChangeProb);
+        //Destructor
+        ~Ladybug();
             
-            void setDirection(int nSteps);
-            
-            void setDirChangeProb(float prob);
-            
-            float getDirChangeProb();
-            
-            void visit_with(AnimalVisitor &animal);
-        
-            bool visit(Aphid &animal);
-        
-            bool visit(Ladybug &animal);
-            
-            bool update(int grid_height, int grid_width);
+        /**
+         * Constructor to just set positions of an ladybug
+         * @param int position1
+         * @param int position2
+         */
+        Ladybug(int position1, int position2);
+
+        /**
+         * Second constructor that takes probabilities as well as positions
+         * @param int position1
+         * @param int position2
+         * @param float mv_prob
+         * @param float re_prob
+         * @param float kill_prob
+         * @param float d_change_prob
+         */
+        Ladybug(int position1, int position2, float mv_prob, float re_prob, 
+                    float kill_prob, float d_change_prob);
+
+        /**
+         * Sets the preferred direction for the ladybug
+         * @param int nSteps
+         */
+        void set_direction(int nSteps);
+
+        /**
+         * Sets the probability to change preferred direction
+         * @param float prob
+         */
+        void set_dir_change_prob(float prob);
+
+        /**
+         * Returns the probability to change preferred direction
+         * @return float dir_change_prob
+         */
+        float get_dir_change_prob();
+
+        /**
+         * Visitor pattern function. Decides which visit() function to call 
+         * @param AnimalVisitor animal
+         */
+        void visit_with(AnimalVisitor &animal);
+
+        /**
+         * Visitor pattern function. Chosen polymorphically. Checks if a ladybug
+         * will fight an aphid
+         * @param AnimalVisitor animal
+         * @return boolean will_fight
+         */
+        bool visit(Aphid &animal);
+
+        /**
+         * Visitor pattern function. Chosen polymorphically. Checks if a ladybug
+         * will be marked for reproduction
+         * @param AnimalVisitor animal
+         * @return boolean will_reproduce
+         */
+        bool visit(Ladybug &animal);
+
+        /**
+         * Updates a ladybug based on their preferred direction. First checks if the 
+         * ladybug will move. Then checks if the ladybug will change their preferred
+         * direction. Then chooses a new direction, NOT the original one. Performs 
+         * constant checks for if the ladybug will go out bounds before incrementing.
+         * Then reduces the ladybug's life.
+         * @param int grid_height
+         * @param int grid_width
+         * @return boolean moved
+         */
+        bool update(int grid_height, int grid_width);
 };
 
 

@@ -3,7 +3,7 @@
 #include "Animal.h"
 using namespace std;
 
-
+//Default constructor
 Ladybug::Ladybug()
 {
     position[0] = 0;
@@ -12,14 +12,29 @@ Ladybug::Ladybug()
     direction = North;
 }
 
+//Destructor
 Ladybug::~Ladybug(){}
 
+/**
+ * Constructor to just set positions of an ladybug
+ * @param int position1
+ * @param int position2
+ */
 Ladybug::Ladybug(int position1, int position2)
 {
     position[0] = position1;
     position[1] = position2;
 }
 
+/**
+ * Second constructor that takes probabilities as well as positions
+ * @param int position1
+ * @param int position2
+ * @param float mv_prob
+ * @param float re_prob
+ * @param float kill_prob
+ * @param float d_change_prob
+ */
 Ladybug::Ladybug(int position1, int position2, float mv_prob, float re_prob, 
         float kill_prob, float d_change_prob)
 {
@@ -33,27 +48,49 @@ Ladybug::Ladybug(int position1, int position2, float mv_prob, float re_prob,
         this->dir_change_prob = d_change_prob;
 }
 
-void Ladybug::setDirection(int n_steps)
+/**
+ * Sets the preferred direction for the ladybug
+ * @param int nSteps
+ */
+void Ladybug::set_direction(int n_steps)
 {
     this->direction = static_cast<LadyDirection>(
                      (this->direction + n_steps) % NUM_DIRECTIONS);
 }
 
-void Ladybug::setDirChangeProb(float prob)
+/**
+ * Sets the probability to change preferred direction
+ * @param float prob
+ */
+void Ladybug::set_dir_change_prob(float prob)
 {
     this->dir_change_prob = prob;
 }
 
-float Ladybug::getDirChangeProb()
+/**
+ * Returns the probability to change preferred direction
+ * @return float dir_change_prob
+ */
+float Ladybug::get_dir_change_prob()
 {
     return this->dir_change_prob;
 }
 
+/**
+ * Visitor pattern function. Decides which visit() function to call 
+ * @param AnimalVisitor animal
+ */
 void Ladybug::visit_with(AnimalVisitor &animal)
 {
     animal.visit(*this);
 }
 
+/**
+ * Visitor pattern function. Chosen polymorphically. Checks if a ladybug
+ * will fight an aphid
+ * @param AnimalVisitor animal
+ * @return boolean will_fight
+ */
 bool Ladybug::visit(Aphid &animal)
 {
     if(check_probability(this->fight_prob))
@@ -69,6 +106,12 @@ bool Ladybug::visit(Aphid &animal)
     }
 }
 
+/**
+ * Visitor pattern function. Chosen polymorphically. Checks if a ladybug
+ * will be marked for reproduction
+ * @param AnimalVisitor animal
+ * @return boolean will_reproduce
+ */
 bool Ladybug::visit(Ladybug &animal)
 {
     if(check_probability(this->reproduce_prob))
@@ -85,7 +128,14 @@ bool Ladybug::visit(Ladybug &animal)
 }
 
 /**
- * This function updates each individual ladybug according to their direction
+ * Updates a ladybug based on their preferred direction. First checks if the 
+ * ladybug will move. Then checks if the ladybug will change their preferred
+ * direction. Then chooses a new direction, NOT the original one. Performs 
+ * constant checks for if the ladybug will go out bounds before incrementing.
+ * Then reduces the ladybug's life.
+ * @param int grid_height
+ * @param int grid_width
+ * @return boolean moved
  */
 bool Ladybug::update(int grid_height, int grid_width)
 {
@@ -95,7 +145,7 @@ bool Ladybug::update(int grid_height, int grid_width)
     {
         if(check_probability(this->dir_change_prob))
         {
-            setDirection(1 + rand()%(NUM_DIRECTIONS - 1));
+            set_direction(1 + rand()%(NUM_DIRECTIONS - 1));
             //cout << "Ladybug changed direction to " << direction << endl;
         }
         else
@@ -311,11 +361,13 @@ bool Ladybug::update(int grid_height, int grid_width)
                     break;
             }
         }
+        //Decrement ladybug's life by a random number out of 10
         life = life - (rand() % 10 + 1);
         //cout << "Ladybug moved to " << position[0] << position[1] << endl;
         //cout << "Ladybugs life is " << life << endl;
         return true;
     }
+    //Did not move
     else
     {
         //cout << "Ladybug did not move" << endl;

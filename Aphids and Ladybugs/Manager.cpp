@@ -112,7 +112,7 @@ void Manager::update_all()
         }
     }
 
-    //Loop through currentAphids vector
+    //Loop through current_aphids vector
     vector<Aphid>::iterator it_a = current_aphids.begin();
     while (it_a != current_aphids.end()) 
     {
@@ -158,7 +158,8 @@ void Manager::update_all()
         {
             //Delete and destruct ladybug
             it_l = current_ladys.erase(it_l);
-        }            //Or increment iterator
+        }            
+        //Or increment iterator
         else 
         {
             ++it_l;
@@ -176,7 +177,7 @@ void Manager::update_all()
             //variables as parent
             current_ladys.emplace_back(it_l->get_height(), it_l->get_width(), 
                     it_l->get_move_prob(), it_l->get_reproduce_prob(), 
-                    it_l->get_fight_prob(), it_l->getDirChangeProb());
+                    it_l->get_fight_prob(), it_l->get_dir_change_prob());
             //Reset reproduce marker
             it_l->set_reproduce(false);
             //Reset iterator

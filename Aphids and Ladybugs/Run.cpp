@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <map>
 #include <vector>
 #include <utility>
 #include <chrono>
@@ -154,7 +153,7 @@ int main()
                 itL != lady_vector.end(); ++itL)
     {
         (*itL).set_move_prob(lady_move_prob);
-        (*itL).setDirChangeProb(lady_direction_prob);
+        (*itL).set_dir_change_prob(lady_direction_prob);
         (*itL).set_reproduce_prob(lady_reproduce_prob);
         (*itL).set_fight_prob(lady_kill_prob);
     }

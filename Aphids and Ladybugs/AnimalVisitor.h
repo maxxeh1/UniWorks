@@ -1,5 +1,5 @@
-#ifndef ANIMALINTERACTOR_H
-#define ANIMALINTERACTOR_H
+#ifndef ANIMALVISITOR_H
+#define ANIMALVISITOR_H
 
 /**
  * Tells class that these classes do exist, just not here

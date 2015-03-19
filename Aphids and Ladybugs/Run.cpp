@@ -50,7 +50,8 @@ int main()
     }
     else
     {
-        cout << "File not opened" << endl;
+        cout << "File not opened, please enter a real file" << endl;
+        return 0;
     }
 
     //Read first line as grid sizes
@@ -100,7 +101,8 @@ int main()
     }
     else
     {
-        cout << "File not opened" << endl;
+        cout << "File not opened, please enter a real file" << endl;
+        return 0;
     }
     //Assign variables with loaded values
     in_file >> aphid_move_prob;
@@ -136,7 +138,8 @@ int main()
     }
     else
     {
-        cout << "File not opened" << endl;
+        cout << "File not opened, please enter a real file" << endl;
+        return 0;
     }
 
     //Assign variables with loaded values

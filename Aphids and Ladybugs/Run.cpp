@@ -35,7 +35,7 @@ int main()
     srand(time(0));
     
     //Welcome messages in console
-    cout << "Welcome to the Aphids and Ladybugs simulator.";
+    cout << "Welcome to the Aphids and Ladybugs simulator." << endl;
     cout << "Please enter the name of the main config file you wish to use (Eg."
             "config.txt) : " << endl;
     //Take user input for file name
@@ -175,12 +175,14 @@ int main()
         current_manager.update_all();
         if(current_manager.get_aphid_count() == 0)
         {
-            cout << "Aphids have been wiped out. Ladybugs rule the world.";
+            cout << endl << "Aphids have been wiped out. Ladybugs rule the "
+                    "world.";
             break;
         }
         else if(current_manager.get_ladybug_count() == 0)
         {
-            cout << "Ladybugs have been wiped out. Aphids rule the world.";
+            cout << endl << "Ladybugs have been wiped out. Aphids rule the "
+                    "world.";
             break;
         }
         //Pause update for 1000 milliseconds

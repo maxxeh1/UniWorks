@@ -49,7 +49,7 @@ float Ladybug::getDirChangeProb()
     return this->dirChangeProb;
 }
 
-void Ladybug::visitWith(AnimalInteractor &animal)
+void Ladybug::visitWith(AnimalVisitor &animal)
 {
     animal.visit(*this);
 }

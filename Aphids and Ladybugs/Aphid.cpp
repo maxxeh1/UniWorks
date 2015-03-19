@@ -50,7 +50,7 @@ float Aphid::getGroupKillProb()
     return this->groupKillProb;
 }
 
-void Aphid::visitWith(AnimalInteractor &animal)
+void Aphid::visitWith(AnimalVisitor &animal)
 {
     animal.visit(*this);
 }

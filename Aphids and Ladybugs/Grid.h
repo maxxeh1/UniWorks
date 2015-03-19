@@ -19,6 +19,7 @@ class Grid
     public:
         //Default Constructor
         Grid();
+        
         /**
          * Constructor
          * @param int temp_height
@@ -52,8 +53,16 @@ class Grid
          */
         int getWidth();
         
+        /**
+         * Sets height of grid
+         * @param temp_height
+         */
         void setHeight(int temp_height);
         
+        /**
+         * Sets width of grid
+         * @param temp_width
+         */
         void setWidth(int temp_width);
 };
 

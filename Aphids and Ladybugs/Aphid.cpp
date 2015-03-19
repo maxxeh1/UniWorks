@@ -17,21 +17,27 @@ Aphid::Aphid()
 {
         position[0] = 0;
         position[1] = 1;
-        this->life = 70 + (rand() % (int)(100 - 70 + 1));
+        this->life = 60 + (rand() % (int)(100 - 60 + 1));
 }
 
 Aphid::~Aphid(){}
 
+Aphid::Aphid(int position1, int position2)
+{
+    position[0] = position1;
+    position[1] = position2;
+}
+
 Aphid::Aphid(int position1, int position2, float mvProb, float reProb, 
         float killProb, float gKillProb)
 {
-        position[0] = position1;
-        position[1] = position2;
-        this->life = 70 + (rand() % (int)(100 - 70 + 1));
-        this->moveProb = mvProb;
-        this->reproduceProb = reProb;
-        this->fightProb = killProb;
-        this->groupKillProb = gKillProb;
+    position[0] = position1;
+    position[1] = position2;
+    this->life = 40 + (rand() % (int)(100 - 40 + 1));
+    this->moveProb = mvProb;
+    this->reproduceProb = reProb;
+    this->fightProb = killProb;
+    this->groupKillProb = gKillProb;
 }
 
 void Aphid::setGroupKillProb(float prob)
@@ -124,9 +130,9 @@ bool Aphid::update(int gridHeight, int gridWidth)
                     break;
             }
             if(this->position[0] >= gridHeight
-                    || this->position[0] <= 0
+                    || this->position[0] < 0
                     || this->position[1] >= gridWidth
-                    || this->position[1] <= 0)
+                    || this->position[1] < 0)
             {
                 memcpy(this->position, store, sizeof(this->position));
             }

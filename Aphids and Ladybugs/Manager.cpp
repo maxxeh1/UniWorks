@@ -5,12 +5,22 @@
 #include "Grid.h"
 using namespace std;
 
+/**
+ * Manager constructor, assigns vectors to the manager
+ * @param newAphids
+ * @param newLadys
+ */
 Manager::Manager(vector<Aphid> newAphids, vector<Ladybug> newLadys)
 {
     currentAphids = newAphids;
     currentLadys = newLadys;
 }
 
+/**
+ * Sets up the grid with inputted values
+ * @param gridHeight
+ * @param gridWidth
+ */
 void Manager::setupGrid(int gridHeight, int gridWidth)
 {
     currentGrid.setHeight(gridHeight);
@@ -18,6 +28,11 @@ void Manager::setupGrid(int gridHeight, int gridWidth)
     currentGrid.drawGrid(currentAphids, currentLadys);
 }
 
+/**
+ * Resets the vector which holds all the animals, and fills it with updated 
+ * vectors at any point in the simulation. Ensures no dangling pointers to 
+ * deleted objects
+ */
 void Manager::setVectors()
 {
     this->allAnimals.clear();
@@ -55,14 +70,12 @@ void Manager::updateAll()
             itAll != allAnimals.end(); ++itAll)
     {
         //Check life of aphid or ladybug
-        bool checker = false;
         if((*itAll)->getLife() <= 0)
         {
-            //If aphid or ladybug is dead, mark for death
+            //If aphid or ladybug is dead, mark it for death
             (*itAll)->setDead(true);
-            //deadAnimals.push_back(*itAll);
-            //cout << "Animal" <<  "has died" << endl;
         }
+        //If aphid or ladybug still has life
         else
         {
             //Update aphid or ladybug position on grid
@@ -77,93 +90,123 @@ void Manager::updateAll()
                     if(*itAll != *itCheck)
                     {
                         //If two animals are in the same cell
-                        if(checkFight (**itAll, **itCheck))
+                        if(checkSameCell (**itAll, **itCheck))
                         {
+                            /***************DEBUGGING COUTS********************/
                             //cout << "Two in same position" << endl;
                             //Draw the grid to show them in same cell
                             //this->currentGrid.drawGrid(this->currentAphids, 
                             //        this->currentLadys);
-                            //Use visitor pattern to call correct function
-                            //polymorphically
+                            /**************************************************/
+                            /**
+                             * Use visitor pattern to call correct function
+                             * polymorphically. This marks an aphid or ladybug
+                             * for death or reproduction
+                             */
                             (*itAll)->visitWith(**itCheck);
-                            //cin.get();
+                            //cin.get(); //For debugging each update
                         }
                     }
                 }
             }
-            else
+            else //For debugging, or future extensions
             {
                 //cout << "Did not move";
             }
         }
     }
-
-        vector<Aphid>::iterator iA = currentAphids.begin();
-        while(iA != currentAphids.end())
+    
+    //Loop through currentAphids vector
+    vector<Aphid>::iterator iA = currentAphids.begin();
+    while(iA != currentAphids.end())
+    {
+        //If an aphid is marked for death
+        if(iA->getDead())
         {
-            if(iA->getDead())
-            {
-                iA = currentAphids.erase(iA);
-                ++iA;
-            }
-            else
-            {
-                ++iA;
-            }
+            //Delete and destruct aphid
+            iA = currentAphids.erase(iA);
         }
-        iA = currentAphids.begin();
-        while(iA != currentAphids.end())
+        //Or increment iterator
+        else
         {
-            if(iA->getReproduce())
-            {
-                currentAphids.emplace_back(iA->getHeight(), iA->getWidth(), iA->getMoveProb(), 
-                        iA->getReproduceProb(), iA->getFightProb(), 
-                        iA->getGroupKillProb());
-                //allAnimals.push_back(&newLady);
-                iA->setReproduce(false);
-                //setVectors();
-                //break;
-                iA = currentAphids.begin();
-            }
             ++iA;
         }
-
-        vector<Ladybug>::iterator l = currentLadys.begin();
-        while(l != currentLadys.end())
+    }
+    //Reset iterator
+    iA = currentAphids.begin();
+    //Loop through currentAphids again
+    while(iA != currentAphids.end())
+    {
+        //If an aphid is marked for reproduction
+        if(iA->getReproduce())
         {
-            if(l->getDead())
-            {
-                l = currentLadys.erase(l);
-                ++l;
-            }
-            else
-            {
-                ++l;
-            }
+            //Create a new aphid object at the end of the vector with same 
+            //variables as parent
+            currentAphids.emplace_back(iA->getHeight(), iA->getWidth(), 
+                    iA->getMoveProb(), iA->getReproduceProb(), 
+                    iA->getFightProb(), iA->getGroupKillProb());
+            //Reset reproduce marker 
+            iA->setReproduce(false);
+            //Reset iterator
+            iA = currentAphids.begin();
         }
-        l = currentLadys.begin();
-        while(l != currentLadys.end())
+        //Increment iterator
+        ++iA;
+    }
+    
+    //Loop through currentLadys vector
+    vector<Ladybug>::iterator l = currentLadys.begin();
+    while(l != currentLadys.end())
+    {
+        //If a ladybug is marked for death
+        if(l->getDead())
         {
-            if(l->getReproduce())
-            {
-                currentLadys.emplace_back(l->getHeight(), l->getWidth(), l->getMoveProb(), 
-                        l->getReproduceProb(), l->getFightProb(), 
-                        l->getDirChangeProb());
-                l->setReproduce(false);
-                l = currentLadys.begin();
-            }
+            //Delete and destruct ladybug
+            l = currentLadys.erase(l);
+        }
+        //Or increment iterator
+        else
+        {
             ++l;
         }
-    //}
+    }
+    //Reset iterator
+    l = currentLadys.begin();
+    //Loop through currentLadys again
+    while(l != currentLadys.end())
+    {
+        //If a ladybug is marked for reproduction
+        if(l->getReproduce())
+        {
+            //Create a new ladybug object at the end of the vector with same 
+            //variables as parent
+            currentLadys.emplace_back(l->getHeight(), l->getWidth(), l->getMoveProb(), 
+                    l->getReproduceProb(), l->getFightProb(), 
+                    l->getDirChangeProb());
+            //Reset reproduce marker
+            l->setReproduce(false);
+            //Reset iterator
+            l = currentLadys.begin();
+        }
+        //Increment iterator
+        ++l;
+    }
+    
+    //Update allAnimals vector with updated positions and animals
     setVectors();
-    for (vector<Animal*>::iterator a = this->allAnimals.begin();
+    
+    /*******ENABLE THIS IF YOU WANT STATISTICS FOR EACH OBJECT*****************/ 
+    /*****************BAD FOR LONG SIMULATIONS*********************************/
+    /*for (vector<Animal*>::iterator a = this->allAnimals.begin();
         a != this->allAnimals.end(); ++a)
     {
-        //if(!(**a).getDead())
-        //{
-            //cout << endl << "Width: " << (*a)->getWidth() << "Height: " << (*a)->getHeight() << "Life: " << (*a)->getLife() << endl;
-       // }
-    }
+        if(!(**a).getDead())
+        {
+            cout << endl << "Width: " << (*a)->getWidth() << "Height: " 
+                    << (*a)->getHeight() << "Life: " << (*a)->getLife() << endl;
+        }
+    }*/
+    
     //Print out remaining ladybugs and aphids
     cout << "Aphids: " << currentAphids.size() << endl << "Ladybugs: " 
             << currentLadys.size();
@@ -173,8 +216,16 @@ void Manager::updateAll()
     this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
 }
 
-bool Manager::checkFight(Animal &movedAnimal, Animal &currentAnimal)
+/**
+ * Checks if an animal is in the same cell as another animal
+ * @param movedAnimal
+ * @param currentAnimal
+ * @return boolean
+ */
+bool Manager::checkSameCell(Animal &movedAnimal, Animal &currentAnimal)
 {
+    //If the getHeight() and getWidth() functions return the same values, they 
+    //are in the same cell
     if(movedAnimal.getHeight() == currentAnimal.getHeight() 
             && movedAnimal.getWidth() == currentAnimal.getWidth())
     {
@@ -209,30 +260,22 @@ bool Manager::checkFight(Animal &movedAnimal, Animal &currentAnimal)
     this->deadAnimals.clear();
 }*/
 
-void Manager::kill(Animal &animalToKill)
+/**
+ * This function marks a specific animal for death.
+ * Not used in the program, but can be used for debugging
+ * @param animalToKill
+ */
+void Manager::markDeath(Animal &animalToKill)
 {
     animalToKill.setDead(true);
-    
-    /*for(vector<Animal*>::iterator itCheck = allAnimals.begin();
-            itCheck != allAnimals.end(); ++ itCheck)
-    {
-        if(*itCheck == &animalToKill)
-        {
-            
-        }
-    }*/
-        //this->currentAphids.erase(animalToKill);
 }
 
-bool Manager::checkProbability(float probToCheck)
+/**
+ * This function marks a specific animal for reproduction.
+ * Not used in the program, but can be used for debugging
+ * @param animalToReproduce
+ */
+void Manager::markReproduce(Animal &animalToReproduce)
 {
-    float chance = ((double) rand() / (RAND_MAX));
-    if(chance <= probToCheck)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    animalToReproduce.setReproduce(true);
 }

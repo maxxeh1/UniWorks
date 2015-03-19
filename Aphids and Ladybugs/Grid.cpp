@@ -48,7 +48,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
 {
     //Local variables
     int cellAphids = 0, cellLadys = 0, column = 0, row = 0; 
-    bool filled = false, ladyBug = false, aphid = false;
+    bool ladyBug = false, aphid = false;
     
     //Draw the grid, looping through aphid and ladybug vectors
     cout << " ";
@@ -62,26 +62,35 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
     //aphids and ladybugs, as well as the number of them in each cell
     for (int i = 0; i < this->height; i++)
     {
+        //Set width to be the same, regardless of what's in it
+        //Increment row number
         cout << setw(3) << row++;
+        //Loop through width of grid
         for (int j = 0; j < this->width; j++)
         {
+            //Loop through aphids
             for (vector<Aphid>::iterator itA = aphidVector.begin();  
                     itA != aphidVector.end(); ++itA)
             {
-                if ((*itA).getHeight() == i && (*itA).getWidth() == j)// && !(*itA).getDead())
+                //If an aphid's positions match current position in grid
+                if ((*itA).getHeight() == i && (*itA).getWidth() == j)
                 {
+                    //Increment number of aphids in cell
                     ++cellAphids;
+                    //Sets boolean check to tell there was an aphid found here
                     aphid = true;
-                    filled = true;
                 }
             }
+            //Loop through ladybugs
             for (vector<Ladybug>::iterator itL = ladyVector.begin(); 
                     itL != ladyVector.end(); ++itL)
             {
-                if ((*itL).getHeight() == i && (*itL).getWidth() == j)// && !(*itL).getDead())
+                //If a ladybug's positions match current position in grid
+                if ((*itL).getHeight() == i && (*itL).getWidth() == j)
                 {
+                    //Increment number of ladybugs in cell
                     ++cellLadys;
-                    filled = true;
+                    //Sets boolean check to tell there was a ladybug found here
                     ladyBug = true;
                 }                                
             }
@@ -90,6 +99,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             if(ladyBug && aphid)
             {
                 cout << "|L"; 
+                //Replace double digits with ~
                 if(cellLadys >= 10)
                 {
                     cout << "~";
@@ -99,6 +109,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
                     cout << cellLadys;
                 }
                 cout << "A";
+                //Replace double digits with ~
                 if(cellAphids >= 10)
                 {
                     cout << "~";
@@ -111,6 +122,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             else if(aphid)
             {
                 cout << "|A";
+                //Replace double digits with ~
                 if(cellAphids >= 10)
                 {
                     cout << "~";
@@ -124,6 +136,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             else if(ladyBug)
             {
                 cout << "|  L";
+                //Replace double digits with ~
                 if(cellLadys >= 10)
                 {
                     cout << "~";
@@ -133,14 +146,14 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
                     cout << cellLadys;
                 }
             }
-            else if (!filled)
+            //If cell is not filled 
+            else if (!aphid || !ladyBug)
             {
                 cout << "|    ";
             }
             //Reset condition variables
             aphid = false;
             ladyBug = false;
-            filled = false;
             cellAphids = 0;
             cellLadys = 0;
         }
@@ -174,11 +187,19 @@ int Grid::getWidth()
     return this->width;
 }
 
+/**
+ * Sets height of grid
+ * @param temp_height
+ */
 void Grid::setHeight(int temp_height)
 {
     this->height = temp_height;
 }
 
+/**
+ * Sets width of grid
+ * @param temp_width
+ */
 void Grid:: setWidth(int temp_width)
 {
     this->width = temp_width;

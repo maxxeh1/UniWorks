@@ -13,7 +13,7 @@
 #include "Manager.h"
 using namespace std;
 
-//Global variables
+//Global variables -- preparation for variables to be loaded
 string file_name;
 ifstream in_file;
 
@@ -24,26 +24,34 @@ float aphidMoveProb = 0, aphidKillProb = 0, groupKillProb = 0,
         ladyKillProb = 0, ladyReproduceProb = 0;
 
 
-//The main function for the program. This will load config files and run the simulator.
+/**
+ * This is the main function. This is where the program starts and ends.
+ * The primary purpose of this function is to initialise, load and setup 
+ * everything in the program
+ * @return 0 -- Close the program
+ */
 int main()
 {
+    //Generate a new seed for rand()
     srand(time(0));
+    
     //Welcome messages in console
     cout << "Welcome to the Aphids and Ladybugs simulator.";
-    cout << "Please enter the name of the config files you wish to use: \n";
+    cout << "Please enter the name of the main config file you wish to use (Eg."
+            "config.txt) : " << endl;
     //Take user input for file name
-    //cin >> file_name;
+    cin >> file_name;
 
     //Open the file
-    in_file.open("config.txt");
+    in_file.open(file_name);
     //Check file was opened correctly
     if (in_file.is_open())
     {
-        cout << "File opened\n";
+        cout << "File opened" << endl;
     }
     else
     {
-        cout << "File not opened\n";
+        cout << "File not opened" << endl;
     }
 
     //Read first line as grid sizes
@@ -58,48 +66,53 @@ int main()
     {
         in_file >> temp_pos1;
         in_file >> temp_pos2;
-        //string temp_name;
-        //cout << "Please enter a name for this aphid: ";
-        //cin >> temp_name;
-        //Aphid temp_aphid(temp_pos1, temp_pos2);
-        //aphidMap[temp_name] = temp_aphid;
+        //Set positions of initialised aphids
         aphidVector[i].setHeight(temp_pos1);
         aphidVector[i].setWidth(temp_pos2);
     }
-    for (vector<Aphid>::iterator itA = aphidVector.begin();  
-                    itA != aphidVector.end(); ++itA)
-    {
-        pair<int, int> temp_pos = (*itA).getPosition();
-        //cout << temp_pos.first << temp_pos.second;
-    }
+
     //Read next line as number of ladybugs
     in_file >> num_ladys;
     vector<Ladybug> ladyVector(num_ladys);
-    //Loop and grab each ladybug position
+    //Loop and grab each aphid position
     for (int i = 0; i < num_ladys; i++)
     {
         in_file >> temp_pos1;
         in_file >> temp_pos2;
-        //string temp_name;
-        //cout << "Please enter a name for this ladybug: ";
-        //cin >> temp_name;
-        //Aphid temp_aphid(temp_pos1, temp_pos2);
-        //aphidMap[temp_name] = temp_aphid;
+        //Set positions of initialised aphids
         ladyVector[i].setHeight(temp_pos1);
         ladyVector[i].setWidth(temp_pos2);
     }
     
-    
-    
-    
     //Close current file
     in_file.close();
     //Open aphid config file and assign variables
-    in_file.open("aphidConfig.txt");
+        cout << "Please enter the name of the aphid config file you wish to use"
+                " (Eg.aphidConfig.txt) : " << endl;
+    //Take user input for file name
+    cin >> file_name;
+
+    //Open the file
+    in_file.open(file_name);
+    //Check file was opened correctly
+    if (in_file.is_open())
+    {
+        cout << "File opened" << endl;
+    }
+    else
+    {
+        cout << "File not opened" << endl;
+    }
+    //Assign variables with loaded values
     in_file >> aphidMoveProb;
     in_file >> aphidKillProb;
     in_file >> groupKillProb;
     in_file >> aphidReproduceProb;
+    
+    //Close current file
+    in_file.close();
+    
+    //Loop through aphid vector and assign object variables
     for (vector<Aphid>::iterator itA = aphidVector.begin();
             itA != aphidVector.end(); ++itA)
     {
@@ -108,17 +121,35 @@ int main()
         (*itA).setReproduceProb(aphidReproduceProb);
         (*itA).setFightProb(aphidKillProb);
     }
-    //cout << moveProb << killProb << groupKillProb << reproduceProb;
-    
-    //Close current file
-    in_file.close();
     
     //Open ladybug config file and assign variables
-    in_file.open("ladybugConfig.txt"); 
+    cout << "Please enter the name of the aphid config file you wish to use "
+            "(Eg.ladybugConfig.txt) : " << endl;
+    //Take user input for file name
+    cin >> file_name;
+
+    //Open the file
+    in_file.open(file_name);
+    //Check file was opened correctly
+    if (in_file.is_open())
+    {
+        cout << "File opened" << endl;
+    }
+    else
+    {
+        cout << "File not opened" << endl;
+    }
+
+    //Assign variables with loaded values
     in_file >> ladyMoveProb;
     in_file >> ladyDirectionProb;
     in_file >> ladyKillProb;
     in_file >> ladyReproduceProb;
+    
+    //Close the file
+    in_file.close();
+    
+    //Loop through ladybug vector and assign object variables
     for (vector<Ladybug>::iterator itL = ladyVector.begin();  
                 itL != ladyVector.end(); ++itL)
     {
@@ -127,39 +158,25 @@ int main()
         (*itL).setReproduceProb(ladyReproduceProb);
         (*itL).setFightProb(ladyKillProb);
     }
-    //cout << moveProb << killProb << groupKillProb << reproduceProb;
     
-    //Create manager with provided data
+    //Create manager with provided vectors
     Manager currentManager(aphidVector, ladyVector);
+    //Set manager vectors up, including a vector to hold all animals
     currentManager.setVectors();
-    //Draw the grid
+    //Draw the grid for the first time
     currentManager.setupGrid(grid_size[0], grid_size[1]);
     
+    //Let the user see the initial grid
+    cin.get();
     cin.get();
     
+    //Loop through the program forever
     while(true)
     {
         currentManager.updateAll();
-        //cin.get();
+        //Pause update for 1000 milliseconds
         this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
-    
-    /*for (vector<Ladybug>::iterator itL = ladyVector.begin();  
-                    itL != ladyVector.end(); ++itL)
-    {
-        (*itL).setDirection('e');
-        (*itL).update();
-    }
-    currentGrid.drawGrid(aphidVector, ladyVector);
-    cin.get();
-    for (vector<Aphid>::iterator itA = aphidVector.begin();  
-                    itA != aphidVector.end(); ++itA)
-    {
-        (*itA).update();
-    }
-    cin.get();
-    //Draw the grid
-    currentGrid.drawGrid(aphidVector, ladyVector);*/
-    //Close the file
-    in_file.close();
+
+
 }

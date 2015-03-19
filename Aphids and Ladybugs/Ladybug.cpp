@@ -14,13 +14,19 @@ Ladybug::Ladybug()
 
 Ladybug::~Ladybug(){}
 
+Ladybug::Ladybug(int position1, int position2)
+{
+    position[0] = position1;
+    position[1] = position2;
+}
+
 Ladybug::Ladybug(int position1, int position2, float mvProb, float reProb, 
         float killProb, float dChangeProb)
 {
         position[0] = position1;
         position[1] = position2;
         direction = North;
-        this->life = 80 + (rand() % (int)(110 - 80 + 1));
+        this->life = 50 + (rand() % (int)(110 - 50 + 1));
         this->moveProb = mvProb;
         this->reproduceProb = reProb;
         this->fightProb = killProb;

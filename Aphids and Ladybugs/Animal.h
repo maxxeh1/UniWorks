@@ -81,6 +81,8 @@ class Aphid : public Animal//, public AnimalInteractor
         Aphid();
         
         ~Aphid();
+        
+        Aphid(int position1, int position2);
 
         Aphid(int position1, int position2, float mvProb, float reProb, 
         float killProb, float gKillProb);
@@ -110,6 +112,8 @@ class Ladybug : public Animal//, public AnimalInteractor
             Ladybug();
             
             ~Ladybug();
+            
+            Ladybug(int position1, int position2);
 
             Ladybug(int position1, int position2, float mvProb, float reProb, 
         float killProb, float dChangeProb);

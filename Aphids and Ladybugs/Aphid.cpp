@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Animal.h"
+#include "Manager.h"
 using namespace std;
 
 
@@ -21,27 +22,63 @@ Aphid::Aphid()
 
 Aphid::~Aphid(){}
 
-Aphid::Aphid(int position1, int position2)
+Aphid::Aphid(int position1, int position2, float mvProb, float reProb, 
+        float killProb, float gKillProb)
 {
         position[0] = position1;
         position[1] = position2;
-        //this->life = 70 + (rand() % (int)(100 - 70 + 1));
-        this->life = 10;
+        this->life = 70 + (rand() % (int)(100 - 70 + 1));
+        this->moveProb = mvProb;
+        this->reproduceProb = reProb;
+        this->fightProb = killProb;
+        this->groupKillProb = gKillProb;
 }
 
-void Aphid::interactWith(AnimalInteractor &animal)
+void Aphid::setGroupKillProb(float prob)
 {
-    animal.interact(*this);
+    this->groupKillProb = prob;
 }
 
-void Aphid::interact(Aphid &animal)
+float Aphid::getGroupKillProb()
 {
-    cout << "Aphids reproduce";
+    return this->groupKillProb;
 }
 
-void Aphid::interact(Ladybug &animal)
+void Aphid::visitWith(AnimalInteractor &animal)
 {
-    cout << "Kill ladybugs";
+    animal.visit(*this);
+}
+
+bool Aphid::visit(Aphid &animal)
+{
+    if(checkProbability(this->reproduceProb))
+    {
+        animal.setReproduce(true);
+        //cout << "Aphids reproduce";
+        return true;
+    }
+    else
+    {
+        //cout << "Aphids do not reproduce";
+        return false;
+    }
+    
+}
+
+bool Aphid::visit(Ladybug &animal)
+{
+    if(checkProbability(this->fightProb))
+    {
+        //cout << "Kill ladybugs";
+        animal.setDead(true);
+        //currentManager.kill(animal);
+        return true;
+    }
+    else
+    {
+        //cout << "Did not kill ladybug";
+        return false;
+    }
 }
 
 bool Aphid::update(int gridHeight, int gridWidth)
@@ -96,9 +133,9 @@ bool Aphid::update(int gridHeight, int gridWidth)
             else
             {
                 life = life - (rand() % 10 + 1);
-                cout << "Aphid moved to " << this->position[0] << 
-                        this->position[1] << endl;
-                cout << "Aphids life is " << this->life << endl;
+                //cout << "Aphid moved to " << this->position[0] << 
+                //        this->position[1] << endl;
+                //cout << "Aphids life is " << this->life << endl;
                 check = false;
                 return true;
             }
@@ -106,7 +143,7 @@ bool Aphid::update(int gridHeight, int gridWidth)
     }
     else
     {
-        cout << "Aphid did not move" << endl;
+        //cout << "Aphid did not move" << endl;
         return false;
     }
 }

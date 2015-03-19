@@ -68,7 +68,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             for (vector<Aphid>::iterator itA = aphidVector.begin();  
                     itA != aphidVector.end(); ++itA)
             {
-                if ((*itA).getHeight() == i && (*itA).getWidth() == j)
+                if ((*itA).getHeight() == i && (*itA).getWidth() == j)// && !(*itA).getDead())
                 {
                     ++cellAphids;
                     aphid = true;
@@ -78,7 +78,7 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             for (vector<Ladybug>::iterator itL = ladyVector.begin(); 
                     itL != ladyVector.end(); ++itL)
             {
-                if ((*itL).getHeight() == i && (*itL).getWidth() == j)
+                if ((*itL).getHeight() == i && (*itL).getWidth() == j)// && !(*itL).getDead())
                 {
                     ++cellLadys;
                     filled = true;
@@ -89,15 +89,49 @@ void Grid::drawGrid(vector<Aphid>& aphidVector, vector<Ladybug>& ladyVector)
             //space
             if(ladyBug && aphid)
             {
-                cout << "|L" << cellLadys << "A" << cellAphids;
+                cout << "|L"; 
+                if(cellLadys >= 10)
+                {
+                    cout << "~";
+                }
+                else
+                {
+                    cout << cellLadys;
+                }
+                cout << "A";
+                if(cellAphids >= 10)
+                {
+                    cout << "~";
+                }
+                else
+                {
+                    cout << cellAphids;
+                }
             }
             else if(aphid)
             {
-                cout << "|A" << cellAphids << "  ";
+                cout << "|A";
+                if(cellAphids >= 10)
+                {
+                    cout << "~";
+                }
+                else
+                {
+                    cout << cellAphids;
+                }
+                cout << "  ";
             }
             else if(ladyBug)
             {
-                cout << "|L" << cellLadys << "  ";
+                cout << "|  L";
+                if(cellLadys >= 10)
+                {
+                    cout << "~";
+                }
+                else
+                {
+                    cout << cellLadys;
+                }
             }
             else if (!filled)
             {

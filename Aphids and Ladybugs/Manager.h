@@ -32,10 +32,12 @@ class Manager
         
         void updateAll();
         
-        bool checkFight(Animal movedAnimal, Animal currentAnimal);
+        bool checkFight(Animal &movedAnimal, Animal &currentAnimal);
         
         void killAnimal(vector<Animal> currentAnimals, 
             vector <Animal*> deadAnimals);
+        
+        void kill(Animal &animalToKill);
         
         bool checkProbability(float probToCheck);
 };

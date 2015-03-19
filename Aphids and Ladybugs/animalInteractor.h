@@ -7,8 +7,8 @@ class Ladybug;
 class AnimalInteractor
 {
     public:
-        virtual void interact(Aphid &animal) = 0;
-        virtual void interact(Ladybug &animal) = 0;
+        virtual bool visit(Aphid &animal) = 0;
+        virtual bool visit(Ladybug &animal) = 0;
 };
 
 

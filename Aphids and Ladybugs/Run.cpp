@@ -104,6 +104,9 @@ int main()
             itA != aphidVector.end(); ++itA)
     {
         (*itA).setMoveProb(aphidMoveProb);
+        (*itA).setGroupKillProb(groupKillProb);
+        (*itA).setReproduceProb(aphidReproduceProb);
+        (*itA).setFightProb(aphidKillProb);
     }
     //cout << moveProb << killProb << groupKillProb << reproduceProb;
     
@@ -121,6 +124,8 @@ int main()
     {
         (*itL).setMoveProb(ladyMoveProb);
         (*itL).setDirChangeProb(ladyDirectionProb);
+        (*itL).setReproduceProb(ladyReproduceProb);
+        (*itL).setFightProb(ladyKillProb);
     }
     //cout << moveProb << killProb << groupKillProb << reproduceProb;
     

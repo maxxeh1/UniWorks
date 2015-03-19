@@ -13,11 +13,12 @@ enum LadyDirection
     NUM_DIRECTIONS
 };
 
-class Animal
+class Animal: public AnimalInteractor
 {
     protected:
         int position[2];
         signed int life;
+        bool dead = false, reproducing = false;
         float moveProb = 0, fightProb = 0, reproduceProb = 0;
         
 
@@ -26,11 +27,27 @@ class Animal
            
         //~Animal();
         
+        void setDead(bool isDead);
+        
+        bool getDead();
+        
+        void setReproduce(bool hasBaby);
+        
+        bool getReproduce();
+        
         void setHeight(int height);
 
         void setWidth(int width);
         
         void setMoveProb(float prob);
+        
+        void setReproduceProb(float prob);
+        
+        float getReproduceProb();
+        
+        void setFightProb(float prob);
+        
+        float getFightProb();
         
         int getHeight();
 
@@ -49,14 +66,15 @@ class Animal
         
         bool checkProbability(float probToCheck);
         
-        virtual void interactWith(AnimalInteractor &animal) = 0;
+        virtual void visitWith(AnimalInteractor &animal) = 0;
 };
 
-class Aphid : public Animal, public AnimalInteractor
+class Aphid : public Animal//, public AnimalInteractor
 {
     //Global variables
     protected:
         int direction;
+        float groupKillProb;
 
     //Constructor
     public:
@@ -64,19 +82,24 @@ class Aphid : public Animal, public AnimalInteractor
         
         ~Aphid();
 
-        Aphid(int position1, int position2);
+        Aphid(int position1, int position2, float mvProb, float reProb, 
+        float killProb, float gKillProb);
+        
+        void setGroupKillProb(float prob);
+       
+        float getGroupKillProb();
 
         bool update(int grid_height, int grid_width);
         
-        void interactWith(AnimalInteractor &animal);
+        void visitWith(AnimalInteractor &animal);
         
-        void interact(Aphid &animal);
+        bool visit(Aphid &animal);
         
-        void interact(Ladybug &animal);
+        bool visit(Ladybug &animal);
 
 };
 
-class Ladybug : public Animal
+class Ladybug : public Animal//, public AnimalInteractor
 {
     protected:
         LadyDirection direction;
@@ -88,7 +111,8 @@ class Ladybug : public Animal
             
             ~Ladybug();
 
-            Ladybug(int position1, int position2);
+            Ladybug(int position1, int position2, float mvProb, float reProb, 
+        float killProb, float dChangeProb);
             
             void setDirection(int nSteps);
             
@@ -96,11 +120,11 @@ class Ladybug : public Animal
             
             float getDirChangeProb();
             
-            void interactWith(AnimalInteractor &animal);
+            void visitWith(AnimalInteractor &animal);
         
-            void interact(Aphid &animal);
+            bool visit(Aphid &animal);
         
-            void interact(Ladybug &animal);
+            bool visit(Ladybug &animal);
             
             bool update(int grid_height, int grid_width);
 };

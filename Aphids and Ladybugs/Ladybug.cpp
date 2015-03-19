@@ -14,13 +14,17 @@ Ladybug::Ladybug()
 
 Ladybug::~Ladybug(){}
 
-Ladybug::Ladybug(int position1, int position2)
+Ladybug::Ladybug(int position1, int position2, float mvProb, float reProb, 
+        float killProb, float dChangeProb)
 {
         position[0] = position1;
         position[1] = position2;
         direction = North;
         this->life = 80 + (rand() % (int)(110 - 80 + 1));
-        this->moveProb;
+        this->moveProb = mvProb;
+        this->reproduceProb = reProb;
+        this->fightProb = killProb;
+        this->dirChangeProb = dChangeProb;
 }
 
 void Ladybug::setDirection(int nSteps)
@@ -39,19 +43,39 @@ float Ladybug::getDirChangeProb()
     return this->dirChangeProb;
 }
 
-void Ladybug::interactWith(AnimalInteractor &animal)
+void Ladybug::visitWith(AnimalInteractor &animal)
 {
-    animal.interact(*this);
+    animal.visit(*this);
 }
 
-void Ladybug::interact(Aphid &animal)
+bool Ladybug::visit(Aphid &animal)
 {
-    cout << "Kill aphids";
+    if(checkProbability(this->fightProb))
+    {
+        animal.setDead(true);
+        //cout << "Kill aphid";
+        return true;
+    }
+    else
+    {
+        //cout << "Did not kill aphid";
+        return false;
+    }
 }
 
-void Ladybug::interact(Ladybug &animal)
+bool Ladybug::visit(Ladybug &animal)
 {
-    cout << "Ladybugs reproduce";
+    if(checkProbability(this->reproduceProb))
+    {
+        animal.setReproduce(true);
+        //cout << "Ladybugs reproduce";
+        return true;
+    }
+    else
+    {
+        //cout << "Ladybugs do not reproduce";
+        return false;
+    }
 }
 
 /**
@@ -66,11 +90,11 @@ bool Ladybug::update(int grid_height, int grid_width)
         if(checkProbability(this->dirChangeProb))
         {
             setDirection(1 + rand()%(NUM_DIRECTIONS - 1));
-            cout << "Ladybug changed direction to " << direction << endl;
+            //cout << "Ladybug changed direction to " << direction << endl;
         }
         else
         {
-            cout << "Ladybug did not change direction" << endl;
+            //cout << "Ladybug did not change direction" << endl;
         }
         while(check)
         {
@@ -282,13 +306,13 @@ bool Ladybug::update(int grid_height, int grid_width)
             }
         }
         life = life - (rand() % 10 + 1);
-        cout << "Ladybug moved to " << position[0] << position[1] << endl;
-        cout << "Ladybugs life is " << life << endl;
+        //cout << "Ladybug moved to " << position[0] << position[1] << endl;
+        //cout << "Ladybugs life is " << life << endl;
         return true;
     }
     else
     {
-        cout << "Ladybug did not move" << endl;
+        //cout << "Ladybug did not move" << endl;
         return false;
     }
 }

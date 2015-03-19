@@ -12,13 +12,33 @@ Animal::Animal()
         position[1] = 1;
 }
 
+void Animal::setDead(bool isDead)
+{
+    this->dead = isDead;
+}
+
+bool Animal::getDead()
+{
+    return this->dead;
+}
+
+void Animal::setReproduce(bool hasBaby)
+{
+    this->reproducing = hasBaby;
+}
+
+bool Animal::getReproduce()
+{
+    return this->reproducing;
+}
+
 /**
  * Sets height of animal
  * @param int height
  */
 void Animal::setHeight(int height)
 {
-        this->position[0] = height;
+    this->position[0] = height;
 }
 
 /**
@@ -71,6 +91,26 @@ void Animal::setMoveProb(float prob)
 float Animal::getMoveProb()
 {
     return this->moveProb;
+}
+
+void Animal::setFightProb(float prob)
+{
+    this->fightProb = prob;
+}
+
+float Animal::getFightProb()
+{
+    return this->fightProb;
+}
+
+void Animal::setReproduceProb(float prob)
+{
+    this->reproduceProb = prob;
+}
+
+float Animal::getReproduceProb()
+{
+    return this->reproduceProb;
 }
 
 bool Animal::update(int grid_height, int grid_width)

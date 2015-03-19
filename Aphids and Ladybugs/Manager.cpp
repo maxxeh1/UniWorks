@@ -20,6 +20,9 @@ void Manager::setupGrid(int gridHeight, int gridWidth)
 
 void Manager::setVectors()
 {
+    this->allAnimals.clear();
+    this->currentAphids.shrink_to_fit();
+    this->currentLadys.shrink_to_fit();
     //Loop through vector of aphids
     for (vector<Aphid>::iterator itA = this->currentAphids.begin();
             itA != this->currentAphids.end(); ++itA)
@@ -34,6 +37,7 @@ void Manager::setVectors()
         //Push ladybugs to vector of aphids and ladybugs
         allAnimals.push_back(&(*itL));
     }
+    this->allAnimals.shrink_to_fit();
 }
 
 /**
@@ -51,78 +55,115 @@ void Manager::updateAll()
             itAll != allAnimals.end(); ++itAll)
     {
         //Check life of aphid or ladybug
+        bool checker = false;
         if((*itAll)->getLife() <= 0)
         {
             //If aphid or ladybug is dead, mark for death
-            deadAnimals.push_back(*itAll);
-            cout << "Animal" <<  "has died" << endl;
+            (*itAll)->setDead(true);
+            //deadAnimals.push_back(*itAll);
+            //cout << "Animal" <<  "has died" << endl;
         }
         else
         {
             //Update aphid or ladybug position on grid
-            if((*itAll)->update(currentGrid.getHeight(), currentGrid.getWidth()))
+            if((*itAll)->update(currentGrid.getHeight(), 
+                    currentGrid.getWidth()))
             {
+                //Loop through vector of animals again
                 for(vector<Animal*>::iterator itCheck = allAnimals.begin();
                         itCheck != allAnimals.end(); ++ itCheck)
                 {
+                    //Don't compare to self
                     if(*itAll != *itCheck)
                     {
-                        /*if((*itAll)->getHeight() == (*itCheck)->getHeight() 
-                                && (*itAll)->getWidth() 
-                                == (*itCheck)->getWidth())
-                        {
-                            cout << "Two in same position." << endl;
-                            cin.get();
-                        }*/
+                        //If two animals are in the same cell
                         if(checkFight (**itAll, **itCheck))
                         {
-                            cout << "Two in same position" << endl;
-                            this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
-                            **itAll->interactWith(*itCheck);
-                            cin.get();
+                            //cout << "Two in same position" << endl;
+                            //Draw the grid to show them in same cell
+                            //this->currentGrid.drawGrid(this->currentAphids, 
+                            //        this->currentLadys);
+                            //Use visitor pattern to call correct function
+                            //polymorphically
+                            (*itAll)->visitWith(**itCheck);
+                            //cin.get();
                         }
                     }
                 }
             }
             else
             {
-                cout << "Did not move";
+                //cout << "Did not move";
             }
         }
     }
 
-    //Loop through vector of marked for death aphids
-    for (vector<Animal*>::iterator itAni = this->deadAnimals.begin();  
-            itAni != this->deadAnimals.end(); ++itAni)
+        vector<Aphid>::iterator iA = currentAphids.begin();
+        while(iA != currentAphids.end())
+        {
+            if(iA->getDead())
+            {
+                iA = currentAphids.erase(iA);
+                ++iA;
+            }
+            else
+            {
+                ++iA;
+            }
+        }
+        iA = currentAphids.begin();
+        while(iA != currentAphids.end())
+        {
+            if(iA->getReproduce())
+            {
+                currentAphids.emplace_back(iA->getHeight(), iA->getWidth(), iA->getMoveProb(), 
+                        iA->getReproduceProb(), iA->getFightProb(), 
+                        iA->getGroupKillProb());
+                //allAnimals.push_back(&newLady);
+                iA->setReproduce(false);
+                //setVectors();
+                //break;
+                iA = currentAphids.begin();
+            }
+            ++iA;
+        }
+
+        vector<Ladybug>::iterator l = currentLadys.begin();
+        while(l != currentLadys.end())
+        {
+            if(l->getDead())
+            {
+                l = currentLadys.erase(l);
+                ++l;
+            }
+            else
+            {
+                ++l;
+            }
+        }
+        l = currentLadys.begin();
+        while(l != currentLadys.end())
+        {
+            if(l->getReproduce())
+            {
+                currentLadys.emplace_back(l->getHeight(), l->getWidth(), l->getMoveProb(), 
+                        l->getReproduceProb(), l->getFightProb(), 
+                        l->getDirChangeProb());
+                l->setReproduce(false);
+                l = currentLadys.begin();
+            }
+            ++l;
+        }
+    //}
+    setVectors();
+    for (vector<Animal*>::iterator a = this->allAnimals.begin();
+        a != this->allAnimals.end(); ++a)
     {
-        //Loop through vector of alive aphids
-        for (vector<Aphid>::iterator itAlive = this->currentAphids.begin();
-                itAlive != this->currentAphids.end(); ++itAlive)
-        {
-            //If an aphid exists in deadAphids that exists in currentAphids, 
-            //remove the aphid from currentAphids
-            if(&(*itAlive) == *itAni)
-            {
-                itAlive = currentAphids.erase(itAlive);
-                break;
-            }
-        }
-        //Loop through vector of alive ladybugs
-        for (vector<Ladybug>::iterator itAlive = this->currentLadys.begin();
-                itAlive != this->currentLadys.end(); ++itAlive)
-        {
-            //If an ladybug exists in deadLadys that exists in currentLadys, 
-            //remove the ladybug from currentLadys
-            if(&(*itAlive) == *itAni)
-            {
-                itAlive = currentLadys.erase(itAlive);
-                break;
-            }
-        }
+        //if(!(**a).getDead())
+        //{
+            //cout << endl << "Width: " << (*a)->getWidth() << "Height: " << (*a)->getHeight() << "Life: " << (*a)->getLife() << endl;
+       // }
     }
-    //Clear the deadAphids vector for the next turn
-    this->deadAnimals.clear();
-
     //Print out remaining ladybugs and aphids
     cout << "Aphids: " << currentAphids.size() << endl << "Ladybugs: " 
             << currentLadys.size();
@@ -132,7 +173,7 @@ void Manager::updateAll()
     this->currentGrid.drawGrid(this->currentAphids, this->currentLadys);
 }
 
-bool Manager::checkFight(Animal movedAnimal, Animal currentAnimal)
+bool Manager::checkFight(Animal &movedAnimal, Animal &currentAnimal)
 {
     if(movedAnimal.getHeight() == currentAnimal.getHeight() 
             && movedAnimal.getWidth() == currentAnimal.getWidth())
@@ -167,6 +208,21 @@ bool Manager::checkFight(Animal movedAnimal, Animal currentAnimal)
     //Clear the deadAphids vector for the next turn
     this->deadAnimals.clear();
 }*/
+
+void Manager::kill(Animal &animalToKill)
+{
+    animalToKill.setDead(true);
+    
+    /*for(vector<Animal*>::iterator itCheck = allAnimals.begin();
+            itCheck != allAnimals.end(); ++ itCheck)
+    {
+        if(*itCheck == &animalToKill)
+        {
+            
+        }
+    }*/
+        //this->currentAphids.erase(animalToKill);
+}
 
 bool Manager::checkProbability(float probToCheck)
 {

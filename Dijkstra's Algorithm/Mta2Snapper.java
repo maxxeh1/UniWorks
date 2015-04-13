@@ -20,27 +20,29 @@ public class Mta2Snapper implements ISnapper
 {
     //Global Variables
     private FloatImage[] fi;
-    private boolean nodesVisited[][];
+    private boolean[][] nodesVisited;
     private Point[][] map;
 
     /**
      * This method sets the seed/start point from the current mouse position. It runs the thread to build the map.
      * @param x is the x co-ordinate of the current position
      * @param y is the y co-ordinate of the current position
-     * @param floatImages is an array of four FloatImages that contain node weights -- 0 = East, 1 = NorthEast,
+     * @param neighbourEdges is an array of four FloatImages that contain node weights -- 0 = East, 1 = NorthEast,
      *                    2 = North, 3 = NorthWest
      */
-    public void setSeed(int x, int y, FloatImage[] floatImages)
+    public void setSeed(int x, int y, FloatImage[] neighbourEdges)
     {
-        fi = floatImages; //Copy the passed array into array for this class
+        fi = neighbourEdges; //Copy the passed array into array for this class
+        int imageHeight = fi[0].getHeight(), imageWidth = fi[0].getWidth();
         final PriorityBlockingQueue<Edge> q = new PriorityBlockingQueue<Edge>();
-        nodesVisited = new boolean[fi[0].getWidth()][fi[0].getHeight()]; //Make nodesVisited array size of image
-        map = new Point[fi[0].getWidth()][fi[0].getHeight()]; //Make map array size of image
+        nodesVisited = new boolean[imageWidth][imageHeight]; //Make nodesVisited array size of image
+        map = new Point[imageWidth][imageHeight]; //Make map array size of image
         q.add(new Edge(null, new Point(x,y), 0));
 
         //Instantiate Runnable for building the map continuously
         Runnable running = new Runnable()
         {
+            @Override
             public void run()
             {
                 mapBuilding(q);
@@ -61,7 +63,7 @@ public class Mta2Snapper implements ISnapper
     public LinkedList<Point> getPath(int x, int y)
     {
         //If the co-ords are not out of bounds
-        if(!checkOutOfBounds(x, y))
+        if(checkInBounds(x, y))
         {
             //If the co-ords have been visited
             if(nodesVisited[x][y])
@@ -93,82 +95,84 @@ public class Mta2Snapper implements ISnapper
      * This is from Dijkstra's shortest path algorithm
      * @param q is the priority blocking queue used to hold edges
      */
-    public void mapBuilding(PriorityBlockingQueue<Edge> q) {
+    private void mapBuilding(PriorityBlockingQueue<Edge> q) {
         float weight;
         Edge newEdge;
         //Try catch block to catch interrupted exceptions
         try {
             //While the queue is not empty
-            while (!q.isEmpty()) {
+            while (!q.isEmpty())
+            {
                 Edge currentEdge = q.take();
+                int endX = currentEdge.end.x, endY = currentEdge.end.y;
                 //Move onto next iteration if co-ords out of bounds
-                if (checkOutOfBounds(currentEdge.end.x, currentEdge.end.y))
+                if (!checkInBounds(endX, endY))
                 {
                     continue;
                 }
                 //Move onto next iteration if node is visited
-                if (nodesVisited[currentEdge.end.x][currentEdge.end.y])
+                if (nodesVisited[endX][endY])
                 {
                     continue;
                 }
                 //Set visited flag to true (Dijkstra's Algorithm step)
-                nodesVisited[currentEdge.end.x][currentEdge.end.y] = true;
+                nodesVisited[endX][endY] = true;
                 //Set map value to edge's to start point (Dijkstra's Algorithm step)
-                map[currentEdge.end.x][currentEdge.end.y] = currentEdge.start;
+                map[endX][endY] = currentEdge.start;
 
                 //Add target point's edges (Dijkstra's Algorithm step)
                 //Add the eastern node as a neighbour
-                weight = fi[0].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x + 1,
-                        currentEdge.end.y), weight + currentEdge.weight);
+                weight = fi[0].get_nocheck(endX, endY);
+                newEdge = new Edge(new Point(endX, endY), new Point(endX + 1,
+                        endY), weight + currentEdge.weight);
                 q.add(newEdge);
 
                 //Add the north-eastern node as a neighbour
-                weight = fi[1].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x + 1,
-                        currentEdge.end.y + 1), weight + currentEdge.weight);
+                weight = fi[1].get_nocheck(endX, endY);
+                newEdge = new Edge(new Point(endX, endY), new Point(endX + 1,
+                        endY + 1), weight + currentEdge.weight);
                 q.add(newEdge);
 
                 //Add the northern node as a neighbour
-                weight = fi[2].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x,
-                        currentEdge.end.y + 1), weight + currentEdge.weight);
+                weight = fi[2].get_nocheck(endX, endY);
+                newEdge = new Edge(new Point(endX, endY), new Point(endX,
+                        endY + 1), weight + currentEdge.weight);
                 q.add(newEdge);
 
                 //Add the north-western node as a neighbour
-                weight = fi[3].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x - 1,
-                        currentEdge.end.y + 1), weight + currentEdge.weight);
+                weight = fi[3].get_nocheck(endX, endY);
+                newEdge = new Edge(new Point(endX, endY), new Point(endX - 1,
+                        endY + 1), weight + currentEdge.weight);
                 q.add(newEdge);
 
                 //Check inverse directions are not out of bounds
-                if (!checkOutOfBounds(currentEdge.end.x - 1, currentEdge.end.y) //Western
-                        && !checkOutOfBounds(currentEdge.end.x - 1, currentEdge.end.y - 1) // South-western
-                        && !checkOutOfBounds(currentEdge.end.x, currentEdge.end.y - 1) //Southern
-                        && !checkOutOfBounds(currentEdge.end.x + 1, currentEdge.end.y - 1)) // South-eastern
+                if (checkInBounds(endX - 1, endY) //Western
+                        && checkInBounds(endX - 1, endY - 1) // South-western
+                        && checkInBounds(endX, endY - 1) //Southern
+                        && checkInBounds(endX + 1, endY - 1)) // South-eastern
                 {
                     //Add the western node as a neighbour
-                    weight = fi[0].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                    newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x - 1,
-                            currentEdge.end.y), weight + currentEdge.weight);
+                    weight = fi[0].get_nocheck(endX - 1, endY);
+                    newEdge = new Edge(new Point(endX, endY), new Point(endX - 1,
+                            endY), weight + currentEdge.weight);
                     q.add(newEdge);
 
                     //Add the south-western node as a neighbour
-                    weight = fi[1].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                    newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x - 1,
-                            currentEdge.end.y - 1), weight + currentEdge.weight);
+                    weight = fi[1].get_nocheck(endX - 1, endY - 1);
+                    newEdge = new Edge(new Point(endX, endY), new Point(endX - 1,
+                            endY - 1), weight + currentEdge.weight);
                     q.add(newEdge);
 
                     //Add the southern node as a neighbour
-                    weight = fi[2].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                    newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x,
-                            currentEdge.end.y - 1), weight + currentEdge.weight);
+                    weight = fi[2].get_nocheck(endX, endY - 1);
+                    newEdge = new Edge(new Point(endX, endY), new Point(endX,
+                            endY - 1), weight + currentEdge.weight);
                     q.add(newEdge);
 
                     //Add the south-eastern node as a neighbour
-                    weight = fi[3].get_nocheck(currentEdge.end.x, currentEdge.end.y);
-                    newEdge = new Edge(new Point(currentEdge.end.x, currentEdge.end.y), new Point(currentEdge.end.x + 1,
-                            currentEdge.end.y - 1), weight + currentEdge.weight);
+                    weight = fi[3].get_nocheck(endX + 1, endY - 1);
+                    newEdge = new Edge(new Point(endX, endY), new Point(endX + 1,
+                            endY - 1), weight + currentEdge.weight);
                     q.add(newEdge);
                 }
             }
@@ -186,9 +190,13 @@ public class Mta2Snapper implements ISnapper
      * @param y is the y co-ordinate to check
      * @return true if co-ordinates are out of bounds, false if not
      */
-    private boolean checkOutOfBounds(int x, int y)
+    private boolean checkInBounds(int x, int y)
     {
-        return x > map.length && y > map[0].length && x <= 0 && y <= 0;
+        return x < map.length
+                && y < map[0].length
+                && x >= 0
+                && y >= 0
+                ;
     }
 
     /**

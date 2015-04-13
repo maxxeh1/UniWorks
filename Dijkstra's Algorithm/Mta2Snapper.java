@@ -12,7 +12,9 @@ import java.util.concurrent.PriorityBlockingQueue;
  * This class implements the ISnapper interface from the .jar file CS21120-A2.jar
  * setSeed and getPath are implemented from the above mentioned interface.
  * mapBuilding method implements Dijkstra's shortest path algorithm.
- * I ran into an issue where the drawn line would disappear under certain circumstances. Still unresolved.
+ * I ran into an issue where the drawn line would disappear under certain circumstances. I resolved this by changing the
+ * outOfBoundsChecker method to an inBoundsChecker. The bounds were not being enforced correctly, so certain points were
+ * going out of bounds when they were not supposed to
  *
  * @author Max Thomas Atkins (mta2)
  */

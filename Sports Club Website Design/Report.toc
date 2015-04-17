@@ -1,0 +1,12 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Task Analysis}{3}
+\contentsline {subsection}{\numberline {2.1}Who is Involved}{3}
+\contentsline {subsection}{\numberline {2.2}Tasks the System Performs}{4}
+\contentsline {subsection}{\numberline {2.3}How Tasks and Data Relate}{5}
+\contentsline {subsection}{\numberline {2.4}How Tasks are Related}{6}
+\contentsline {section}{\numberline {3}High-Level Design}{7}
+\contentsline {subsection}{\numberline {3.1}Style of Interaction}{7}
+\contentsline {subsection}{\numberline {3.2}Navigation}{7}
+\contentsline {subsection}{\numberline {3.3}Sketches of UI}{7}
+\contentsline {section}{\numberline {4}Analysis of Prototype}{12}

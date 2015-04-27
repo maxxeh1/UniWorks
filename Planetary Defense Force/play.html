@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Gravity Game </title>
+		<meta charset = "UTF-8">
+		<link type = "text/css" rel = "stylesheet" href = "style.css">
+		<link rel = "shortcut icon" href ="images/favicon.ico">
+	</head>
+
+	<body onLoad="start_game()">
+		<header>
+			<h1 id = "title1"> Planetary </h1> <h1 id = "title2"> Defense Force </h1>
+		</header>
+
+		<ul id = "nav">
+			<li class = "inactive"><a href = "about.html"> About </a></li>
+			<li id = "active"><a href = "play.html"> Play Game </a></li>
+		</ul>
+
+		<div id = "menu" class = "main">
+			<div id = "main">
+				<h1> Planetary Defense Force </h1>
+				<ul>
+					<li><a href = "#" class = "button"> Start Game </a></li>
+					<li><a href = "#" class = "button"> High Scores </a></li>
+			</div>
+		</div>
+
+		<canvas id = "myCanvas" width = "1500" height = "750"></canvas>
+		<input type="text" id = "name" style="position:absolute;left:650px;top:600px;width:300px;" placeholder = "Your name..."/>
+		<audio loop preload = "true" id = "mainSound">
+			<source src = "sounds/ml.mp3"/>
+		</audio>
+		<audio preload = "true" id = "crashSound">
+			<source src = "sounds/crash.wav"/>
+		</audio>
+		<script>
+			var thisCanvas = document.getElementById("myCanvas");
+			var context = myCanvas.getContext("2d");
+
+			var score;
+			var level;
+
+			var wait = false;
+			var menu = true;
+			var ingame = false;
+			var highscorescreen = false;
+
+			var gameLoopId;
+			var asteroidLoopId;
+			var levelLoopId;
+
+			var mouseX;
+			var mouseY;
+
+			var obstacles;
+			
+			var world_sprite = new Image();
+			world_sprite.src = "images/spriteMap.png";
+			var world = new Sprite();
+
+			//UI STUFF
+			var play = {
+				x: 650,
+				y: 360,
+				width: 200,
+				height: 100
+			}
+			var playUpButton = new Image();
+			playUpButton.src = "images/PlayUp.png";
+			var playDownButton = new Image();
+			playDownButton.src = "images/PlayDown.png";
+			var playHovering = false;
+
+			var highscores = {
+				x: 650,
+				y: 500,
+				width: 200,
+				height: 100
+			}
+			var highUpButton = new Image();
+			highUpButton.src = "images/HighUp.png";
+			var highDownButton = new Image();
+			highDownButton.src = "images/HighDown.png";
+			var highHovering = false;
+
+			var mute = {
+				x: 650,
+				y: 630,
+				width: 200,
+				height: 100
+			}
+			var muteUpButton = new Image();
+			muteUpButton.src = "images/VolumeOnUp.png";
+			var unmuteUpButton = new Image();
+			unmuteUpButton.src = "images/VolumeOffUp.png";
+			var muteDownButton = new Image();
+			muteDownButton.src = "images/VolumeOnUp.png";
+			var unmuteDownButton = new Image();
+			unmuteDownButton.src = "images/VolumeOffUp.png";
+			var mainIsMuted = false;
+			var muteHovering = false;
+
+			var help = {
+				x: 1380,
+				y: 30,
+				width: 90,
+				height: 90
+			}
+			var helpUpButton = new Image();
+			helpUpButton.src = "images/HelpUp.png";
+			var helpDownButton = new Image();
+			helpDownButton.src = "images/HelpDown.png";
+			var helpHovering = false;
+
+			var left = {
+				x: 50,
+				y: 375,
+				width: 90,
+				height: 90
+			}
+			var leftUpButton = new Image();
+			leftUpButton.src = "images/LeftUp.png";
+			var leftDownButton = new Image();
+			leftDownButton.src = "images/LeftDown.png";
+			var leftHovering = false;
+
+
+			var menu = {
+				x: 0,
+				y: 0,
+				width: 1500,
+				height: 750
+			}
+			var menubg = new Image();
+			menubg.src = "images/Menu.png";
+
+			var highscorebg = {
+				x: 0,
+				y: 0,
+				width: 1500,
+				height: 750
+			}
+			var highscoreBg = new Image();
+			highscoreBg.src = "images/highscoreBg.png";
+			
+			
+			var mainSound = document.getElementById("mainSound");
+			var crashSound = document.getElementById("crashSound");
+			var crashIsMuted = false;
+
+			function start_game()
+			{
+				mainSound.play();
+				score = 0;
+				level = 1;
+				wait = false;
+				menu = true;
+				ingame = false;
+				obstacles = [];
+				world = new World(300, 300, 0, 80, 75);
+				gameLoopId = setInterval(loop_game, 30);
+			}
+
+			thisCanvas.addEventListener("mousemove",seen_move,false);
+
+			document.onkeydown = function(event) 
+			{
+				event.preventDefault();
+				var keyCode; 
+				if(event == null) 
+				{
+					keyCode = window.event.keyCode; 
+				}
+				else 
+				{
+					keyCode = event.keyCode; 
+				}
+				switch(keyCode) 
+				{ 
+					case(37): //Left
+						world.positionX = world.positionX - 5;
+						break;
+					case(38): //Up
+						world.positionY = world.positionY - 5;
+						break;
+					case(39): //Right
+						world.positionX = world.positionX + 5;
+						break;
+					case(40): //Down
+						world.positionY = world.positionY + 5;
+						break;
+					case(37 && 38): //Left and Up
+						world.positionX = world.positionX - 5;
+						world.positionY = world.positionY - 5;
+						break;
+					case(37 && 40): //Left and Down
+						world.positionX = world.positionX - 5;
+						world.positionY = world.positionY + 5;
+						break;
+					case(39 && 38): //Right and Up
+						world.positionX = world.positionX + 5;
+						world.positionY = world.positionY - 5;
+						break;
+					case(39 && 40): //Right and Up
+						world.positiondX = world.positionX + 5;
+						world.positionY = world.positionY + 5;
+						break;
+					case(77): //m 
+						if(mainIsMuted)
+						{
+							document.getElementById('mainSound').muted = false;
+							mainIsMuted = false;
+						}
+						else
+						{
+							document.getElementById('mainSound').muted = true;
+							mainIsMuted = true;
+						}
+						case(78): //n 
+						if(crashIsMuted)
+						{
+							document.getElementById('crashSound').muted = false;
+							crashIsMuted = false;
+						}
+						else
+						{
+							document.getElementById('crashSound').muted = true;
+							crashIsMuted = true;
+						}
+					case(80): //p
+						if(pause)
+						{
+							pause = false;
+						}
+						else
+						{
+							pause = true;
+						}
+				}
+			} 
+
+			function seen_move(e)
+			{
+				var bounding_box = thisCanvas.getBoundingClientRect();
+       			mouseX = ((e.clientX-bounding_box.left) * (thisCanvas.width/bounding_box.width));
+        		mouseY = ((e.clientY-bounding_box.top) * (thisCanvas.height/bounding_box.height));
+			}
+
+
+			function change_level()
+			{
+				if(level == 1)
+				{
+					level = 2;
+				}
+				else if(level == 2)
+				{
+					level = 3;
+				}
+			}
+
+			function loop_game()
+			{
+				//Re-draw canvas
+				thisCanvas.width = thisCanvas.width;
+				
+				if(world.lives == 0)
+				{
+					window.setTimeout(function()
+					{
+						wait = true;
+					}, 1700);
+				}
+				if(menu)
+				{
+					draw_start();
+					thisCanvas.addEventListener('click', checkPlay);
+					thisCanvas.addEventListener('mouseover', hoverPlay, false);
+					thisCanvas.addEventListener('mouseout', hoverPlay, false);
+					thisCanvas.addEventListener('click', checkMute);
+					thisCanvas.addEventListener("mouseover", hoverMute, false);
+					thisCanvas.addEventListener("mouseout", hoverMute, false);
+					thisCanvas.addEventListener('click', checkHighscores);
+					thisCanvas.addEventListener("mouseover", hoverHighscores, false);
+					thisCanvas.addEventListener("mouseout", hoverHighscores, false);
+				}
+				if(highscorescreen)
+				{
+					draw_highscore();
+					thisCanvas.addEventListener('click', checkLeft);
+					thisCanvas.addEventListener("mouseover", hoverLeft);
+					thisCanvas.addEventListener("mouseout", hoverLeft);
+				}
+				if(ingame)
+				{
+
+					if(!wait)
+					{
+						document.getElementById("myCanvas").style.cursor = "none";
+						update_positions();
+						draw_everything();
+						draw_world();
+					}
+					else
+					{
+						draw_lose();
+						localStorage.setItem('player', score);
+						var tempName = document.getElementById('name').value;
+						localStorage.setItem('input', tempName);
+					}
+				}
+
+			}
+
+			function update_positions()
+			{
+				world.setPosition();
+			    world.rotation += 0.01;
+
+				for(index = 0; index < obstacles.length; index++)
+				{
+					obstacles[index].gravity();
+					obstacles[index].update();
+
+					if(obstacles[index].positionX < 0 
+						|| obstacles[index].positionY < 0 
+						|| obstacles[index].positionX > myCanvas.width 
+						|| obstacles[index].positionY > myCanvas.height)
+					{
+						console.log("Out of world");
+						obstacles.splice(index, 1);
+					}
+				}
+
+				for(index = 0; index < obstacles.length; index++)
+				{
+					if(checkCollision(world, obstacles[index], true, true))
+					{
+						console.log("Collision");
+						crashSound.play();
+						var tempX = obstacles[index].positionX;
+						var tempY = obstacles[index].positionY;
+
+						obstacles[index].isExploding = true;
+
+						if(obstacles[index] instanceof Asteroid)
+						{
+							context.drawImage(world_sprite, 0, 1900, 100, 100, tempX, tempY, 100 * 0.4, 100 * 0.4);
+						}
+						else if(obstacles[index] instanceof Ball)
+						{
+							context.drawImage(world_sprite, 1000, 1800, 200, 200, tempX, tempY, 200 * 0.4, 200 * 0.4);
+						}
+						else if(obstacles[index] instanceof Duck)
+						{
+							context.drawImage(world_sprite, 1000, 1800, 200, 200, tempX, tempY, 200 * 0.4, 200 * 0.4);
+						}
+						world.lives--;
+						world.damage();
+					}
+					if(obstacles[index].isExploding)
+					{
+							console.log("Splice");
+							obstacles.splice(index, 1);
+					}
+
+				}
+
+				for(index = 0; index < obstacles.length; index++)
+				{
+					for(index2 = 0; index2 < obstacles.length; index2++)
+					{
+						if(obstacles[index] != obstacles[index2])
+						{
+							if(checkCollision(obstacles[index], obstacles[index2], true, true))
+							{
+								console.log("Collision");
+								crashSound.play();
+								obstacles[index].isExploding = true;
+								obstacles[index2].isExploding = true;
+								tempX = obstacles[index].positionX;
+								tempY = obstacles[index].positionY;
+								tempX2 = obstacles[index2].positionX;
+								tempY2 = obstacles[index2].positionY;
+
+
+								if(obstacles[index] instanceof Asteroid)
+								{
+									context.drawImage(world_sprite, 0, 1900, 100, 100, tempX, tempY, 100 * 0.4, 100 * 0.4);
+								}
+								else if(obstacles[index] instanceof Ball)
+								{
+									context.drawImage(world_sprite, 1000, 1800, 200, 200, tempX, tempY, 200 * 0.4, 200 * 0.4);
+								}
+								else if(obstacles[index] instanceof Duck)
+								{
+									context.drawImage(world_sprite, 1000, 1800, 200, 200, tempX, tempY, 200 * 0.4, 200 * 0.4);
+								}
+								if(obstacles[index2] instanceof Asteroid)
+								{
+									context.drawImage(world_sprite, 0, 1900, 100, 100, tempX2, tempY2, 100 * 0.4, 100 * 0.4);
+								}
+								else if(obstacles[index2] instanceof Ball)
+								{
+									context.drawImage(world_sprite, 1000, 1800, 200, 200, tempX2, tempY2, 200 * 0.4, 200 * 0.4);
+								}
+								else if(obstacles[index2] instanceof Duck)
+								{
+									context.drawImage(world_sprite, 1000, 1800, 200, 200, tempX2, tempY2, 200 * 0.4, 200 * 0.4);
+								}
+
+							}
+						}
+					}
+				}
+			}
+
+			function draw_world(mouseX, mouseY)
+			{				
+                context.save();
+                context.translate(world.positionX + ((world.spriteW * world.scale)/2), world.positionY +((world.spriteH * world.scale)/2));
+                context.rotate(world.rotation);
+				context.drawImage(world.imagePath, world.spriteX, world.spriteY, world.spriteW, world.spriteH, -((world.spriteW * world.scale)/2), -((world.spriteH * world.scale)/2), world.spriteW * world.scale, world.spriteH * world.scale);
+                context.restore();
+			}
+
+			function draw_everything(mouseX, mouseY)
+			{
+				
+				for(index = 0; index < obstacles.length; index++)
+				{
+
+					context.save();
+					context.translate(obstacles[index].positionX + ((obstacles[index].spriteW * obstacles[index].scale)/2), 
+                            obstacles[index].positionY + ((obstacles[index].spriteH * obstacles[index].scale)/2));
+					context.rotate(obstacles[index].rotation);
+
+					context.drawImage(obstacles[index].imagePath, obstacles[index].spriteX, obstacles[index].spriteY, 
+						obstacles[index].spriteW, obstacles[index].spriteH, -((obstacles[index].spriteW * obstacles[index].scale)/2), 
+						-((obstacles[index].spriteH * obstacles[index].scale)/2), obstacles[index].spriteW * obstacles[index].scale, 
+						obstacles[index].spriteH * obstacles[index].scale);
+					context.restore();
+				}
+
+				
+				context.font = "20px courier new";
+				context.fillStyle = 'white';
+				context.fillText("Score:" + ++score, 10, 30);
+				context.fillText("Lives:" + world.lives, 10, 50);
+				context.fillText("Level:" + level, 10, 70);
+				context.fillStyle = 'white';
+			}
+
+			function draw_start()
+			{
+				context.drawImage(menubg, menubg.x, menubg.y, menubg.width, menubg.height);
+				if(playHovering)
+				{
+					context.drawImage(playDownButton, play.x, play.y, play.width, play.height);
+				}
+				else
+				{
+					context.drawImage(playUpButton, play.x, play.y, play.width, play.height);
+				}
+				context.drawImage(highUpButton, highscores.x, highscores.y, highscores.width, highscores.height);
+				context.drawImage(helpUpButton, help.x, help.y, help.width, help.height)
+				if(mainIsMuted)
+				{
+					context.drawImage(unmuteUpButton, mute.x, mute.y, mute.width, mute.height);
+				}
+				else
+				{
+					context.drawImage(muteUpButton, mute.x, mute.y, mute.width, mute.height);
+				}
+			}
+
+			function draw_highscore()
+			{
+				context.drawImage(highscoreBg, highscorebg.x, highscorebg.y, highscorebg.width, highscorebg.height);
+				context.drawImage(leftUpButton, left.x, left.y, left.width, left.height);
+				context.font = "50px courier new";
+				context.fillStyle = 'white';
+				context.font = "30px courier new";
+				context.fillText(localStorage.getItem('player'), 250, 500);
+				context.fillText(localStorage.getItem('input'), 400, 500);
+			}
+
+			function draw_lose()
+			{
+				context.font = "50px courier new";
+				context.fillStyle = 'white';
+				context.fillText("You Lose", 250, 400);
+				context.font = "30px courier new";
+				context.fillText("Score:" + score, 250, 500);
+			}
+
+			function checkCollision(object1, object2, object1Circular, object2Circular)
+			{
+				var obj1centerX = object1.positionX + ((object1.spriteW * object1.scale) / 2);
+				var obj1centerY = object1.positionY + ((object1.spriteH * object1.scale) / 2);
+				var obj2centerX = object2.positionX + ((object2.spriteW * object2.scale) / 2);
+				var obj2centerY = object2.positionY + ((object2.spriteH * object2.scale) / 2);
+				var obj1rad = (object1.spriteW * object1.scale) / 2;
+				var obj2rad = (object2.spriteW * object2.scale) / 2;
+
+				if(Math.abs(distance(obj1centerX, obj1centerY, obj2centerX, obj2centerY)) <
+				(obj1rad + obj2rad))
+				{
+					return true;
+				}
+					return false;
+			}
+
+			//300, 300, 100, 90
+			function mouseInArea(top, right, bottom, left)
+			{
+				if(mouseX >= left && mouseX < right && mouseY >= top && mouseY < bottom)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			function checkPlay()
+			{
+				if(mouseInArea(play.y, play.x + play.width, play.y + play.height, play.x))
+				{
+					ingame = true;
+					menu = false;
+					asteroidLoopId = setInterval(spawn_asteroid, 1500);
+					levelLoopId = setInterval(change_level, 30000);
+				}
+			}
+
+			function checkMute()
+			{
+				if(mouseInArea(mute.y, mute.x + mute.width, mute.y + mute.height, mute.x))
+				{
+					if(mainIsMuted)
+					{
+						document.getElementById('mainSound').muted = false;
+						mainIsMuted = false;
+					}
+					else
+					{
+						document.getElementById('mainSound').muted = true;
+						mainIsMuted = true;
+					}
+				}
+			}
+
+			function checkHighscores()
+			{
+				if(mouseInArea(highscores.y, highscores.x + highscores.width, highscores.y + highscores.height, highscores.x))
+				{
+					highscorescreen = true;
+					menu = false;
+				}
+			}
+
+			function checkLeft()
+			{
+				if(mouseInArea(left.y, left.x + left.width, left.y + left.height, left.x))
+				{
+					highscorescreen = false;
+					menu = true;
+				}
+			}
+
+			function hoverPlay()
+			{
+				if(mouseInArea(play.y, play.x + play.width, play.y + play.height, play.x))
+				{
+					console.log("Hovering");
+					if(playHovering)
+					{
+						playHovering = false;
+					}
+					else
+					{
+						playHovering = true;
+					}
+				}
+			}
+
+			function hoverMute()
+			{
+				if(mouseInArea(mute.y, mute.x + mute.width, mute.y + mute.height, mute.x))
+				{
+					muteHovering = !muteHovering;
+				}
+			}
+
+			function hoverHighscores()
+			{
+				if(mouseInArea(highscores.y, highscores.x + highscores.width, highscores.y + highscores.height, highscores.x))
+				{
+					highHovering = !highHovering;
+				}
+			}
+
+			function hoverLeft()
+			{
+				if(mouseInArea(left.y, left.x + left.width, left.y + left.height, left.x))
+				{
+					leftHovering = !leftHovering;
+				}
+			}
+
+
+			function spawn_asteroid()
+			{
+				var newX;
+				var newY;
+				var dir;
+				var mapX;
+				var mapY;
+				var mapW;
+				var mapH;
+				var mapScale;
+
+				var edgeChoice = Math.floor(Math.random() * (5 - 1)) + 1;
+				console.log(edgeChoice);
+				switch(edgeChoice)
+				{
+					case 1: //North Edge
+						newX = Math.floor(Math.random() * myCanvas.width);
+						newY = 0;
+						dir = 1;
+						break;
+					case 2: //East Edge
+						newX = myCanvas.width;
+						newY = Math.floor(Math.random() * myCanvas.height);
+							dir = 2;
+						break;
+					case 3: //South Edge
+						newX = Math.floor(Math.random() * myCanvas.width);
+						newY = myCanvas.height;
+						dir = 3;
+						break;
+					case 4: //West Edge
+						newX = 0;
+						newY = Math.floor(Math.random() * myCanvas.width);
+						dir = 4;
+						break;
+				}
+
+				switch(level)
+				{
+					case 1: 
+						choice = 1;
+						break;
+					case 2:
+						choice = Math.floor(Math.random() * (3 - 1)) + 1;
+						break;
+					case 3:
+						choice = Math.floor(Math.random() * (4 - 1)) + 1;
+						break;
+				}
+				switch(choice)
+				{
+					case 1:
+						var temp = new Asteroid(newX, newY, dir);
+						break;
+					case 2:
+						var temp = new Ball(newX, newY, dir);
+						break;
+					case 3:
+						var temp = new Duck(newX, newY, dir);
+						break;
+				}
+				obstacles[obstacles.length] = temp;
+			}
+
+			function distance(x1, y1, x2, y2)
+			{
+				//Calculate direction to player
+				toWorldX = x1 - x2;
+				toWorldY = y1 - y2;
+
+				//Normalize
+				var distance = Math.sqrt(toWorldX * toWorldX + toWorldY * toWorldY);
+
+				return distance;
+			}
+
+
+			function Sprite(spriteX, spriteY, spriteW, spriteH, scale, positionX, positionY, direction)
+			{
+				this.imagePath = world_sprite;
+				this.spriteX = spriteX;
+				this.spriteY = spriteY;
+				this.spriteW = spriteW;
+				this.spriteH = spriteH;
+				this.scale = scale;
+				this.positionX = positionX;
+				this.positionY = positionY;
+				this.direction = direction;
+				this.speed = 5; 
+				this.speedX = 0;
+				this.speedY = 0;
+                this.rotation = 0;
+				this.noGravity = false;
+				this.direction = 0;
+
+				//Physics stuff
+				this.velX = 0;
+				this.velY = 0;
+				this.friction = 0.98;
+			};
+
+			Sprite.prototype.setPosition = function(posX, posY)
+			{
+				this.positionX = posX;
+				this.positionY = posY;
+			};
+
+			Sprite.prototype.draw = function()
+			{
+				context.drawImage(world_sprite, this.spriteX, this.spriteY, this.spriteW, this.spriteH, this.positionX, this.positionY, this.spriteW * this.scale, this.spriteH * this.scale);
+			};
+
+			function World(positionX, positionY, direction, xOffset, yOffset)
+			{
+				Sprite.call(this, 0, 0, 400, 400, 0.4, positionX, positionY, direction);
+
+				this.xOffset = xOffset;
+				this.yOffset = yOffset;
+				this.lives = 3;
+			};
+
+			World.prototype = Object.create(Sprite.prototype);
+			World.prototype.constructor = World;
+
+			World.prototype.setPosition = function()
+			{
+				this.positionX = mouseX - (this.spriteW / 5);
+				this.positionY = mouseY - (this.spriteH / 5);
+			};
+
+			World.prototype.draw = function(positionX, positionY)
+			{
+				context.drawImage(world_sprite, this.spriteX, this.spriteY, this.spriteW, this.spriteH, positionX, positionY, this.spriteW * this.scale, this.spriteH * this.scale);
+			};
+
+			World.prototype.damage = function()
+			{
+				var that = this;
+				if(this.lives == 2)
+				{
+					this.spriteX = 400;
+				}
+				if(this.lives == 1)
+				{
+					this.spriteX = 800;
+					this.yOffset = 75;
+				}
+				if(this.lives == 0)
+				{
+					this.spriteX = 80;
+					this.spriteY = 505;
+					this.spriteW = 440;
+					this.spriteH = 415;
+					this.xOffset = 80;
+					this.yOffset = 80;
+					window.setTimeout(function(){
+						that.spriteX = 640;
+						that.spriteY = 465;
+						that.spriteW = 520;
+						that.spriteH = 475;
+						that.xOffset = 100;
+						that.yOffset = 90;
+					}, 500);
+					window.setTimeout(function(){
+						that.spriteX = 25;
+						that.spriteY = 1025; 
+						that.spriteW = 540;
+						that.spriteH = 520;
+						that.xOffset = 100;
+						that.yOffset = 100;
+					}, 1000);
+					window.setTimeout(function(){
+						that.spriteX = 600;
+						that.spriteY = 1000;
+						that.spriteW = 600;
+						that.spriteH = 600;
+						that.xOffset = 115;
+						that.yOffset = 110;
+					}, 1500);
+				}
+			}
+
+			function Obstacle(spriteX, spriteY, spriteW, spriteH, scale, positionX, positionY, direction)
+			{
+				Sprite.call(this, spriteX, spriteY, spriteW, spriteH, scale, positionX, positionY, direction);
+
+				this.isExploding = false;
+				this.rotation = 0;
+			};
+
+			Obstacle.prototype = Object.create(Sprite.prototype);
+			Obstacle.prototype.constructor = Obstacle;
+
+			Obstacle.prototype.gravity = function(worldX, worldY)
+			{
+                //Work out distance and force (force is square of distance)
+                var dis = Math.abs(distance(mouseX, mouseY, this.positionX, this.positionY));
+                var force = Math.pow(1 / dis, 2);
+
+                //Work out distance along x and y between this and world
+                var toWorldX = mouseX - this.positionX;
+                var toWorldY = mouseY - this.positionY;
+
+                //Normalise so ratioX + ratioY = 1
+                var toWorldSum = Math.abs(toWorldX) + Math.abs(toWorldY);
+                var ratioX = toWorldX / toWorldSum;
+                var ratioY = toWorldY / toWorldSum;
+
+                //Work out acceleration based on normalised ratio x and y
+                var accelerationX = force * ratioX;
+                var accelerationY = force * ratioY;
+
+                //Add acceleration to the speed based on score -- Change second log to increase gravitational pull over time. -- Change last number to change initial gravity
+                this.speedX += accelerationX * (Math.log(score) / Math.log(2)) * 300;
+                this.speedY += accelerationY * (Math.log(score) / Math.log(2)) * 300;
+
+                this.rotation = Math.atan2(this.speedY, this.speedX);
+			};
+
+			Obstacle.prototype.update = function()
+			{
+				this.positionX += this.speedX;
+				this.positionY += this.speedY;
+
+			};
+
+			function Asteroid(positionX, positionY, direction)
+			{
+				Obstacle.call(this, 0, 1800, 100, 100, 0.4, positionX, positionY, direction);
+			};
+
+			Asteroid.prototype = Object.create(Obstacle.prototype);
+			Asteroid.prototype.constructor = Asteroid;
+
+			function Duck(positionX, positionY, direction)
+			{
+				Obstacle.call(this, 800, 1800, 200, 200, 0.4, positionX, positionY, direction);
+			};
+
+			Duck.prototype.explode = function()
+			{
+				this.spriteX += 200;
+			};
+
+			Duck.prototype = Object.create(Obstacle.prototype);
+			Duck.prototype.constructor = Duck;
+
+			function Ball(positionX, positionY, direction)
+			{
+				Obstacle.call(this, 600, 1800, 200, 200, 0.4, positionX, positionY, direction);
+			};
+
+			Ball.prototype = Object.create(Obstacle.prototype);
+			Ball.prototype.constructor = Ball;
+
+		</script>
+
+	</body>
+
+</html>
